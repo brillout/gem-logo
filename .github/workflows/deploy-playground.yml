@@ -1,4 +1,8 @@
-# Build the playground with Vite and publish it to GitHub Pages.
+# Build the playground with Vite and publish it to GitHub Pages, by pushing
+# the build to the `gh-pages` branch (which GitHub serves at
+# https://<owner>.github.io/<repo>). Publishing from a branch needs no Pages
+# settings, unlike the Actions-based deployment, which the workflow token
+# isn't allowed to enable for this repository.
 name: Deploy playground to GitHub Pages
 
 on:
@@ -7,9 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 # Allow only one concurrent deployment, but let in-progress runs finish.
 concurrency:
@@ -17,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -27,43 +29,12 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - name: Build playground
-        # base_path is e.g. /brand-the-framework — Vite wants a trailing slash.
-        run: pnpm exec vite build playground --base "${{ steps.pages.outputs.base_path }}/"
-      - uses: actions/upload-pages-artifact@v3
+        # The site lives under /<repo>/ — Vite wants a trailing slash.
+        run: pnpm exec vite build playground --base "/${{ github.event.repository.name }}/"
+      - name: Publish to the gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: playground/dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-        continue-on-error: true
-      # The Pages backend intermittently rejects deployments with "Deployment
-      # failed, try again later." — so do exactly that, with backoff. It has
-      # failed twice 3 minutes apart, so the waits are generous.
-      - name: Wait before retrying
-        if: steps.deployment.outcome == 'failure'
-        run: sleep 60
-      - name: Deploy to GitHub Pages (retry 1)
-        id: deployment-retry-1
-        if: steps.deployment.outcome == 'failure'
-        uses: actions/deploy-pages@v4
-        continue-on-error: true
-      - name: Wait before retrying again
-        if: steps.deployment.outcome == 'failure' && steps.deployment-retry-1.outcome == 'failure'
-        run: sleep 120
-      - name: Deploy to GitHub Pages (retry 2)
-        if: steps.deployment.outcome == 'failure' && steps.deployment-retry-1.outcome == 'failure'
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./playground/dist
+          force_orphan: true
