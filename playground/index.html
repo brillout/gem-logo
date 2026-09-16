@@ -20,11 +20,23 @@
       </aside>
       <section id="stage">
         <div id="stage-actions">
-          <label id="padding-control"
-            >padding
-            <select id="padding-preset"></select>
-            <input id="padding-slider" type="range" min="0" max="16384" step="1"
-          /></label>
+          <div id="stage-settings">
+            <label
+              >padding
+              <select id="padding-preset"></select>
+              <input id="padding-slider" type="range" min="0" max="16384" step="1"
+            /></label>
+            <!-- Preview settings only style the page around the SVG; the SVG and its exports are unaffected. -->
+            <label
+              >preview size
+              <select id="preview-size-preset"></select>
+              <input id="preview-size" type="number" min="8" max="4096" step="1" placeholder="fit"
+            /></label>
+            <label
+              >preview background <input id="preview-background" type="color" value="#ffffff"
+            /></label>
+            <label><input id="preview-checkerboard" type="checkbox" /> checkerboard</label>
+          </div>
           <button id="copy" type="button">Copy SVG</button>
           <button id="download" type="button">Download SVG</button>
           <label

@@ -144,6 +144,8 @@ function syncUrl(): void {
   if (state.background !== stateDefaults.background)
     query.set("background", state.background ?? "");
   if (state.glintColor !== stateDefaults.glintColor) query.set("glintColor", state.glintColor);
+  if (previewSize) query.set("previewSize", String(previewSize));
+  if (previewBackground !== "#ffffff") query.set("previewBackground", previewBackground);
   const search = query.toString();
   history.replaceState(null, "", search ? `?${search}` : location.pathname);
 }
@@ -347,63 +349,16 @@ controls.append(el("div", { class: "palettes" }, ...paletteGroups));
 // Padding: a preset pick plus a free slider, applied to the live preview
 // (and thus everything copied/downloaded). Both drive the same `padding` as
 // the sidebar row; a value matching no preset shows as "custom".
-//
-// Besides the fixed presets, the select offers icon sizes: the padding is
-// then computed so the stone shows exactly that many pixels wide in the
-// preview as laid out on screen right now — to judge how the mark reads at
-// a favicon's 16px, or as an app icon.
-const ICON_SIZE_PRESETS: { key: string; label: string; px: number }[] = [
-  { key: "px16", label: "favicon (16px)", px: 16 },
-  { key: "px24", label: "24px", px: 24 },
-  { key: "px32", label: "32px", px: 32 },
-  { key: "px48", label: "48px", px: 48 },
-  { key: "px64", label: "64px", px: 64 },
-  { key: "px128", label: "128px", px: 128 },
-  { key: "px256", label: "256px", px: 256 },
-];
-/** The icon-size preset last applied, with the padding it computed, so the select keeps showing it. */
-let iconPreset: { key: string; padding: number } | null = null;
-
-/** The padding that shows the stone `px` pixels wide in the preview as currently laid out. */
-function paddingForIconSize(px: number): number {
-  const match = /viewBox="([-\d.]+) ([-\d.]+) ([-\d.]+) ([-\d.]+)"/.exec(currentSvg);
-  const svg = preview.querySelector("svg");
-  if (!match || !svg) return state.padding;
-  const [, , , viewBoxWidth, viewBoxHeight] = match.map(Number);
-  // The mark's own extents: the current canvas without its padding.
-  const markWidth = viewBoxWidth - 2 * state.padding;
-  const markHeight = viewBoxHeight - 2 * state.padding;
-  // The canvas is fit inside the element, so whichever side binds sets the
-  // scale; the padding that makes the binding side land on `px` is the
-  // smaller of the two candidates.
-  const { width, height } = svg.getBoundingClientRect();
-  const byWidth = ((markWidth * width) / px - markWidth) / 2;
-  const byHeight = ((markWidth * height) / px - markHeight) / 2;
-  return Math.max(0, Math.round(Math.min(byWidth, byHeight)));
-}
-
 const paddingSelect = $<HTMLSelectElement>("#padding-preset");
 const paddingSlider = $<HTMLInputElement>("#padding-slider");
 paddingSelect.append(
   ...Object.entries(PADDING_PRESETS).map(([name, value]) =>
     el("option", { value: String(value) }, name),
   ),
-  el(
-    "optgroup",
-    { label: "icon size in the preview" },
-    ...ICON_SIZE_PRESETS.map((preset) => el("option", { value: preset.key }, preset.label)),
-  ),
   el("option", { value: "custom", disabled: "", hidden: "" }, "custom"),
 );
 paddingSelect.addEventListener("input", () => {
-  const icon = ICON_SIZE_PRESETS.find((preset) => preset.key === paddingSelect.value);
-  if (icon) {
-    const padding = paddingForIconSize(icon.px);
-    iconPreset = { key: icon.key, padding };
-    setSliderValue("padding", padding);
-  } else {
-    setSliderValue("padding", Number(paddingSelect.value));
-  }
+  setSliderValue("padding", Number(paddingSelect.value));
   render();
 });
 paddingSlider.addEventListener("input", () => {
@@ -416,10 +371,82 @@ function syncPaddingControls(): void {
   const value = String(state.padding);
   paddingSelect.value = Object.values(PADDING_PRESETS).some((p) => String(p) === value)
     ? value
-    : iconPreset && iconPreset.padding === state.padding
-      ? iconPreset.key
-      : "custom";
+    : "custom";
   paddingSlider.value = value;
+}
+
+// ----------------------------------------------------------------- preview
+//
+// Preview settings style the DOM around the SVG — how big it is shown, and
+// what's behind it — and nothing else: the SVG itself, and so every copy,
+// download and PNG export, is unaffected. (The sidebar's `background` is
+// the opposite: part of the SVG, and it paints over this backdrop.)
+
+/** Icon sizes to show the mark at; "fit" fills the stage instead. */
+const PREVIEW_SIZES = [16, 24, 32, 48, 64, 128, 256, 512];
+const CHECKERBOARD = "checkerboard";
+const HEX_COLOR = /^#[0-9a-f]{6}$/i;
+
+const previewSizeSelect = $<HTMLSelectElement>("#preview-size-preset");
+const previewSizeInput = $<HTMLInputElement>("#preview-size");
+const previewBackgroundPicker = $<HTMLInputElement>("#preview-background");
+const previewCheckerboard = $<HTMLInputElement>("#preview-checkerboard");
+
+/** Displayed size of the SVG in CSS pixels; null fits it to the stage. */
+let previewSize: number | null = null;
+/** Backdrop behind the SVG: a color, or the transparency checkerboard. */
+let previewBackground = "#ffffff";
+{
+  // Restore the preview settings from the query string, like the mark's parameters.
+  const query = new URLSearchParams(location.search);
+  const size = Number(query.get("previewSize"));
+  if (size > 0) previewSize = size;
+  const background = query.get("previewBackground");
+  if (background && (background === CHECKERBOARD || HEX_COLOR.test(background)))
+    previewBackground = background;
+}
+
+previewSizeSelect.append(
+  el("option", { value: "" }, "fit"),
+  ...PREVIEW_SIZES.map((px) => el("option", { value: String(px) }, `${px}px`)),
+  el("option", { value: "custom", disabled: "", hidden: "" }, "custom"),
+);
+previewSizeSelect.addEventListener("input", () => {
+  previewSize = previewSizeSelect.value ? Number(previewSizeSelect.value) : null;
+  applyPreview();
+  syncUrl();
+});
+previewSizeInput.addEventListener("input", () => {
+  const value = Number(previewSizeInput.value);
+  previewSize = previewSizeInput.value && value > 0 ? value : null;
+  applyPreview();
+  syncUrl();
+});
+previewBackgroundPicker.addEventListener("input", () => {
+  previewBackground = previewBackgroundPicker.value;
+  applyPreview();
+  syncUrl();
+});
+previewCheckerboard.addEventListener("input", () => {
+  previewBackground = previewCheckerboard.checked ? CHECKERBOARD : previewBackgroundPicker.value;
+  applyPreview();
+  syncUrl();
+});
+
+/** Style the SVG on the stage per the preview settings, and point the controls at them. */
+function applyPreview(): void {
+  const svg = preview.querySelector("svg");
+  if (svg) {
+    svg.style.width = previewSize ? `${previewSize}px` : "";
+    svg.style.height = previewSize ? `${previewSize}px` : "";
+    svg.classList.toggle(CHECKERBOARD, previewBackground === CHECKERBOARD);
+    svg.style.background = previewBackground === CHECKERBOARD ? "" : previewBackground;
+  }
+  const size = previewSize ? String(previewSize) : "";
+  previewSizeSelect.value = !previewSize || PREVIEW_SIZES.includes(previewSize) ? size : "custom";
+  previewSizeInput.value = size;
+  previewCheckerboard.checked = previewBackground === CHECKERBOARD;
+  if (previewBackground !== CHECKERBOARD) previewBackgroundPicker.value = previewBackground;
 }
 
 $("#reset").addEventListener("click", () => {
@@ -517,6 +544,7 @@ function render(): void {
   try {
     currentSvg = diamondSvg({ ...state, onWarn: (message) => warnings.push(message) });
     preview.innerHTML = currentSvg;
+    applyPreview();
     source.textContent = currentSvg;
     byteCount.textContent = `(${currentSvg.length} bytes)`;
     // A tab icon doesn't replay SMIL, so it shows the static pose.
