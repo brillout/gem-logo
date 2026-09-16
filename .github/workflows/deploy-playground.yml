@@ -30,8 +30,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Build playground
-        # The site lives under /<repo>/ — Vite wants a trailing slash.
-        run: pnpm exec vite build playground --base "/${{ github.event.repository.name }}/"
+        # A relative base keeps the build independent of the repository name,
+        # so it works wherever GitHub serves it (https://<owner>.github.io/<repo>).
+        run: pnpm exec vite build playground --base ./
       - name: Publish to the gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:

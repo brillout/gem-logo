@@ -1,4 +1,4 @@
-# The gem-skills Logo
+# The Gem Logo
 
 An SVG diamond: the orthographic projection of a real 3D model of a cut stone, in one color like a real gem, with seven animations that need no JavaScript. The mark spins and floats by default.
 
@@ -10,7 +10,7 @@ An SVG diamond: the orthographic projection of a real 3D model of a cut stone, i
 
 ## Playground
 
-Playground: https://brillout.github.io/gem-skills-logo
+Playground: https://brillout.github.io/gem-logo
 
 ## Color
 
@@ -50,7 +50,7 @@ All `1024px` but with different paddings (the stone at rest, without any animati
 | :--------------------------------------------------: | :---------------------------------------------------: | :----------------------------------------------------: | :---------------------------------------------------: |
 | <img src="./diamond-padding-none.png" width="150" /> | <img src="./diamond-padding-small.png" width="150" /> | <img src="./diamond-padding-medium.png" width="150" /> | <img src="./diamond-padding-large.png" width="150" /> |
 
-For custom size & padding, go to the [playground](https://brillout.github.io/gem-skills-logo).
+For custom size & padding, go to the [playground](https://brillout.github.io/gem-logo).
 
 ## CLI
 
