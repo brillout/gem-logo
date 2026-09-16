@@ -456,6 +456,9 @@ function applyPreview(): void {
 
 $("#reset").addEventListener("click", () => {
   Object.assign(state, stateDefaults, { colors: [...stateDefaults.colors] });
+  // Everything goes back to its default, the preview settings included.
+  previewSize = PREVIEW_SIZE_DEFAULT;
+  previewBackground = "#ffffff";
   for (const key of NUMERIC_KEYS) setSliderValue(key, state[key]);
   for (const key of BOOLEAN_KEYS) toggles.get(key)!.checked = state[key];
   gradientSelect.value = state.gradient;
