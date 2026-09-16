@@ -41,7 +41,7 @@ const SLIDERS: Record<NumericKey, SliderSpec> = {
   gap: { min: 0, max: 40 },
   cornerRadius: { min: 0, max: 40 },
   // Up to many times the stone's own size, to preview it at favicon size.
-  padding: { min: 0, max: 8192 },
+  padding: { min: 0, max: 16384 },
   shading: { min: 0, max: 1, step: 0.05 },
   lightAngle: { min: -180, max: 180 },
   lightElevation: { min: -90, max: 90 },
@@ -347,16 +347,63 @@ controls.append(el("div", { class: "palettes" }, ...paletteGroups));
 // Padding: a preset pick plus a free slider, applied to the live preview
 // (and thus everything copied/downloaded). Both drive the same `padding` as
 // the sidebar row; a value matching no preset shows as "custom".
+//
+// Besides the fixed presets, the select offers icon sizes: the padding is
+// then computed so the stone shows exactly that many pixels wide in the
+// preview as laid out on screen right now — to judge how the mark reads at
+// a favicon's 16px, or as an app icon.
+const ICON_SIZE_PRESETS: { key: string; label: string; px: number }[] = [
+  { key: "px16", label: "favicon (16px)", px: 16 },
+  { key: "px24", label: "24px", px: 24 },
+  { key: "px32", label: "32px", px: 32 },
+  { key: "px48", label: "48px", px: 48 },
+  { key: "px64", label: "64px", px: 64 },
+  { key: "px128", label: "128px", px: 128 },
+  { key: "px256", label: "256px", px: 256 },
+];
+/** The icon-size preset last applied, with the padding it computed, so the select keeps showing it. */
+let iconPreset: { key: string; padding: number } | null = null;
+
+/** The padding that shows the stone `px` pixels wide in the preview as currently laid out. */
+function paddingForIconSize(px: number): number {
+  const match = /viewBox="([-\d.]+) ([-\d.]+) ([-\d.]+) ([-\d.]+)"/.exec(currentSvg);
+  const svg = preview.querySelector("svg");
+  if (!match || !svg) return state.padding;
+  const [, , , viewBoxWidth, viewBoxHeight] = match.map(Number);
+  // The mark's own extents: the current canvas without its padding.
+  const markWidth = viewBoxWidth - 2 * state.padding;
+  const markHeight = viewBoxHeight - 2 * state.padding;
+  // The canvas is fit inside the element, so whichever side binds sets the
+  // scale; the padding that makes the binding side land on `px` is the
+  // smaller of the two candidates.
+  const { width, height } = svg.getBoundingClientRect();
+  const byWidth = ((markWidth * width) / px - markWidth) / 2;
+  const byHeight = ((markWidth * height) / px - markHeight) / 2;
+  return Math.max(0, Math.round(Math.min(byWidth, byHeight)));
+}
+
 const paddingSelect = $<HTMLSelectElement>("#padding-preset");
 const paddingSlider = $<HTMLInputElement>("#padding-slider");
 paddingSelect.append(
   ...Object.entries(PADDING_PRESETS).map(([name, value]) =>
     el("option", { value: String(value) }, name),
   ),
+  el(
+    "optgroup",
+    { label: "icon size in the preview" },
+    ...ICON_SIZE_PRESETS.map((preset) => el("option", { value: preset.key }, preset.label)),
+  ),
   el("option", { value: "custom", disabled: "", hidden: "" }, "custom"),
 );
 paddingSelect.addEventListener("input", () => {
-  setSliderValue("padding", Number(paddingSelect.value));
+  const icon = ICON_SIZE_PRESETS.find((preset) => preset.key === paddingSelect.value);
+  if (icon) {
+    const padding = paddingForIconSize(icon.px);
+    iconPreset = { key: icon.key, padding };
+    setSliderValue("padding", padding);
+  } else {
+    setSliderValue("padding", Number(paddingSelect.value));
+  }
   render();
 });
 paddingSlider.addEventListener("input", () => {
@@ -369,7 +416,9 @@ function syncPaddingControls(): void {
   const value = String(state.padding);
   paddingSelect.value = Object.values(PADDING_PRESETS).some((p) => String(p) === value)
     ? value
-    : "custom";
+    : iconPreset && iconPreset.padding === state.padding
+      ? iconPreset.key
+      : "custom";
   paddingSlider.value = value;
 }
 
