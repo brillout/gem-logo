@@ -14,7 +14,7 @@ Playground: https://brillout.github.io/gem-skills-logo
 
 ## Color
 
-A gem is one color, so a palette is a tone ramp of that color — highlight, body, shadow — and every facet takes its tone from how it faces the light. [`color-palettes.ts`](./color-palettes.ts) has ready-made stones (Sapphire, Ruby, Emerald, Amethyst, Onyx, Gold, …); pick any of them in the playground, or pass a single color and the highlight and shadow are derived.
+A gem is one color, so a palette is a tone ramp of that color — highlight, body, shadow — and every facet takes its tone from how it faces the light. [`color-palettes.ts`](./color-palettes.ts) has ready-made stones (Ruby, Sapphire, Emerald, Amethyst, Onyx, Gold, …); pick any of them in the playground, or pass a single color and the highlight and shadow are derived.
 
 ## Animations
 
@@ -57,7 +57,7 @@ For custom size & padding, go to the [playground](https://brillout.github.io/gem
 ```bash
 pnpm install
 pnpm run node-ts cli.ts logo.svg --spin=true --sweep=true                    # any parameter as --name=value
-pnpm run node-ts cli.ts logo.svg --colors=#ffe3e8,#ff7d90,#e02244,#a4122f,#5c0a1c   # a tone ramp (this one is Ruby)
+pnpm run node-ts cli.ts logo.svg --colors=#e4f0ff,#7cb4ff,#2f6de6,#1b45b4,#0f2670   # a tone ramp (this one is Sapphire)
 pnpm run node-ts cli.ts logo.svg --colors=#16b56c                            # one color; highlight and shadow derived
 pnpm run node-ts cli.ts logo.svg --pitch=15 --yaw=22.5                       # look down onto the table, turned
 pnpm run node-ts cli.ts logo.png --pngSize=512 --padding=large
