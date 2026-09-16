@@ -143,7 +143,8 @@ function syncUrl(): void {
   if (state.background !== stateDefaults.background)
     query.set("background", state.background ?? "");
   if (state.glintColor !== stateDefaults.glintColor) query.set("glintColor", state.glintColor);
-  if (previewSize) query.set("previewSize", String(previewSize));
+  if (previewSize !== PREVIEW_SIZE_DEFAULT)
+    query.set("previewSize", previewSize ? String(previewSize) : "fit");
   if (previewBackground !== "#ffffff") query.set("previewBackground", previewBackground);
   const search = query.toString();
   history.replaceState(null, "", search ? `?${search}` : location.pathname);
@@ -392,14 +393,16 @@ const previewBackgroundToggle = $<HTMLInputElement>("#preview-background-on");
 const previewBackgroundPicker = $<HTMLInputElement>("#preview-background");
 
 /** Displayed size of the SVG in CSS pixels; null fits it to the stage. */
-let previewSize: number | null = null;
+const PREVIEW_SIZE_DEFAULT = 64;
+let previewSize: number | null = PREVIEW_SIZE_DEFAULT;
 /** Backdrop of the preview area: a color, or (toggle off) the transparency checkerboard. */
 let previewBackground = "#ffffff";
 {
   // Restore the preview settings from the query string, like the mark's parameters.
   const query = new URLSearchParams(location.search);
-  const size = Number(query.get("previewSize"));
-  if (size > 0) previewSize = size;
+  const size = query.get("previewSize");
+  if (size === "fit") previewSize = null;
+  else if (Number(size) > 0) previewSize = Number(size);
   const background = query.get("previewBackground");
   if (background && (background === CHECKERBOARD || HEX_COLOR.test(background)))
     previewBackground = background;

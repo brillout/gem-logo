@@ -60,7 +60,7 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   glowIntensity: 0.45,
   spin: true,
   spinDuration: 10,
-  spinSteps: 24,
+  spinSteps: 48,
   float: true,
   floatDuration: 3,
   floatHeight: 18,
