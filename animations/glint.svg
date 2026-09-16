@@ -1,40 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-289.7 -258.1 579.5 536.9">
   <defs>
-    <linearGradient id="gem-g0" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
-      <stop offset="0" stop-color="#ffa9cb"/>
-      <stop offset="1" stop-color="#f25392"/>
+    <linearGradient id="gem-g0" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
+      <stop offset="0" stop-color="#ff99c1"/>
+      <stop offset="1" stop-color="#ee4689"/>
     </linearGradient>
-    <linearGradient id="gem-g1" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
-      <stop offset="0" stop-color="#ffcbdf"/>
-      <stop offset="1" stop-color="#fa71a7"/>
+    <linearGradient id="gem-g1" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
+      <stop offset="0" stop-color="#ffc6dc"/>
+      <stop offset="1" stop-color="#f86da4"/>
     </linearGradient>
-    <linearGradient id="gem-g2" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
-      <stop offset="0" stop-color="#e42f78"/>
-      <stop offset="1" stop-color="#aa1a58"/>
+    <linearGradient id="gem-g2" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
+      <stop offset="0" stop-color="#ea3880"/>
+      <stop offset="1" stop-color="#b41d5d"/>
     </linearGradient>
-    <linearGradient id="gem-g3" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
-      <stop offset="0" stop-color="#fa73a8"/>
-      <stop offset="1" stop-color="#de2c74"/>
+    <linearGradient id="gem-g3" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
+      <stop offset="0" stop-color="#f769a2"/>
+      <stop offset="1" stop-color="#d72a71"/>
     </linearGradient>
-    <linearGradient id="gem-g4" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
-      <stop offset="0" stop-color="#a51955"/>
-      <stop offset="1" stop-color="#621034"/>
+    <linearGradient id="gem-g4" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
+      <stop offset="0" stop-color="#ab1a58"/>
+      <stop offset="1" stop-color="#661136"/>
     </linearGradient>
-    <linearGradient id="gem-g5" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
-      <stop offset="0" stop-color="#e32e77"/>
-      <stop offset="1" stop-color="#a91a57"/>
+    <linearGradient id="gem-g5" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
+      <stop offset="0" stop-color="#d92a71"/>
+      <stop offset="1" stop-color="#9c1851"/>
     </linearGradient>
-    <linearGradient id="gem-g13" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
-      <stop offset="0" stop-color="#ffdae9"/>
-      <stop offset="1" stop-color="#fd7eb0"/>
+    <linearGradient id="gem-g13" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
+      <stop offset="0" stop-color="#ffd6e6"/>
+      <stop offset="1" stop-color="#fc7bae"/>
     </linearGradient>
-    <linearGradient id="gem-g15" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+    <linearGradient id="gem-g15" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
       <stop offset="0" stop-color="#ffe6f0"/>
-      <stop offset="1" stop-color="#ff9ac2"/>
+      <stop offset="1" stop-color="#ff98c1"/>
     </linearGradient>
-    <linearGradient id="gem-g16" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
-      <stop offset="0" stop-color="#f25594"/>
-      <stop offset="1" stop-color="#c82568"/>
+    <linearGradient id="gem-g16" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
+      <stop offset="0" stop-color="#f6659f"/>
+      <stop offset="1" stop-color="#d4296f"/>
     </linearGradient>
   </defs>
   <path fill="url(#gem-g0)" stroke="url(#gem-g0)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -181.5 L120.1 -190.1 L120.1 -202.2 L49.7 -210.8 L-49.7 -210.8 L-120.1 -202.2 L-120.1 -190.1 L-49.7 -181.5 Z"/>

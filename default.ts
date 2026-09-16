@@ -40,7 +40,7 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   gradient: "sheen",
   shading: 0.85,
   lightAngle: -50,
-  lightElevation: 40,
+  lightElevation: 35,
   colorFlow: false,
   colorFlowDuration: 6,
   sweep: false,
