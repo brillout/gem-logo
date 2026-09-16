@@ -37,13 +37,13 @@
       <stop offset="1" stop-color="#c82568"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#c82568;#e22e77;#ef4a8c;#f768a1;#fe80b1;#ff91bd;#ff99c1;#ff97c0;#ff8ab8;#fb75aa;#f35a97;#eb3a81;#d62970;#bc2061;#a21954;#881547;#74123d;#661136;#621034;#621034;#6c1139;#7d1441;#94174d;#af1b5a;#c82568"/></stop>
     </linearGradient>
   </defs>
-  <path fill="url(#gem-g0)" d="M49.8 -181.2 L120.5 -189.8 L120.5 -202.5 L49.8 -211.1 L-49.8 -211.1 L-120.5 -202.5 L-120.5 -189.8 L-49.8 -181.2 Z"/>
-  <path fill="url(#gem-g1)" d="M-50 -181.9 L50 -181.9 L92.3 -59.6 L-92.3 -59.6 Z"/>
-  <path fill="url(#gem-g2)" d="M-92.3 -60.3 L92.3 -60.3 L0 211.9 Z"/>
-  <path fill="url(#gem-g3)" d="M49.3 -181.8 L120.2 -190.5 L222.4 -75.5 L91.6 -59.6 Z"/>
-  <path fill="url(#gem-g4)" d="M91.6 -60.3 L222.5 -76.2 L-1 212.6 Z"/>
-  <path fill="url(#gem-g5)" d="M119.8 -190 L119.8 -203.1 L222.1 -98.3 L222.1 -74.9 Z"/>
-  <path fill="url(#gem-g13)" d="M-119.8 -203.1 L-119.8 -190 L-222.1 -74.9 L-222.1 -98.3 Z"/>
-  <path fill="url(#gem-g15)" d="M-120.2 -190.5 L-49.3 -181.8 L-91.6 -59.6 L-222.4 -75.5 Z"/>
-  <path fill="url(#gem-g16)" d="M-222.5 -76.2 L-91.6 -60.3 L1 212.6 Z"/>
+  <path fill="url(#gem-g0)" stroke="url(#gem-g0)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -181.5 L120.1 -190.1 L120.1 -202.2 L49.7 -210.8 L-49.7 -210.8 L-120.1 -202.2 L-120.1 -190.1 L-49.7 -181.5 Z"/>
+  <path fill="url(#gem-g1)" stroke="url(#gem-g1)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-49.7 -181.5 L49.7 -181.5 L91.8 -60 L-91.8 -60 Z"/>
+  <path fill="url(#gem-g2)" stroke="url(#gem-g2)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-91.8 -60 L91.8 -60 L0 210.8 Z"/>
+  <path fill="url(#gem-g3)" stroke="url(#gem-g3)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -181.5 L120.1 -190.1 L221.7 -75.8 L91.8 -60 Z"/>
+  <path fill="url(#gem-g4)" stroke="url(#gem-g4)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M91.8 -60 L221.7 -75.8 L0 210.8 Z"/>
+  <path fill="url(#gem-g5)" stroke="url(#gem-g5)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M120.1 -190.1 L120.1 -202.2 L221.7 -98.2 L221.7 -75.8 Z"/>
+  <path fill="url(#gem-g13)" stroke="url(#gem-g13)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -202.2 L-120.1 -190.1 L-221.7 -75.8 L-221.7 -98.2 Z"/>
+  <path fill="url(#gem-g15)" stroke="url(#gem-g15)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -190.1 L-49.7 -181.5 L-91.8 -60 L-221.7 -75.8 Z"/>
+  <path fill="url(#gem-g16)" stroke="url(#gem-g16)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-221.7 -75.8 L-91.8 -60 L0 210.8 Z"/>
 </svg>

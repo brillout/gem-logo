@@ -17,11 +17,13 @@
  * the viewer): straight from the side by default, the classic icon with the
  * table edge-on, or elevated by `pitch` degrees so the table shows; the
  * stone can be turned about its vertical axis by `yaw` degrees. Every facet is
- * projected to a 2D polygon, inset by half the `gap` so neighboring facets
- * are separated by a transparent seam, and optionally rounded
- * (`cornerRadius`). The stone is convex, so front-facing facets never overlap
- * and back-facing ones are simply not drawn — which is also what makes the
- * `spin` animation possible without any z-sorting.
+ * projected to a 2D polygon, optionally inset by half the `gap` so
+ * neighboring facets are separated by a transparent seam, optionally rounded
+ * (`cornerRadius`), and stroked in its own color one screen pixel wide, so
+ * anti-aliasing leaves no hairline between facets at any size. The stone is
+ * convex, so front-facing facets never overlap and back-facing ones are
+ * simply not drawn — which is also what makes the `spin` animation possible
+ * without any z-sorting.
  *
  * Color
  * -----
@@ -450,13 +452,9 @@ const signedArea2 = (poly: readonly Vec[]): number =>
     return s + x * ny - nx * y;
   }, 0);
 
-/** How far, in multiples of the outset distance, a corner may move when a polygon is let out. */
-const OUTSET_REACH = 6;
-
 /**
- * Convex polygon with every edge moved inward by `d` (outward for a
- * negative `d`); null when the polygon is too thin for that — the caller
- * falls back to `shrink`.
+ * Convex polygon with every edge moved inward by `d`; null when the polygon
+ * is too thin for that — the caller falls back to `shrink`.
  */
 function inset(poly: readonly Vec[], d: number): Vec[] | null {
   if (d === 0) return [...poly];
@@ -477,17 +475,7 @@ function inset(poly: readonly Vec[], d: number): Vec[] | null {
   for (let i = 0; i < poly.length; i++) {
     const q = intersect(lines[(i + poly.length - 1) % poly.length], lines[i]);
     if (!q) return null;
-    // Letting out a needle-thin sliver (a facet almost edge-on) would send
-    // its tip toward infinity, since its two edges are nearly parallel:
-    // cap how far a corner may move, which keeps the long edges' overlap.
-    const [x, y] = poly[i];
-    const moved = Math.hypot(q[0] - x, q[1] - y);
-    const limit = OUTSET_REACH * -d;
-    out.push(
-      d < 0 && moved > limit
-        ? [x + ((q[0] - x) * limit) / moved, y + ((q[1] - y) * limit) / moved]
-        : q,
-    );
+    out.push(q);
   }
   // Every inset corner must still satisfy every inset edge, or the polygon collapsed.
   for (const q of out)
@@ -693,8 +681,8 @@ function timelineOf(p: Resolved, active: Active): Timeline | null {
 
 /** How many sparkle spots `glint` can pick from (a `glintCount` of n uses the first n). */
 const GLINT_SPOTS = 5;
-/** Without a gap, neighboring facets overlap by this hair so anti-aliasing leaves no seam between them. */
-const SEAM_OVERLAP = 0.35;
+/** A facet's stroke: one screen pixel wide at any rendered size, with round joins so sharp corners don't spike. */
+const STROKE_ATTRS = 'stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke"';
 /** How far along the ramp (at `shading` 1) a facet's sheen runs lighter toward the light and darker away from it. */
 const SHEEN_SPREAD = 0.14;
 
@@ -778,10 +766,6 @@ export function diamondSvg(params: DiamondParams = {}): string {
     readonly keyframeOpts: { keyTimes?: readonly number[] };
   }
 
-  // Facets are inset by half the gap; without a gap they are let out by a
-  // hair instead, so neighbors overlap and anti-aliasing leaves no seam.
-  const insetBy = p.gap > 0 ? p.gap / 2 : -SEAM_OVERLAP;
-
   const facets: Facet[] = [];
   model.faces.forEach((face, index) => {
     const isFacing = (yaw: number): boolean => facing(face.normal, yaw, p.pitch) > 1e-9;
@@ -817,7 +801,7 @@ export function diamondSvg(params: DiamondParams = {}): string {
       if (facingAt[i]) {
         const verts = pose(yaw);
         const raw = face.indices.map((j) => verts[j]);
-        return inset(raw, insetBy) ?? shrink(raw, Math.max(0, insetBy));
+        return inset(raw, p.gap / 2) ?? shrink(raw, p.gap / 2);
       }
       // Hidden: the line it is at the nearest edge-on turn (at an edge-on
       // keyframe, that is this very turn).
@@ -912,7 +896,11 @@ export function diamondSvg(params: DiamondParams = {}): string {
             f.keyframeOpts,
           )
         : "";
-    if (!sheen) return { fill: tone(f.tones[0], 0), animate: animateTone("fill", 0) };
+    if (!sheen)
+      return {
+        fill: tone(f.tones[0], 0),
+        animate: animateTone("fill", 0) + animateTone("stroke", 0),
+      };
     const gid = id(`g${f.index}`);
     const stop = (offset: number): string => {
       const color = tone(f.tones[0], offset);
@@ -950,13 +938,11 @@ export function diamondSvg(params: DiamondParams = {}): string {
     // brightens while the center is within w of it.
     const time = (s: number): number => (((s + w) / (1 + 2 * w)) * p.sweepDuration) / period;
     const keyTimes = [0, Math.max(time(at - w), 0.0005), time(at), time(at + w), 1];
-    return animateEl(
-      "animate",
-      "fill-opacity",
-      period,
-      ["0", "0", frac(p.sweepIntensity), "0", "0"],
-      { keyTimes, splines: [LINEAR, EASE, EASE, LINEAR], additive: true },
-    );
+    return animateEl("animate", "opacity", period, ["0", "0", frac(p.sweepIntensity), "0", "0"], {
+      keyTimes,
+      splines: [LINEAR, EASE, EASE, LINEAR],
+      additive: true,
+    });
   }
 
   // `glow`: brightness by distance from the table's center, breathing.
@@ -968,7 +954,7 @@ export function diamondSvg(params: DiamondParams = {}): string {
     const distance = Math.hypot(f.center[0] - tableCenter[0], f.center[1] - tableCenter[1]);
     const peak = p.glowIntensity * Math.max(0, 1 - distance / p.glowRadius) ** 2;
     if (peak < 0.005) return "";
-    return animateEl("animate", "fill-opacity", p.glowDuration, ["0", frac(peak), "0"], {
+    return animateEl("animate", "opacity", p.glowDuration, ["0", frac(peak), "0"], {
       keyTimes: [0, 0.5, 1],
       splines: [EASE, EASE],
       additive: true,
@@ -981,7 +967,7 @@ export function diamondSvg(params: DiamondParams = {}): string {
   const pulseTime = (fraction: number): number =>
     pulseRest + (fraction * p.pulseDuration) / pulsePeriod;
   const pulseFlashAnimate = (): string =>
-    animateEl("animate", "fill-opacity", pulsePeriod, ["0", "0", frac(p.pulseFlash), "0", "0"], {
+    animateEl("animate", "opacity", pulsePeriod, ["0", "0", frac(p.pulseFlash), "0", "0"], {
       keyTimes: [0, pulseRest, pulseTime(0.3), pulseTime(0.9), 1],
       splines: [LINEAR, "0.2 0 0.4 1", EASE, LINEAR],
       additive: true,
@@ -1013,12 +999,16 @@ export function diamondSvg(params: DiamondParams = {}): string {
     const d0 = dOf(f.polys[0], f.sweep);
     const geometry = shapeAnimate(f) + visibilityAnimate(f);
     const hidden = f.shownAtStart ? "" : ` visibility="hidden"`;
+    // Each facet is stroked in its own paint, one screen pixel wide whatever
+    // the rendered size, so the anti-aliased edges of neighbors always add
+    // up to full coverage: no hairline seam, at favicon size or a poster's.
+    const paint = `fill="${fill}" stroke="${fill}"`;
     if (!layered) {
       const inner = geometry + fillAnimate;
       body.push(
         inner
-          ? `  <path fill="${fill}" d="${d0}"${hidden}>${inner}</path>`
-          : `  <path fill="${fill}" d="${d0}"${hidden}/>`,
+          ? `  <path ${paint} ${STROKE_ATTRS} d="${d0}"${hidden}>${inner}</path>`
+          : `  <path ${paint} ${STROKE_ATTRS} d="${d0}"${hidden}/>`,
       );
       continue;
     }
@@ -1027,18 +1017,18 @@ export function diamondSvg(params: DiamondParams = {}): string {
     const gid = id(`f${f.index}`);
     defs.push(
       geometry
-        ? `    <path id="${gid}" d="${d0}"${hidden}>${geometry}</path>`
-        : `    <path id="${gid}" d="${d0}"${hidden}/>`,
+        ? `    <path id="${gid}" ${STROKE_ATTRS} d="${d0}"${hidden}>${geometry}</path>`
+        : `    <path id="${gid}" ${STROKE_ATTRS} d="${d0}"${hidden}/>`,
     );
     const use = (attrs: string, inner = ""): string =>
       inner ? `  <use href="#${gid}" ${attrs}>${inner}</use>` : `  <use href="#${gid}" ${attrs}/>`;
-    body.push(use(`fill="${fill}"`, fillAnimate));
+    body.push(use(paint, fillAnimate));
     const light = [
       active.sweep && p.sweepIntensity > 0 ? sweepAnimate(f) : "",
       active.glow && p.glowIntensity > 0 ? glowAnimate(f) : "",
       active.pulse && p.pulseFlash > 0 ? pulseFlashAnimate() : "",
     ].join("");
-    if (light) body.push(use(`fill="#fff" fill-opacity="0"`, light));
+    if (light) body.push(use(`fill="#fff" stroke="#fff" opacity="0"`, light));
   }
 
   // `glint`: sparkles at the front's extreme corners (left/right of the top
