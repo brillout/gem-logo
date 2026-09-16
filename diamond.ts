@@ -450,6 +450,9 @@ const signedArea2 = (poly: readonly Vec[]): number =>
     return s + x * ny - nx * y;
   }, 0);
 
+/** How far, in multiples of the outset distance, a corner may move when a polygon is let out. */
+const OUTSET_REACH = 6;
+
 /**
  * Convex polygon with every edge moved inward by `d` (outward for a
  * negative `d`); null when the polygon is too thin for that — the caller
@@ -474,7 +477,17 @@ function inset(poly: readonly Vec[], d: number): Vec[] | null {
   for (let i = 0; i < poly.length; i++) {
     const q = intersect(lines[(i + poly.length - 1) % poly.length], lines[i]);
     if (!q) return null;
-    out.push(q);
+    // Letting out a needle-thin sliver (a facet almost edge-on) would send
+    // its tip toward infinity, since its two edges are nearly parallel:
+    // cap how far a corner may move, which keeps the long edges' overlap.
+    const [x, y] = poly[i];
+    const moved = Math.hypot(q[0] - x, q[1] - y);
+    const limit = OUTSET_REACH * -d;
+    out.push(
+      d < 0 && moved > limit
+        ? [x + ((q[0] - x) * limit) / moved, y + ((q[1] - y) * limit) / moved]
+        : q,
+    );
   }
   // Every inset corner must still satisfy every inset edge, or the polygon collapsed.
   for (const q of out)
