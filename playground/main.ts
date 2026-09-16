@@ -40,8 +40,7 @@ const SLIDERS: Record<NumericKey, SliderSpec> = {
   yaw: { min: 0, max: 360 },
   gap: { min: 0, max: 40 },
   cornerRadius: { min: 0, max: 40 },
-  // Up to many times the stone's own size, to preview it at favicon size.
-  padding: { min: 0, max: 16384 },
+  padding: { min: 0, max: 256 },
   shading: { min: 0, max: 1, step: 0.05 },
   lightAngle: { min: -180, max: 180 },
   lightElevation: { min: -90, max: 90 },
@@ -389,12 +388,12 @@ const HEX_COLOR = /^#[0-9a-f]{6}$/i;
 
 const previewSizeSelect = $<HTMLSelectElement>("#preview-size-preset");
 const previewSizeInput = $<HTMLInputElement>("#preview-size");
+const previewBackgroundToggle = $<HTMLInputElement>("#preview-background-on");
 const previewBackgroundPicker = $<HTMLInputElement>("#preview-background");
-const previewCheckerboard = $<HTMLInputElement>("#preview-checkerboard");
 
 /** Displayed size of the SVG in CSS pixels; null fits it to the stage. */
 let previewSize: number | null = null;
-/** Backdrop behind the SVG: a color, or the transparency checkerboard. */
+/** Backdrop of the preview area: a color, or (toggle off) the transparency checkerboard. */
 let previewBackground = "#ffffff";
 {
   // Restore the preview settings from the query string, like the mark's parameters.
@@ -422,31 +421,34 @@ previewSizeInput.addEventListener("input", () => {
   applyPreview();
   syncUrl();
 });
+previewBackgroundToggle.addEventListener("input", () => {
+  previewBackground = previewBackgroundToggle.checked
+    ? previewBackgroundPicker.value
+    : CHECKERBOARD;
+  applyPreview();
+  syncUrl();
+});
 previewBackgroundPicker.addEventListener("input", () => {
   previewBackground = previewBackgroundPicker.value;
   applyPreview();
   syncUrl();
 });
-previewCheckerboard.addEventListener("input", () => {
-  previewBackground = previewCheckerboard.checked ? CHECKERBOARD : previewBackgroundPicker.value;
-  applyPreview();
-  syncUrl();
-});
 
-/** Style the SVG on the stage per the preview settings, and point the controls at them. */
+/** Style the stage per the preview settings, and point the controls at them. */
 function applyPreview(): void {
   const svg = preview.querySelector("svg");
   if (svg) {
     svg.style.width = previewSize ? `${previewSize}px` : "";
     svg.style.height = previewSize ? `${previewSize}px` : "";
-    svg.classList.toggle(CHECKERBOARD, previewBackground === CHECKERBOARD);
-    svg.style.background = previewBackground === CHECKERBOARD ? "" : previewBackground;
   }
+  const checkerboard = previewBackground === CHECKERBOARD;
+  preview.classList.toggle(CHECKERBOARD, checkerboard);
+  preview.style.background = checkerboard ? "" : previewBackground;
   const size = previewSize ? String(previewSize) : "";
   previewSizeSelect.value = !previewSize || PREVIEW_SIZES.includes(previewSize) ? size : "custom";
   previewSizeInput.value = size;
-  previewCheckerboard.checked = previewBackground === CHECKERBOARD;
-  if (previewBackground !== CHECKERBOARD) previewBackgroundPicker.value = previewBackground;
+  previewBackgroundToggle.checked = !checkerboard;
+  if (!checkerboard) previewBackgroundPicker.value = previewBackground;
 }
 
 $("#reset").addEventListener("click", () => {

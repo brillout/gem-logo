@@ -19,24 +19,26 @@
         <div id="warnings" hidden></div>
       </aside>
       <section id="stage">
+        <!-- Preview settings only style the page around the SVG; the SVG and its exports are unaffected. -->
+        <div id="preview-settings">
+          <label
+            >preview size
+            <select id="preview-size-preset"></select>
+            <input id="preview-size" type="number" min="8" max="4096" step="1" placeholder="fit"
+          /></label>
+          <label
+            >preview background
+            <input id="preview-background-on" type="checkbox" checked />
+            <input id="preview-background" type="color" value="#ffffff"
+          /></label>
+        </div>
+        <div id="preview"></div>
         <div id="stage-actions">
-          <div id="stage-settings">
-            <label
-              >padding
-              <select id="padding-preset"></select>
-              <input id="padding-slider" type="range" min="0" max="16384" step="1"
-            /></label>
-            <!-- Preview settings only style the page around the SVG; the SVG and its exports are unaffected. -->
-            <label
-              >preview size
-              <select id="preview-size-preset"></select>
-              <input id="preview-size" type="number" min="8" max="4096" step="1" placeholder="fit"
-            /></label>
-            <label
-              >preview background <input id="preview-background" type="color" value="#ffffff"
-            /></label>
-            <label><input id="preview-checkerboard" type="checkbox" /> checkerboard</label>
-          </div>
+          <label id="padding-control"
+            >padding
+            <select id="padding-preset"></select>
+            <input id="padding-slider" type="range" min="0" max="256" step="1"
+          /></label>
           <button id="copy" type="button">Copy SVG</button>
           <button id="download" type="button">Download SVG</button>
           <label
@@ -46,7 +48,6 @@
           /></label>
           <button id="download-png" type="button">Download PNG</button>
         </div>
-        <div id="preview"></div>
         <details id="source-details">
           <summary>SVG source <span id="byte-count"></span></summary>
           <pre id="source"></pre>
