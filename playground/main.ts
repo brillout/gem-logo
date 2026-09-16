@@ -40,7 +40,8 @@ const SLIDERS: Record<NumericKey, SliderSpec> = {
   yaw: { min: 0, max: 360 },
   gap: { min: 0, max: 40 },
   cornerRadius: { min: 0, max: 40 },
-  padding: { min: 0, max: 256 },
+  // Up to many times the stone's own size, to preview it at favicon size.
+  padding: { min: 0, max: 8192 },
   shading: { min: 0, max: 1, step: 0.05 },
   lightAngle: { min: -180, max: 180 },
   lightElevation: { min: -90, max: 90 },
