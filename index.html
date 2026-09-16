@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>diamond playground</title>
+    <!-- Filled in by main.ts with the currently rendered mark. -->
+    <link rel="icon" type="image/svg+xml" href="data:," />
+    <script type="module" crossorigin src="./assets/index-A5rVmAgT.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Bc8Zg8Sa.css">
+  </head>
+  <body>
+    <main>
+      <aside id="sidebar">
+        <header id="sidebar-header">
+          <h1>diamond playground</h1>
+          <button id="reset" type="button">Reset</button>
+        </header>
+        <div id="controls"></div>
+        <div id="warnings" hidden></div>
+      </aside>
+      <section id="stage">
+        <!-- Preview settings only style the page around the SVG; the SVG and its exports are unaffected. -->
+        <div id="preview-settings">
+          <label
+            >preview size
+            <select id="preview-size-preset"></select>
+            <input id="preview-size" type="number" min="8" max="4096" step="1" placeholder="fit"
+          /></label>
+          <label
+            >preview background
+            <input id="preview-background-on" type="checkbox" checked />
+            <input id="preview-background" type="color" value="#ffffff"
+          /></label>
+        </div>
+        <div id="preview"></div>
+        <div id="stage-actions">
+          <label id="padding-control"
+            >padding
+            <select id="padding-preset"></select>
+            <input id="padding-slider" type="range" min="0" max="256" step="1"
+          /></label>
+          <button id="copy" type="button">Copy SVG</button>
+          <button id="download" type="button">Download SVG</button>
+          <label
+            >PNG size
+            <select id="png-size-preset"></select>
+            <input id="png-size" type="number" min="16" max="4096" step="1"
+          /></label>
+          <button id="download-png" type="button">Download PNG</button>
+        </div>
+        <details id="source-details">
+          <summary>SVG source <span id="byte-count"></span></summary>
+          <pre id="source"></pre>
+        </details>
+      </section>
+    </main>
+  </body>
+</html>
