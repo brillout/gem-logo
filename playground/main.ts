@@ -41,8 +41,6 @@ const SLIDERS: Record<NumericKey, SliderSpec> = {
   gap: { min: 0, max: 40 },
   cornerRadius: { min: 0, max: 40 },
   padding: { min: 0, max: 256 },
-  gradientAngle: { min: 0, max: 360, onlyFor: "linear" },
-  paletteRepeat: { min: 1, max: 6 },
   shading: { min: 0, max: 1, step: 0.05 },
   lightAngle: { min: -180, max: 180 },
   lightElevation: { min: -90, max: 90 },
@@ -62,13 +60,6 @@ const SLIDERS: Record<NumericKey, SliderSpec> = {
   spinSteps: { min: 8, max: 72 },
   floatDuration: { min: 0.5, max: 20, step: 0.5 },
   floatHeight: { min: 0, max: 100 },
-  flipDuration: { min: 0.2, max: 10, step: 0.1 },
-  flipHold: { min: 0, max: 20, step: 0.5 },
-  forgeHold: { min: 0.5, max: 20, step: 0.5 },
-  forgeMorph: { min: 0.2, max: 10, step: 0.1 },
-  forgeRough: { min: 0.2, max: 20, step: 0.1 },
-  forgeRoughness: { min: 0, max: 1, step: 0.05 },
-  forgeDull: { min: 0, max: 1, step: 0.05 },
   pulseHold: { min: 0.5, max: 20, step: 0.5 },
   pulseDuration: { min: 0.1, max: 5, step: 0.1 },
   pulseScale: { min: 1, max: 2, step: 0.01 },
@@ -90,7 +81,7 @@ const SECTIONS: { title: string; keys: ControlKey[] }[] = [
     keys: ["size", "tableSize", "crownHeight", "pavilionHeight", "sides", "gap", "cornerRadius"],
   },
   { title: "Camera", keys: ["pitch", "yaw"] },
-  { title: "Color", keys: ["gradient", "gradientAngle", "paletteRepeat", "colors", "background"] },
+  { title: "Color", keys: ["gradient", "colors", "background"] },
   { title: "Light", keys: ["shading", "lightAngle", "lightElevation"] },
   { title: "Color flow", keys: ["colorFlow", "colorFlowDuration"] },
   {
@@ -101,11 +92,6 @@ const SECTIONS: { title: string; keys: ControlKey[] }[] = [
   { title: "Glow", keys: ["glow", "glowDuration", "glowRadius", "glowIntensity"] },
   { title: "Spin", keys: ["spin", "spinDuration", "spinSteps"] },
   { title: "Float", keys: ["float", "floatDuration", "floatHeight", "floatShadow"] },
-  { title: "Flip", keys: ["flip", "flipDuration", "flipHold"] },
-  {
-    title: "Forge",
-    keys: ["forge", "forgeHold", "forgeMorph", "forgeRough", "forgeRoughness", "forgeDull"],
-  },
   { title: "Pulse", keys: ["pulse", "pulseHold", "pulseDuration", "pulseScale", "pulseFlash"] },
   { title: "Output", keys: ["padding", "precision"] },
 ];
@@ -238,7 +224,7 @@ gradientSelect.addEventListener("input", () => {
   render();
 });
 
-// Color palette: one picker per entry; one entry means the monochrome stone.
+// The tone ramp: one picker per stop, lightest first; a single stop gets its highlight and shadow derived.
 const colorList = el("div", { class: "color-list" });
 const addColorButton = el("button", { type: "button", class: "small" }, "+ Add color");
 addColorButton.addEventListener("click", () => {
@@ -493,7 +479,7 @@ function render(): void {
   warningsBox.replaceChildren(...warnings.map((w) => el("p", {}, w)));
 
   // Dim the controls that currently have no effect: an animation's settings
-  // while it is off, and the gradient angle outside the "linear" mode.
+  // while it is off, and sliders tied to another gradient mode.
   for (const section of SECTIONS) {
     const [first, ...others] = section.keys;
     if (typeof stateDefaults[first] !== "boolean") continue;

@@ -25,24 +25,22 @@
  *
  * Color
  * -----
- * `colors` takes any number of colors; `gradient` picks how they are applied:
- *   "flow"    (default) the palette, treated as a closed loop, wraps around
- *             the stone's vertical axis `paletteRepeat` times (2: the whole
- *             palette shows across the front). Each facet gets a horizontal
- *             gradient between the palette colors at its left and right
- *             edges, so the colors sweep seamlessly across the facets.
- *   "steps"   every facet is ONE solid color: the palette sampled at the
- *             facet's center — a stepped version of "flow".
- *   "linear"  one straight gradient across the whole mark; direction set by
- *             gradientAngle (0 = left→right, 90 = top→bottom).
- * One color gives the monochrome stone (facets told apart by shading only).
- * "flow" and "steps" blend colors themselves, so they need hex colors.
+ * A gem is one color, so `colors` is a tone ramp of that one color, lightest
+ * first: highlight, body, shadow — any number of stops (color-palettes.ts
+ * has ready-made ones; a single color gets its highlight and shadow
+ * derived). Every facet takes its tone from how squarely it faces a light
+ * at azimuth `lightAngle` (0 = from the viewer, 90 = from the right) and
+ * `lightElevation` degrees above the horizon: facets turned toward the
+ * light climb toward the highlight, facets turned away sink toward the
+ * shadow, and `shading` sets how far along the ramp they go (0: every facet
+ * the middle tone, 1: the full ramp). Half-wrap lighting keeps facets past
+ * the light's terminator from clamping to one flat dark tone, so the
+ * pavilion keeps its left/right variation.
  *
- * `shading` darkens every facet by how much it faces away from a light at
- * azimuth `lightAngle` (0 = from the viewer, 90 = from the right) and
- * `lightElevation` degrees above the horizon: the palette color is the fully
- * lit color, and facets turned away from the light get progressively darker
- * (wrap lighting, so even the pavilion keeps its left/right variation).
+ * `gradient` picks how a facet wears its tone:
+ *   "sheen"   (default) a soft gradient across each facet, a shade lighter
+ *             toward the light and darker away from it — the glassy look.
+ *   "flat"    every facet one solid tone.
  *
  * Animation
  * ---------
@@ -52,9 +50,10 @@
  * at t = 0 every animation rests in the static pose, so static renderers
  * (which ignore SMIL) show exactly the un-animated mark. They combine freely.
  *
- *   colorFlow  the palette drifts across the facets — the same palette
- *              position that already varies per facet is swept through a
- *              full cycle over `colorFlowDuration` seconds.
+ *   colorFlow  the light circles the stone once every `colorFlowDuration`
+ *              seconds — around the viewing axis, so it always lights the
+ *              front — and the tones flow around the facets: each facet
+ *              brightens as the light passes its side and dims again.
  *   sweep      a band of light crosses the mark along `sweepAngle`: each
  *              facet flares up (white overlay, `sweepIntensity`) as the band
  *              passes over its center, over `sweepDuration` seconds, then
@@ -69,17 +68,10 @@
  *              every `spinDuration` seconds. The 3D model is projected at
  *              `spinSteps` keyframes; every facet's outline tweens between
  *              them, back-facing facets flatten to a line and hide, and the
- *              shading follows each facet's changing angle to the light.
+ *              tones follow each facet's changing angle to the light.
  *   float      the stone bobs `floatHeight` up and back every
  *              `floatDuration` seconds, above a soft shadow (`floatShadow`)
  *              that shrinks as it rises.
- *   flip       the stone turns edge-on and over, showing its mirror image,
- *              holding each face `flipHold` seconds and turning over
- *              `flipDuration` seconds (a cosine, so it lingers at the faces).
- *   forge      the cut stone dissolves into a rough one — every corner
- *              displaced by `forgeRoughness`, the color dulled by
- *              `forgeDull` — and is cut again: cut for `forgeHold` seconds,
- *              morph over `forgeMorph`, rough for `forgeRough`, morph back.
  *   pulse      every `pulseHold` seconds the stone pops to `pulseScale`
  *              with a white flash (`pulseFlash`) and settles back, over
  *              `pulseDuration` seconds — the "skill unlocked" beat.
@@ -90,7 +82,7 @@
 
 // ------------------------------------------------------------------ options
 
-export const GRADIENTS = ["flow", "steps", "linear"] as const;
+export const GRADIENTS = ["sheen", "flat"] as const;
 export type Gradient = (typeof GRADIENTS)[number];
 
 export interface DiamondParams {
@@ -114,23 +106,19 @@ export interface DiamondParams {
   cornerRadius?: number;
   /** Margin between the artwork and the edge of the viewBox. */
   padding?: number;
-  /** Color palette; 2+ entries wrap around the stone, a single entry gives the monochrome stone. */
+  /** The stone's color as a tone ramp, lightest first (highlight … shadow); a single color gets its highlight and shadow derived. Hex colors. */
   colors?: string[];
-  /** How the palette is applied: "flow" (sweep across the facets), "steps" (solid facets), "linear" (straight gradient). */
+  /** How a facet wears its tone: "sheen" (a soft gradient toward the light) or "flat" (one solid tone). */
   gradient?: Gradient;
-  /** Direction of the "linear" gradient in degrees: 0 = left→right, 90 = top→bottom. */
-  gradientAngle?: number;
-  /** How many times the palette wraps around the stone; 2 shows the whole palette across the front. */
-  paletteRepeat?: number;
-  /** Strength of the light/dark shading between facets, 0 (flat) to 1. */
+  /** How far along the ramp facets go with their angle to the light: 0 (every facet the middle tone) to 1 (the full ramp). */
   shading?: number;
   /** Azimuth of the light in degrees: 0 = from the viewer, 90 = from the right, -90 = from the left. */
   lightAngle?: number;
   /** Elevation of the light above the horizon, in degrees. */
   lightElevation?: number;
-  /** Animate the palette drifting across the facets. Needs "flow"/"steps" and a hex palette of 2+ colors. */
+  /** Animate the light circling the stone (on screen, always lighting its front), so the tones flow around the facets. */
   colorFlow?: boolean;
-  /** Duration of one full color-drift cycle, in seconds. */
+  /** Seconds per circuit of the light. */
   colorFlowDuration?: number;
   /** Animate a band of light sweeping across the facets. */
   sweep?: boolean;
@@ -176,24 +164,6 @@ export interface DiamondParams {
   floatHeight?: number;
   /** Draw the soft ground shadow under the floating stone. */
   floatShadow?: boolean;
-  /** Animate the stone flipping over to its mirror image. */
-  flip?: boolean;
-  /** Seconds per half turn (front to back, or back to front). */
-  flipDuration?: number;
-  /** Seconds the stone holds each face between turns. */
-  flipHold?: number;
-  /** Animate the stone dissolving into a rough stone and being cut again. */
-  forge?: boolean;
-  /** Seconds the cut stone holds per cycle. */
-  forgeHold?: number;
-  /** Seconds to morph between cut and rough, each way. */
-  forgeMorph?: number;
-  /** Seconds the rough stone holds per cycle. */
-  forgeRough?: number;
-  /** How far the rough stone's corners stray from the cut ones, 0 to 1. */
-  forgeRoughness?: number;
-  /** How much the rough stone's color is dulled, 0 to 1. */
-  forgeDull?: number;
   /** Animate the "skill unlocked" pop: a quick scale-up with a flash. */
   pulse?: boolean;
   /** Seconds of rest between pops. */
@@ -224,8 +194,8 @@ const warnToConsole = (message: string): void => console.warn(`[diamond] warning
 
 /**
  * Fill in defaults. An empty `colors` array means unset, so the default
- * palette applies — the resolved `colors` is never empty, so it IS the
- * palette. Counts are rounded to whole numbers.
+ * ramp applies — the resolved `colors` is never empty. Counts are rounded
+ * to whole numbers.
  */
 function resolve(params: DiamondParams): Resolved {
   const p: Resolved = { onWarn: warnToConsole, ...DEFAULTS, ...params };
@@ -233,7 +203,6 @@ function resolve(params: DiamondParams): Resolved {
   p.sides = Math.max(3, Math.round(p.sides));
   p.spinSteps = Math.max(4, Math.round(p.spinSteps));
   p.glintCount = Math.min(GLINT_SPOTS, Math.max(1, Math.round(p.glintCount)));
-  p.paletteRepeat = Math.max(1, Math.round(p.paletteRepeat));
   return p;
 }
 
@@ -248,13 +217,12 @@ function validate(p: Resolved): void {
   if (p.cornerRadius < 0) warn("cornerRadius must be >= 0 — treating it as 0 (sharp corners)");
   if (Math.abs(p.pitch) >= 90) warn("pitch must stay between -90 and 90");
   if (!GRADIENTS.includes(p.gradient))
-    warn(`unknown gradient "${p.gradient}" — using "steps" (options: ${GRADIENTS.join(", ")})`);
+    warn(`unknown gradient "${p.gradient}" — using "flat" (options: ${GRADIENTS.join(", ")})`);
+  const bad = p.colors.filter((c) => parseHex(c) === null);
+  if (bad.length) warn(`colors must be hex (#rgb / #rrggbb) — using gray for ${bad.join(", ")}`);
   if (p.shading < 0 || p.shading > 1) warn("shading should be between 0 and 1");
   if (p.colorFlow && p.colorFlowDuration <= 0)
     warn("colorFlowDuration must be > 0 — colorFlow ignored");
-  if (p.colorFlow && p.colors.length <= 1) warn("colorFlow has no effect with a single color");
-  if (p.colorFlow && p.gradient === "linear")
-    warn('colorFlow only applies to "flow"/"steps" — ignoring for "linear"');
   if (p.sweep && (p.sweepDuration <= 0 || p.sweepHold < 0 || p.sweepWidth <= 0))
     warn("sweepDuration and sweepWidth must be > 0 and sweepHold >= 0 — sweep ignored");
   if (p.glint && p.glintDuration <= 0) warn("glintDuration must be > 0 — glint ignored");
@@ -262,10 +230,6 @@ function validate(p: Resolved): void {
     warn("glowDuration and glowRadius must be > 0 — glow ignored");
   if (p.spin && p.spinDuration <= 0) warn("spinDuration must be > 0 — spin ignored");
   if (p.float && p.floatDuration <= 0) warn("floatDuration must be > 0 — float ignored");
-  if (p.flip && (p.flipDuration <= 0 || p.flipHold < 0))
-    warn("flipDuration must be > 0 and flipHold >= 0 — flip ignored");
-  if (p.forge && (p.forgeHold <= 0 || p.forgeMorph <= 0 || p.forgeRough <= 0))
-    warn("forgeHold, forgeMorph and forgeRough must be > 0 — forge ignored");
   if (p.pulse && (p.pulseHold <= 0 || p.pulseDuration <= 0))
     warn("pulseHold and pulseDuration must be > 0 — pulse ignored");
   if (p.pulse && p.pulseScale <= 0) warn("pulseScale must be > 0 — pulse ignored");
@@ -279,8 +243,6 @@ export const ANIMATIONS = [
   "glow",
   "spin",
   "float",
-  "flip",
-  "forge",
   "pulse",
 ] as const;
 export type Animation = (typeof ANIMATIONS)[number];
@@ -288,14 +250,12 @@ export type Animation = (typeof ANIMATIONS)[number];
 /** The animations that actually run, after validation knocked out the broken ones. */
 function activeAnimations(p: Resolved) {
   return {
-    colorFlow: p.colorFlow && p.colorFlowDuration > 0 && p.colors.length > 1,
+    colorFlow: p.colorFlow && p.colorFlowDuration > 0,
     sweep: p.sweep && p.sweepDuration > 0 && p.sweepHold >= 0 && p.sweepWidth > 0,
     glint: p.glint && p.glintDuration > 0,
     glow: p.glow && p.glowDuration > 0 && p.glowRadius > 0,
     spin: p.spin && p.spinDuration > 0,
     float: p.float && p.floatDuration > 0,
-    flip: p.flip && p.flipDuration > 0 && p.flipHold >= 0,
-    forge: p.forge && p.forgeHold > 0 && p.forgeMorph > 0 && p.forgeRough > 0,
     pulse: p.pulse && p.pulseHold > 0 && p.pulseDuration > 0 && p.pulseScale > 0,
   };
 }
@@ -312,11 +272,6 @@ const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.m
 const range = (n: number): number[] => Array.from({ length: n }, (_, i) => i);
 /** Angle folded into [-180, 180). */
 const foldDeg = (a: number): number => ((((a + 180) % 360) + 360) % 360) - 180;
-/** Smoothstep: 0 → 1 with zero slope at both ends. */
-const ease = (u: number): number => {
-  const x = clamp(u, 0, 1);
-  return x * x * (3 - 2 * x);
-};
 
 const dot3 = (a: Vec3, b: Vec3): number => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const normalize3 = (v: Vec3): Vec3 => {
@@ -335,8 +290,6 @@ interface Face {
   readonly indices: readonly number[];
   /** Unit outward normal. */
   readonly normal: Vec3;
-  /** Azimuths of the facet's left and right edges (the palette range it covers); null for the table. */
-  readonly azimuth: readonly [number, number] | null;
 }
 
 interface Model {
@@ -389,18 +342,16 @@ function buildModel(p: Resolved): Model {
   const culet = vertices.length;
   vertices.push([0, -p.pavilionHeight, 0]);
 
-  const face = (kind: Face["kind"], indices: number[], azimuth: Face["azimuth"]): Face => ({
+  const face = (kind: Face["kind"], indices: number[]): Face => ({
     kind,
     indices,
     normal: outwardNormal(indices.map((i) => vertices[i])),
-    azimuth,
   });
-  const faces: Face[] = [face("table", range(n), null)];
+  const faces: Face[] = [face("table", range(n))];
   for (let i = 0; i < n; i++) {
     const prev = (i + n - 1) % n;
-    const azimuth: [number, number] = [(i - 0.5) * step, (i + 0.5) * step];
-    faces.push(face("crown", [prev, i, n + i, n + prev], azimuth));
-    faces.push(face("pavilion", [n + prev, n + i, culet], azimuth));
+    faces.push(face("crown", [prev, i, n + i, n + prev]));
+    faces.push(face("pavilion", [n + prev, n + i, culet]));
   }
   return { vertices, faces, culet, tableCenter: [0, p.crownHeight, 0] };
 }
@@ -436,28 +387,40 @@ function edgeOnYaws(normal: Vec3, pitch: number): number[] {
   return [a - azimuth, -a - azimuth];
 }
 
+// ------------------------------------------------------------------- light
+
+/** Unit vector toward a light at `angle` degrees of azimuth and `elevation` degrees above the horizon. */
+function lightVector(angle: number, elevation: number): Vec3 {
+  const la = rad(angle);
+  const le = rad(elevation);
+  return [Math.cos(le) * Math.sin(la), Math.sin(le), Math.cos(le) * Math.cos(la)];
+}
+
 /** How far past the light's terminator a facet still catches light (0: plain Lambert, 1: full wrap). */
 const SHADE_WRAP = 0.5;
 
-/** Darkening (0: fully lit, up to `shading`) of a facet turned by `yaw`, from its angle to the light. */
-function darkenOf(normal: Vec3, yaw: number, p: Resolved): number {
-  const n = yawed(normal, yaw);
-  const la = rad(p.lightAngle);
-  const le = rad(p.lightElevation);
-  const light: Vec3 = [Math.cos(le) * Math.sin(la), Math.sin(le), Math.cos(le) * Math.cos(la)];
-  // Half-wrap lighting: facets turned up to 60° past the light still get
-  // some light, so the pavilion keeps its left/right variation instead of
-  // clamping to one flat dark tone.
-  const lit = clamp((dot3(n, light) + SHADE_WRAP) / (1 + SHADE_WRAP), 0, 1);
-  return clamp(p.shading * (1 - lit), 0, 1);
+/**
+ * The light swung `angle` degrees around the viewing axis: it circles the
+ * stone on screen (up, left, down, right) while always lighting its front.
+ */
+function orbitLight(light: Vec3, angle: number): Vec3 {
+  const a = rad(angle);
+  return [
+    light[0] * Math.cos(a) - light[1] * Math.sin(a),
+    light[0] * Math.sin(a) + light[1] * Math.cos(a),
+    light[2],
+  ];
 }
 
-/** Deterministic pseudo-random number in [0, 1) for vertex `i`, stream `salt`. */
-function hash01(i: number, salt: number): number {
-  let h = (Math.imul(i + 1, 374761393) + Math.imul(salt + 1, 668265263)) | 0;
-  h = Math.imul(h ^ (h >>> 13), 1274126177);
-  h ^= h >>> 16;
-  return (h >>> 0) / 4294967296;
+/**
+ * How lit a facet is, 0 (turned away) to 1 (squarely facing the light), for
+ * a stone turned by `yaw` under a light from the unit direction `light`.
+ * Half-wrap lighting: facets turned up to 60° past the light still get
+ * some light, so the pavilion keeps its left/right variation instead of
+ * clamping to one flat dark tone.
+ */
+function litOf(normal: Vec3, yaw: number, light: Vec3): number {
+  return clamp((dot3(yawed(normal, yaw), light) + SHADE_WRAP) / (1 + SHADE_WRAP), 0, 1);
 }
 
 // --------------------------------------------------------------- 2D polygons
@@ -488,12 +451,12 @@ const signedArea2 = (poly: readonly Vec[]): number =>
   }, 0);
 
 /**
- * Convex polygon shrunk by moving every edge inward by `d`; null when the
- * polygon is too thin (or not convex) for that — the caller falls back to
- * `shrink`.
+ * Convex polygon with every edge moved inward by `d` (outward for a
+ * negative `d`); null when the polygon is too thin for that — the caller
+ * falls back to `shrink`.
  */
 function inset(poly: readonly Vec[], d: number): Vec[] | null {
-  if (d <= 0) return [...poly];
+  if (d === 0) return [...poly];
   const c = centroid(poly);
   const lines: Line[] = [];
   for (let i = 0; i < poly.length; i++) {
@@ -549,6 +512,7 @@ function roundCorner(poly: readonly Vec[], i: number, radius: number): RoundedCo
   const prev = poly[(i + poly.length - 1) % poly.length];
   const next = poly[(i + 1) % poly.length];
   const sharp: RoundedCorner = { from: pt, to: pt, r: 0, sweep: 1 };
+  if (radius <= 0) return sharp;
 
   const d1: Vec = [prev[0] - pt[0], prev[1] - pt[1]];
   const d2: Vec = [next[0] - pt[0], next[1] - pt[1]];
@@ -560,7 +524,9 @@ function roundCorner(poly: readonly Vec[], i: number, radius: number): RoundedCo
 
   const dot = clamp(u1[0] * u2[0] + u1[1] * u2[1], -1, 1);
   const theta = Math.acos(dot); // interior angle at the corner
-  if (theta > Math.PI - 1e-6) return sharp; // collinear edges: nothing to round
+  // Collinear edges (a flat corner, or a facet flattened to its edge-on
+  // line, where the edges fold onto each other): nothing to round.
+  if (theta < 1e-6 || theta > Math.PI - 1e-6) return sharp;
 
   const trim = Math.min(radius / Math.tan(theta / 2), l1 / 2, l2 / 2);
   const r = trim * Math.tan(theta / 2);
@@ -598,19 +564,33 @@ const toHex = (rgb: readonly number[]): string =>
     )
     .join("");
 
-/** Sample a palette treated as a closed loop, t ∈ [0, 1] (t = 1 wraps to t = 0). */
-function paletteAt(palette: readonly Rgb[], t: number): string {
-  const x = (((t % 1) + 1) % 1) * palette.length;
-  const i = Math.floor(x) % palette.length;
-  const f = x - Math.floor(x);
-  const a = palette[i];
-  const b = palette[(i + 1) % palette.length];
-  return toHex(a.map((v, ch) => v + (b[ch] - v) * f));
+/** Linear blend from `a` (f = 0) to `b` (f = 1). */
+const mix = (a: Rgb, b: Rgb, f: number): Rgb => [
+  a[0] + (b[0] - a[0]) * f,
+  a[1] + (b[1] - a[1]) * f,
+  a[2] + (b[2] - a[2]) * f,
+];
+
+/** The tone ramp sampled at t ∈ [0, 1]: its first stop at 0, its last at 1, blended linearly in between. */
+function rampAt(ramp: readonly Rgb[], t: number): string {
+  if (ramp.length === 1) return toHex(ramp[0]);
+  const x = clamp(t, 0, 1) * (ramp.length - 1);
+  const i = Math.min(Math.floor(x), ramp.length - 2);
+  return toHex(mix(ramp[i], ramp[i + 1], x - i));
 }
 
-/** The palette with every color darkened by `darken` (0: unchanged, 1: black) — what a black overlay of that opacity would do. */
-const darkened = (palette: readonly Rgb[], darken: number): Rgb[] =>
-  palette.map((c) => [c[0] * (1 - darken), c[1] * (1 - darken), c[2] * (1 - darken)]);
+/** A tone ramp for a single color: tinted toward white for the highlights, deepened toward black for the shadows. */
+const deriveRamp = (color: Rgb): Rgb[] => {
+  const white: Rgb = [255, 255, 255];
+  const black: Rgb = [0, 0, 0];
+  return [
+    mix(color, white, 0.72),
+    mix(color, white, 0.3),
+    color,
+    mix(color, black, 0.38),
+    mix(color, black, 0.66),
+  ];
+};
 
 // --------------------------------------------------------------- svg output
 
@@ -661,77 +641,49 @@ function animateEl(
   );
 }
 
+/** Keyframes per circuit of the light for `colorFlow`. */
+const COLOR_FLOW_STEPS = 24;
+
 /**
- * The keyframes that the stone's outline tweens through when its geometry
- * animates (`spin` and/or `forge`): the turn and the rough-morph amount at
- * every keyframe, with the timing that SMIL needs to replay them.
+ * The evenly spaced keyframes that the stone tweens through when it spins
+ * and/or the light circles it (`spin`, `colorFlow`): the turn and the
+ * light's direction at every keyframe. The loop is the spin's period, and
+ * the light makes as many whole circuits inside it as `colorFlowDuration`
+ * allows (or, without a spin, the loop is the light's own period), so both
+ * repeat seamlessly together.
  */
 interface Timeline {
   readonly period: number;
   /** The base keyframes, 0 .. 1; the last repeats the first. */
   readonly keyTimes: readonly number[];
-  /** Per-segment easing of the base keyframes; null for evenly spaced linear ones (keyTimes then stay implicit). */
-  readonly splines: readonly string[] | null;
   /** Whole turns of the stone per loop; 0 when it isn't spinning. */
   readonly turns: number;
   readonly yawAt: (t: number) => number;
-  readonly morphAt: (t: number) => number;
-}
-
-function forgeTiming(p: Resolved): { total: number; t1: number; t2: number; t3: number } {
-  const total = p.forgeHold + 2 * p.forgeMorph + p.forgeRough;
-  return {
-    total,
-    t1: p.forgeHold / total,
-    t2: (p.forgeHold + p.forgeMorph) / total,
-    t3: (p.forgeHold + p.forgeMorph + p.forgeRough) / total,
-  };
+  readonly lightAt: (t: number) => Vec3;
 }
 
 function timelineOf(p: Resolved, active: Active): Timeline | null {
-  if (!active.spin && !active.forge) return null;
-  const forge = forgeTiming(p);
-  // Cut, held; morph to rough; rough, held; morph back. Sampled on the
-  // spin's dense keyframes the ramps are eased here; on the forge's own
-  // sparse keyframes they are linear and SMIL's splines do the easing.
-  const morphAt = (t: number, eased: boolean): number => {
-    const ramp = (u: number): number => (eased ? ease(u) : clamp(u, 0, 1));
-    if (!active.forge || t < forge.t1) return 0;
-    if (t < forge.t2) return ramp((t - forge.t1) / (forge.t2 - forge.t1));
-    if (t < forge.t3) return 1;
-    return 1 - ramp((t - forge.t3) / (1 - forge.t3));
-  };
-  if (!active.spin)
-    return {
-      period: forge.total,
-      keyTimes: [0, forge.t1, forge.t2, forge.t3, 1],
-      splines: [LINEAR, EASE, LINEAR, EASE],
-      turns: 0,
-      yawAt: () => p.yaw,
-      morphAt: (t) => morphAt(t, false),
-    };
-  // Spinning: evenly spaced keyframes around the turn. With `forge` on too,
-  // the loop is the forge cycle and the stone makes as many whole turns in it
-  // as `spinDuration` allows, so both animations repeat seamlessly together.
-  const period = active.forge ? forge.total : p.spinDuration;
-  const turns = active.forge ? Math.max(1, Math.round(period / p.spinDuration)) : 1;
-  const count = turns * p.spinSteps;
+  if (!active.spin && !active.colorFlow) return null;
+  const period = active.spin ? p.spinDuration : p.colorFlowDuration;
+  const turns = active.spin ? 1 : 0;
+  const orbits = active.colorFlow ? Math.max(1, Math.round(period / p.colorFlowDuration)) : 0;
+  const count = Math.max(turns * p.spinSteps, orbits * COLOR_FLOW_STEPS);
+  const light = lightVector(p.lightAngle, p.lightElevation);
   return {
     period,
     keyTimes: range(count + 1).map((i) => i / count),
-    splines: null,
     turns,
     yawAt: (t) => p.yaw + 360 * turns * t,
-    morphAt: (t) => morphAt(t, true),
+    lightAt: (t) => orbitLight(light, 360 * orbits * t),
   };
 }
 
 /** How many sparkle spots `glint` can pick from (a `glintCount` of n uses the first n). */
 const GLINT_SPOTS = 5;
-/** How far the rough stone's corners stray at `forgeRoughness` 1, as a fraction of `size`. */
-const ROUGH_SCALE = 0.15;
-/** Overlay that dulls the rough stone: mid-gray flattens light and dark palettes alike. */
-const DULL_COLOR = "#8a8a8a";
+/** Without a gap, neighboring facets overlap by this hair so anti-aliasing leaves no seam between them. */
+const SEAM_OVERLAP = 0.35;
+/** How far along the ramp (at `shading` 1) a facet's sheen runs lighter toward the light and darker away from it. */
+const SHEEN_SPREAD = 0.14;
 
 export function diamondSvg(params: DiamondParams = {}): string {
   const p = resolve(params);
@@ -746,32 +698,48 @@ export function diamondSvg(params: DiamondParams = {}): string {
   //
   // Everything is drawn around (0,0): the stone's axis is x = 0 and the
   // static pose's silhouette is centered vertically, so the scale
-  // animations (`pulse`, `flip`) scale about the stone's own center.
+  // animation (`pulse`) scales about the stone's own center.
   const staticRaw = model.vertices.map((v) => project(v, p.yaw, p.pitch));
   const staticYs = staticRaw.map(([, y]) => y);
   const yShift = (Math.min(...staticYs) + Math.max(...staticYs)) / 2;
-  // `forge`'s rough stone: every corner pushed a fixed pseudo-random way.
-  const roughness = p.forgeRoughness * p.size * ROUGH_SCALE;
-  const jitter: Vec[] = model.vertices.map((_, j) => [
-    (2 * hash01(j, 1) - 1) * roughness,
-    (2 * hash01(j, 2) - 1) * roughness,
-  ]);
-  /** Every vertex on screen, for the stone turned by `yaw` and `morph` (0..1) of the way to rough. */
-  const pose = (yaw: number, morph: number): Vec[] =>
-    model.vertices.map((v, j) => {
+  /** Every vertex on screen, for the stone turned by `yaw`. */
+  const pose = (yaw: number): Vec[] =>
+    model.vertices.map((v) => {
       const [x, y] = project(v, yaw, p.pitch);
-      return [x + morph * jitter[j][0], y - yShift + morph * jitter[j][1]];
+      return [x, y - yShift];
     });
+  const staticLight = lightVector(p.lightAngle, p.lightElevation);
   const yawAt = timeline ? timeline.yawAt : (): number => p.yaw;
-  const morphAt = timeline ? timeline.morphAt : (): number => 0;
+  const lightAt = timeline ? timeline.lightAt : (): Vec3 => staticLight;
   const baseTimes: readonly number[] = timeline ? timeline.keyTimes : [0];
   const turns = timeline?.turns ?? 0;
   /** The vertices at every base keyframe; frames[0] is the static pose. */
-  const frames = baseTimes.map((t) => pose(yawAt(t), morphAt(t)));
-  /** keyTimes/keySplines of an animation running on the base keyframes. */
-  const baseKeyframeOpts = timeline?.splines
-    ? { keyTimes: timeline.keyTimes, splines: timeline.splines }
-    : {};
+  const frames = baseTimes.map((t) => pose(yawAt(t)));
+
+  // ------------------------------------------------------------------ color
+
+  const ramp: Rgb[] = (() => {
+    const parsed = p.colors.map((c) => parseHex(c) ?? ([128, 128, 128] as Rgb));
+    return parsed.length === 1 ? deriveRamp(parsed[0]) : parsed;
+  })();
+  /** Ramp position (0: highlight, 1: shadow) of a facet that is `lit` much. */
+  const toneOf = (lit: number): number => clamp(0.5 + p.shading * (0.5 - lit), 0, 1);
+  const gradient: Gradient = GRADIENTS.includes(p.gradient) ? p.gradient : "flat";
+  const sheen = gradient === "sheen";
+  const spread = SHEEN_SPREAD * p.shading;
+  // The sheen runs toward the light: from the facet's side nearest the
+  // light (lighter) to the far side (darker), in each facet's own box.
+  const sheenDir = ((): Vec => {
+    const ph = rad(p.pitch);
+    const v: Vec = [
+      staticLight[0],
+      -(staticLight[1] * Math.cos(ph) - staticLight[2] * Math.sin(ph)),
+    ];
+    const len = Math.hypot(...v);
+    return len < 1e-6 ? [0, -1] : [v[0] / len, v[1] / len];
+  })();
+  const sheenFrom: Vec = [0.5 + 0.5 * sheenDir[0], 0.5 + 0.5 * sheenDir[1]];
+  const sheenTo: Vec = [0.5 - 0.5 * sheenDir[0], 0.5 - 0.5 * sheenDir[1]];
 
   // ----------------------------------------------------------------- facets
 
@@ -783,8 +751,8 @@ export function diamondSvg(params: DiamondParams = {}): string {
     readonly times: readonly number[];
     /** Outline at every keyframe: inset by the half gap while front-facing, its edge-on line otherwise. */
     readonly polys: readonly (readonly Vec[])[];
-    /** Darkening at every keyframe. */
-    readonly darkens: readonly number[];
+    /** Ramp position at every keyframe. */
+    readonly tones: readonly number[];
     /** Whether the static pose (t = 0) shows the facet. */
     readonly shownAtStart: boolean;
     /** Visibility switches at the edge-on moments; null when the facet never leaves the view. */
@@ -793,9 +761,13 @@ export function diamondSvg(params: DiamondParams = {}): string {
     readonly sweep: 0 | 1;
     /** Center of the facet in the static pose. */
     readonly center: Vec;
-    /** keyTimes/keySplines of this facet's keyframe animations. */
-    readonly keyframeOpts: { keyTimes?: readonly number[]; splines?: readonly string[] };
+    /** keyTimes of this facet's keyframe animations; empty when they are the evenly spaced base ones. */
+    readonly keyframeOpts: { keyTimes?: readonly number[] };
   }
+
+  // Facets are inset by half the gap; without a gap they are let out by a
+  // hair instead, so neighbors overlap and anti-aliasing leaves no seam.
+  const insetBy = p.gap > 0 ? p.gap / 2 : -SEAM_OVERLAP;
 
   const facets: Facet[] = [];
   model.faces.forEach((face, index) => {
@@ -829,18 +801,17 @@ export function diamondSvg(params: DiamondParams = {}): string {
     if (!facingAt.some(Boolean)) return; // never in view (e.g. the table at pitch 0)
     const polys = times.map((t, i) => {
       const yaw = yawAt(t);
-      const morph = morphAt(t);
       if (facingAt[i]) {
-        const verts = pose(yaw, morph);
+        const verts = pose(yaw);
         const raw = face.indices.map((j) => verts[j]);
-        return inset(raw, p.gap / 2) ?? shrink(raw, p.gap / 2);
+        return inset(raw, insetBy) ?? shrink(raw, Math.max(0, insetBy));
       }
       // Hidden: the line it is at the nearest edge-on turn (at an edge-on
       // keyframe, that is this very turn).
       const nearest = edgeOns.reduce((best, e) =>
         Math.abs(foldDeg(e - yaw)) < Math.abs(foldDeg(best - yaw)) ? e : best,
       );
-      const edgeOn = pose(nearest, morph);
+      const edgeOn = pose(nearest);
       return face.indices.map((j) => edgeOn[j]);
     });
 
@@ -863,12 +834,12 @@ export function diamondSvg(params: DiamondParams = {}): string {
       index,
       times,
       polys,
-      darkens: times.map((t) => darkenOf(face.normal, yawAt(t), p)),
+      tones: times.map((t) => toneOf(litOf(face.normal, yawAt(t), lightAt(t)))),
       shownAtStart: facingAt[0],
       visibility,
       sweep: signedArea2(polys[facingAt.indexOf(true)]) > 0 ? 1 : 0,
       center: centroid(face.indices.map((j) => frames[0][j])),
-      keyframeOpts: times.length === baseTimes.length ? baseKeyframeOpts : { keyTimes: times },
+      keyframeOpts: times.length === baseTimes.length ? {} : { keyTimes: times },
     });
   });
 
@@ -876,24 +847,20 @@ export function diamondSvg(params: DiamondParams = {}): string {
     poly
       .map((pt, i) => {
         const c = roundCorner(poly, i, p.cornerRadius);
-        // A corner turning the other way is reflex (only the rough stone has
-        // those): it stays sharp, or its arc would bulge outward.
-        const rounded = c.r > 0 && c.sweep === sweep;
-        const from = rounded ? c.from : pt;
-        const to = rounded ? c.to : pt;
-        const enter = `${i === 0 ? "M" : "L"}${fmt(from[0])} ${fmt(from[1])}`;
+        const enter = `${i === 0 ? "M" : "L"}${fmt(c.from[0])} ${fmt(c.from[1])}`;
         // With rounding on, every corner is written as an arc (radius 0 = a
-        // plain corner), so all keyframes of a tweened outline share one
+        // plain corner, and the flag is the facet's so a hidden, flattened
+        // outline keeps it), so all keyframes of a tweened outline share one
         // command structure — which is what SMIL needs to interpolate `d`.
         return p.cornerRadius > 0
-          ? `${enter} A${fmt(rounded ? c.r : 0)} ${fmt(rounded ? c.r : 0)} 0 0 ${sweep} ${fmt(to[0])} ${fmt(to[1])}`
+          ? `${enter} A${fmt(c.r)} ${fmt(c.r)} 0 0 ${sweep} ${fmt(c.to[0])} ${fmt(c.to[1])}`
           : enter;
       })
       .join(" ") + " Z";
 
   /** Tween the outline through the facet's keyframes. */
   const shapeAnimate = (f: Facet): string =>
-    timeline
+    timeline && active.spin
       ? animateEl(
           "animate",
           "d",
@@ -912,161 +879,44 @@ export function diamondSvg(params: DiamondParams = {}): string {
         })
       : "";
 
-  // ------------------------------------------------------------------ color
-
-  const palette = p.colors;
-  const parsed = palette.map(parseHex);
-  const rgb = parsed.every((c): c is Rgb => c !== null) ? parsed : null;
-  const gradient: Gradient = GRADIENTS.includes(p.gradient) ? p.gradient : "steps";
-  const linear = gradient === "linear" && palette.length > 1;
-  if (!rgb && !linear && palette.length > 1)
-    p.onWarn(
-      `gradient "${gradient}" blends colors, which needs hex — cycling the palette per facet instead`,
-    );
-  /** Colors are computed per facet, so the shading can be baked into them. */
-  const blends = rgb !== null && !linear;
-  const colorFlow = active.colorFlow && blends;
-  /** Baked shading only holds still; `spin` changes it, so it moves to an overlay. */
-  const bake = blends && !active.spin;
-  const needsDark = p.shading > 0 && !bake;
-  /**
-   * Whether facets need overlays (light, dark, dull) on top of their fill —
-   * then each facet's outline is defined once and <use>d per layer.
-   */
-  const layered = needsDark || active.sweep || active.glow || active.forge || active.pulse;
-  /** Palette position (0..1 around the loop) of a model azimuth. */
-  const pos = (azimuth: number): number => (p.paletteRepeat * azimuth) / 360;
-
   const defs: string[] = [];
 
-  const gradientEl = (
-    gid: string,
-    stops: readonly (readonly [number, string])[],
-    // One <animate> snippet per stop (same index); a missing/falsy entry leaves that stop static.
-    animates?: readonly (string | undefined)[],
-    // Extra attributes; the default is a left→right gradient in the facet's own bounding box.
-    attrs = "",
-  ): string =>
-    [
-      `    <linearGradient id="${gid}"${attrs}>`,
-      ...stops.map(([o, c], i) => {
-        const animate = animates?.[i];
-        return animate
-          ? `      <stop offset="${frac(o)}" stop-color="${c}">${animate}</stop>`
-          : `      <stop offset="${frac(o)}" stop-color="${c}"/>`;
-      }),
-      `    </linearGradient>`,
-    ].join("\n");
-
   /**
-   * Sweep `attr` (a color attribute: "stop-color" or "fill") through one full
-   * palette cycle starting at loop position `t0`, as a native SMIL <animate>.
-   * The keyframes sit exactly at the palette's own blend breakpoints (every
-   * 1/palette.length of the loop, `paletteAt`'s own linear-interpolation
-   * knots) so the browser's linear interpolation between keyframes retraces
-   * `paletteAt` exactly — no visible faceting, and no need to oversample.
+   * The facet's fill — its tone, or a sheen gradient around it — with the
+   * tone's animation over the timeline when the stone turns or the light
+   * circles (a sheen animates its gradient stops instead).
    */
-  function colorAnimate(shade: readonly Rgb[], t0: number, attr: string): string {
-    const n = shade.length;
-    const knots = new Set<number>([0]);
-    for (let i = 0; i < n; i++) {
-      const x = (((i / n - t0) % 1) + 1) % 1; // phase (0..1) at which t0+phase crosses knot i
-      if (x > 1e-9) knots.add(x);
-    }
-    const xs = [...knots].sort((a, b) => a - b);
-    xs.push(1); // closes the loop: same color as x=0, so the cycle repeats seamlessly
-    return animateEl(
-      "animate",
-      attr,
-      p.colorFlowDuration,
-      xs.map((x) => paletteAt(shade, t0 + x)),
-      { keyTimes: xs },
-    );
-  }
-
-  /**
-   * Gradient stops running from palette position `from` to `to` (a facet's
-   * left and right edges), with a stop at every palette knot in between so
-   * the gradient retraces the palette's own blends.
-   */
-  function flowStops(
-    from: number,
-    to: number,
-    shade: readonly Rgb[],
-  ): { stops: [number, string][]; positions: number[] } {
-    const n = shade.length;
-    const positions = [from];
-    for (let k = Math.ceil(from * n); k <= Math.floor(to * n); k++) {
-      const x = k / n;
-      if (x > from + 1e-9 && x < to - 1e-9) positions.push(x);
-    }
-    positions.push(to);
-    return {
-      positions,
-      stops: positions.map((x) => [(x - from) / (to - from), paletteAt(shade, x)]),
-    };
-  }
-
-  /**
-   * The table spans the whole front, so its gradient samples the palette
-   * around the visible half turn, each stop placed where that azimuth
-   * projects across the table — matching the crown facets below it.
-   */
-  function tableStops(shade: readonly Rgb[]): { stops: [number, string][]; positions: number[] } {
-    const samples = 2 * p.sides;
-    const positions: number[] = [];
-    const stops: [number, string][] = [];
-    for (let j = 0; j <= samples; j++) {
-      const azimuth = -90 + (180 * j) / samples; // on screen
-      const x = pos(azimuth - p.yaw);
-      positions.push(x);
-      stops.push([(Math.sin(rad(azimuth)) + 1) / 2, paletteAt(shade, x)]);
-    }
-    return { stops, positions };
-  }
-
-  if (linear) {
-    // One straight gradient across the whole mark, spanning exactly the
-    // static pose's extent along its axis.
-    const axis: Vec = [Math.cos(rad(p.gradientAngle)), Math.sin(rad(p.gradientAngle))];
-    const extent = Math.max(...frames[0].map(([x, y]) => Math.abs(x * axis[0] + y * axis[1])));
-    defs.push(
-      gradientEl(
-        id("g"),
-        palette.map((c, i) => [i / (palette.length - 1), c]),
-        undefined,
-        ` gradientUnits="userSpaceOnUse" x1="${fmt(-extent * axis[0])}" y1="${fmt(-extent * axis[1])}"` +
-          ` x2="${fmt(extent * axis[0])}" y2="${fmt(extent * axis[1])}"`,
-      ),
-    );
-  }
-
-  /** The facet's fill (a color or a gradient reference), plus the `colorFlow` animation of a solid fill. */
-  function fillOf(f: Facet, darken0: number): { fill: string; animate: string } {
-    if (linear) return { fill: `url(#${id("g")})`, animate: "" };
-    if (!rgb) return { fill: palette[f.index % palette.length], animate: "" };
-    const shade = bake ? darkened(rgb, darken0) : rgb;
-    if (palette.length === 1 || gradient === "steps") {
-      // One solid color: the palette at the facet's center (the table takes
-      // the color facing the viewer).
-      const [a0, a1] = f.face.azimuth ?? [-p.yaw, -p.yaw];
-      const x = palette.length === 1 ? 0 : pos((a0 + a1) / 2);
-      return {
-        fill: paletteAt(shade, x),
-        animate: colorFlow ? colorAnimate(shade, x, "fill") : "",
-      };
-    }
-    // "flow": a gradient across the facet between the palette colors at its edges.
+  function fillOf(f: Facet): { fill: string; animate: string } {
+    const moves = timeline !== null && f.tones.some((t) => Math.abs(t - f.tones[0]) > 1e-4);
+    const tone = (t: number, offset: number): string => rampAt(ramp, t + offset);
+    const animateTone = (attr: string, offset: number): string =>
+      moves && timeline
+        ? animateEl(
+            "animate",
+            attr,
+            timeline.period,
+            f.tones.map((t) => tone(t, offset)),
+            f.keyframeOpts,
+          )
+        : "";
+    if (!sheen) return { fill: tone(f.tones[0], 0), animate: animateTone("fill", 0) };
     const gid = id(`g${f.index}`);
-    const { stops, positions } = f.face.azimuth
-      ? flowStops(pos(f.face.azimuth[0]), pos(f.face.azimuth[1]), shade)
-      : tableStops(shade);
+    const stop = (offset: number): string => {
+      const color = tone(f.tones[0], offset);
+      const animate = animateTone("stop-color", offset);
+      const at = offset < 0 ? 0 : 1;
+      return animate
+        ? `      <stop offset="${at}" stop-color="${color}">${animate}</stop>`
+        : `      <stop offset="${at}" stop-color="${color}"/>`;
+    };
     defs.push(
-      gradientEl(
-        gid,
-        stops,
-        colorFlow ? positions.map((x) => colorAnimate(shade, x, "stop-color")) : undefined,
-      ),
+      [
+        `    <linearGradient id="${gid}" x1="${frac(sheenFrom[0])}" y1="${frac(sheenFrom[1])}"` +
+          ` x2="${frac(sheenTo[0])}" y2="${frac(sheenTo[1])}">`,
+        stop(-spread),
+        stop(spread),
+        `    </linearGradient>`,
+      ].join("\n"),
     );
     return { fill: `url(#${gid})`, animate: "" };
   }
@@ -1136,33 +986,32 @@ export function diamondSvg(params: DiamondParams = {}): string {
       },
     );
 
-  // `forge`: the dulling overlay follows the morph's timing.
-  const forge = forgeTiming(p);
-  const forgeKeyframes = {
-    keyTimes: [0, forge.t1, forge.t2, forge.t3, 1],
-    splines: [LINEAR, EASE, LINEAR, EASE],
-  };
-
   // --------------------------------------------------------------- the body
+
+  /**
+   * Whether facets need a light overlay on top of their fill — then each
+   * facet's outline is defined once and <use>d by both layers.
+   */
+  const layered = active.sweep || active.glow || active.pulse;
 
   const body: string[] = [];
   for (const f of facets) {
-    const { darkens } = f;
-    const { fill, animate: fillAnimate } = fillOf(f, darkens[0]);
+    const { fill, animate: fillAnimate } = fillOf(f);
     const d0 = dOf(f.polys[0], f.sweep);
+    const geometry = shapeAnimate(f) + visibilityAnimate(f);
+    const hidden = f.shownAtStart ? "" : ` visibility="hidden"`;
     if (!layered) {
+      const inner = geometry + fillAnimate;
       body.push(
-        fillAnimate
-          ? `  <path fill="${fill}" d="${d0}">${fillAnimate}</path>`
-          : `  <path fill="${fill}" d="${d0}"/>`,
+        inner
+          ? `  <path fill="${fill}" d="${d0}"${hidden}>${inner}</path>`
+          : `  <path fill="${fill}" d="${d0}"${hidden}/>`,
       );
       continue;
     }
     // The outline, defined once (with its geometry animations) and <use>d
-    // by every layer: fill, then the overlays that shade, dull and light it.
+    // by both layers: the fill, then the overlay that lights it.
     const gid = id(`f${f.index}`);
-    const geometry = shapeAnimate(f) + visibilityAnimate(f);
-    const hidden = f.shownAtStart ? "" : ` visibility="hidden"`;
     defs.push(
       geometry
         ? `    <path id="${gid}" d="${d0}"${hidden}>${geometry}</path>`
@@ -1171,36 +1020,6 @@ export function diamondSvg(params: DiamondParams = {}): string {
     const use = (attrs: string, inner = ""): string =>
       inner ? `  <use href="#${gid}" ${attrs}>${inner}</use>` : `  <use href="#${gid}" ${attrs}/>`;
     body.push(use(`fill="${fill}"`, fillAnimate));
-    if (needsDark) {
-      const moves = active.spin && darkens.some((v) => Math.abs(v - darkens[0]) > 1e-4);
-      body.push(
-        use(
-          `fill="#000" fill-opacity="${frac(darkens[0])}"`,
-          moves && timeline
-            ? animateEl(
-                "animate",
-                "fill-opacity",
-                timeline.period,
-                darkens.map(frac),
-                f.keyframeOpts,
-              )
-            : "",
-        ),
-      );
-    }
-    if (active.forge && p.forgeDull > 0)
-      body.push(
-        use(
-          `fill="${DULL_COLOR}" fill-opacity="0"`,
-          animateEl(
-            "animate",
-            "fill-opacity",
-            forge.total,
-            ["0", "0", frac(p.forgeDull), frac(p.forgeDull), "0"],
-            forgeKeyframes,
-          ),
-        ),
-      );
     const light = [
       active.sweep && p.sweepIntensity > 0 ? sweepAnimate(f) : "",
       active.glow && p.glowIntensity > 0 ? glowAnimate(f) : "",
@@ -1248,15 +1067,16 @@ export function diamondSvg(params: DiamondParams = {}): string {
       const splines = [LINEAR, "0.2 0 0.4 1", EASE, LINEAR];
       const positions = frames.map((verts) => verts[vertex]);
       const [x0, y0] = positions[0];
-      const ride = timeline
-        ? animateEl(
-            "animateTransform",
-            "transform",
-            timeline.period,
-            positions.map(([x, y]) => `${fmt(x)} ${fmt(y)}`),
-            { type: "translate", ...baseKeyframeOpts },
-          )
-        : "";
+      const ride =
+        timeline && active.spin
+          ? animateEl(
+              "animateTransform",
+              "transform",
+              timeline.period,
+              positions.map(([x, y]) => `${fmt(x)} ${fmt(y)}`),
+              { type: "translate" },
+            )
+          : "";
       glints.push(
         `  <g transform="translate(${fmt(x0)} ${fmt(y0)})">${ride}` +
           `<path d="${star}" fill="${p.glintColor}" opacity="0">` +
@@ -1285,28 +1105,6 @@ export function diamondSvg(params: DiamondParams = {}): string {
   const wrap = (animate: string): void => {
     content = ["  <g>", `    ${animate}`, ...content, "  </g>"];
   };
-  if (active.flip) {
-    // Width follows a cosine (sampled, so it lingers at the faces and rushes
-    // past edge-on), holding at each face in between.
-    const period = 2 * (p.flipDuration + p.flipHold);
-    const hold = p.flipHold / period;
-    const turn = p.flipDuration / period;
-    const steps = 12;
-    const keyTimes: number[] = [];
-    const values: string[] = [];
-    const key = (t: number, sx: number): void => {
-      // A zero hold would repeat a keyTime; the later value simply wins.
-      if (keyTimes.length && Math.abs(t - keyTimes[keyTimes.length - 1]) < 1e-9) values.pop();
-      else keyTimes.push(t);
-      values.push(`${frac(sx)} 1`);
-    };
-    key(0, 1);
-    for (let i = 0; i <= steps; i++)
-      key(hold + (turn * i) / steps, Math.cos(rad((180 * i) / steps)));
-    for (let i = 0; i <= steps; i++)
-      key(2 * hold + turn + (turn * i) / steps, Math.cos(rad(180 + (180 * i) / steps)));
-    wrap(animateEl("animateTransform", "transform", period, values, { type: "scale", keyTimes }));
-  }
   if (active.pulse) wrap(pulseScaleAnimate());
   if (active.float)
     wrap(

@@ -1,6 +1,6 @@
 # The gem-skills Logo
 
-An SVG diamond: the orthographic projection of a real 3D model of a cut stone, with nine optional animations that need no JavaScript.
+An SVG diamond: the orthographic projection of a real 3D model of a cut stone, in one color like a real gem, with seven optional animations that need no JavaScript.
 
 ## SVG
 
@@ -12,24 +12,23 @@ An SVG diamond: the orthographic projection of a real 3D model of a cut stone, w
 
 Playground: https://brillout.github.io/gem-skills-logo
 
+## Color
+
+A gem is one color, so a palette is a tone ramp of that color — highlight, body, shadow — and every facet takes its tone from how it faces the light. [`color-palettes.ts`](./color-palettes.ts) has ready-made stones (Sapphire, Ruby, Emerald, Amethyst, Onyx, Gold, …); pick any of them in the playground, or pass a single color and the highlight and shadow are derived.
+
 ## Animations
 
 Every animation is an independent toggle with its own timing parameters, rendered as native SVG animation (SMIL) — so the files play inside `<img>` tags and READMEs like this one, and combine freely. At t&nbsp;=&nbsp;0 each animation rests in the static pose, so tools that don't animate (PNG export, favicons) show exactly the un-animated mark.
 
-|                             `colorFlow`                             |                           `sweep`                           |                           `glint`                           |
-| :-----------------------------------------------------------------: | :---------------------------------------------------------: | :---------------------------------------------------------: |
-| <img src="./animations/colorFlow.svg" alt="colorFlow" width="200"/> | <img src="./animations/sweep.svg" alt="sweep" width="200"/> | <img src="./animations/glint.svg" alt="glint" width="200"/> |
-|                The palette drifts across the facets.                |           A band of light passes over the facets.           |            Sparkles pop at the stone's corners.             |
+|                             `colorFlow`                             |                           `sweep`                           |                           `glint`                           |                          `glow`                           |
+| :-----------------------------------------------------------------: | :---------------------------------------------------------: | :---------------------------------------------------------: | :-------------------------------------------------------: |
+| <img src="./animations/colorFlow.svg" alt="colorFlow" width="200"/> | <img src="./animations/sweep.svg" alt="sweep" width="200"/> | <img src="./animations/glint.svg" alt="glint" width="200"/> | <img src="./animations/glow.svg" alt="glow" width="200"/> |
+|   The light circles the stone; the tones flow across the facets.    |           A band of light passes over the facets.           |            Sparkles pop at the stone's corners.             |          A soft highlight breathes on the table.          |
 
-|                          `glow`                           |                          `spin`                           |                           `float`                           |
-| :-------------------------------------------------------: | :-------------------------------------------------------: | :---------------------------------------------------------: |
-| <img src="./animations/glow.svg" alt="glow" width="200"/> | <img src="./animations/spin.svg" alt="spin" width="200"/> | <img src="./animations/float.svg" alt="float" width="200"/> |
-|          A soft highlight breathes on the table.          |     The stone turns about its axis, with real depth.      |              The stone bobs above its shadow.               |
-
-|                          `flip`                           |                           `forge`                           |                           `pulse`                           |
+|                          `spin`                           |                           `float`                           |                           `pulse`                           |
 | :-------------------------------------------------------: | :---------------------------------------------------------: | :---------------------------------------------------------: |
-| <img src="./animations/flip.svg" alt="flip" width="200"/> | <img src="./animations/forge.svg" alt="forge" width="200"/> | <img src="./animations/pulse.svg" alt="pulse" width="200"/> |
-|         The stone turns over to its mirror image.         | The cut stone dissolves into a rough one and is cut again.  |           The "skill unlocked" pop, with a flash.           |
+| <img src="./animations/spin.svg" alt="spin" width="200"/> | <img src="./animations/float.svg" alt="float" width="200"/> | <img src="./animations/pulse.svg" alt="pulse" width="200"/> |
+|    The stone revolves about its axis, with real depth.    |              The stone bobs above its shadow.               |           The "skill unlocked" pop, with a flash.           |
 
 | Animation   | Parameters                                                                 |
 | ----------- | -------------------------------------------------------------------------- |
@@ -39,8 +38,6 @@ Every animation is an independent toggle with its own timing parameters, rendere
 | `glow`      | `glowDuration`, `glowRadius`, `glowIntensity`                              |
 | `spin`      | `spinDuration`, `spinSteps`                                                |
 | `float`     | `floatDuration`, `floatHeight`, `floatShadow`                              |
-| `flip`      | `flipDuration`, `flipHold`                                                 |
-| `forge`     | `forgeHold`, `forgeMorph`, `forgeRough`, `forgeRoughness`, `forgeDull`     |
 | `pulse`     | `pulseHold`, `pulseDuration`, `pulseScale`, `pulseFlash`                   |
 
 Each parameter is documented in [`diamond.ts`](./diamond.ts).
@@ -59,9 +56,10 @@ For custom size & padding, go to the [playground](https://brillout.github.io/gem
 
 ```bash
 pnpm install
-pnpm run node-ts cli.ts logo.svg --spin=true --sweep=true   # any parameter as --name=value
-pnpm run node-ts cli.ts logo.svg --colors=#7fbbb3            # monochrome stone
-pnpm run node-ts cli.ts logo.svg --pitch=15 --yaw=22.5       # look down onto the table, turned
+pnpm run node-ts cli.ts logo.svg --spin=true --sweep=true                    # any parameter as --name=value
+pnpm run node-ts cli.ts logo.svg --colors=#ffe3e8,#ff7d90,#e02244,#a4122f,#5c0a1c   # a tone ramp (this one is Ruby)
+pnpm run node-ts cli.ts logo.svg --colors=#16b56c                            # one color; highlight and shadow derived
+pnpm run node-ts cli.ts logo.svg --pitch=15 --yaw=22.5                       # look down onto the table, turned
 pnpm run node-ts cli.ts logo.png --pngSize=512 --padding=large
 ```
 

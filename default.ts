@@ -7,9 +7,9 @@
 import { COLOR_PALETTES } from "./color-palettes.ts";
 import type { DiamondParams } from "./diamond.ts";
 
-const DEFAULT_PALETTE = COLOR_PALETTES.find((p) => p.name === "Everforest");
+const DEFAULT_PALETTE = COLOR_PALETTES.find((p) => p.name === "Sapphire");
 if (!DEFAULT_PALETTE)
-  throw new Error('default palette "Everforest" is missing from color-palettes.ts');
+  throw new Error('default palette "Sapphire" is missing from color-palettes.ts');
 
 const padding = 40;
 
@@ -25,7 +25,7 @@ export const PADDING_PRESETS = {
 } as const;
 export type PaddingPreset = keyof typeof PADDING_PRESETS;
 
-/** Defaults: the Everforest palette flowing across the facets, every animation off. */
+/** Defaults: a sapphire with a soft sheen on every facet, every animation off. */
 export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   size: 480,
   tableSize: 260,
@@ -34,14 +34,12 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   sides: 8,
   pitch: 0,
   yaw: 0,
-  gap: 6,
-  cornerRadius: 4,
+  gap: 0,
+  cornerRadius: 0,
   padding,
   colors: DEFAULT_PALETTE.colors,
-  gradient: "flow",
-  gradientAngle: 45,
-  paletteRepeat: 2,
-  shading: 0.55,
+  gradient: "sheen",
+  shading: 0.85,
   lightAngle: -50,
   lightElevation: 40,
   colorFlow: false,
@@ -68,15 +66,6 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   floatDuration: 3,
   floatHeight: 18,
   floatShadow: true,
-  flip: false,
-  flipDuration: 1.2,
-  flipHold: 2,
-  forge: false,
-  forgeHold: 3,
-  forgeMorph: 1.2,
-  forgeRough: 1,
-  forgeRoughness: 0.35,
-  forgeDull: 0.5,
   pulse: false,
   pulseHold: 3,
   pulseDuration: 0.6,
