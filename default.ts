@@ -7,8 +7,8 @@
 import { COLOR_PALETTES } from "./color-palettes.ts";
 import type { DiamondParams } from "./diamond.ts";
 
-const DEFAULT_PALETTE = COLOR_PALETTES.find((p) => p.name === "Ruby");
-if (!DEFAULT_PALETTE) throw new Error('default palette "Ruby" is missing from color-palettes.ts');
+const DEFAULT_PALETTE = COLOR_PALETTES.find((p) => p.name === "Spinel");
+if (!DEFAULT_PALETTE) throw new Error('default palette "Spinel" is missing from color-palettes.ts');
 
 const padding = 40;
 
@@ -24,14 +24,14 @@ export const PADDING_PRESETS = {
 } as const;
 export type PaddingPreset = keyof typeof PADDING_PRESETS;
 
-/** Defaults: a ruby with a soft sheen on every facet, every animation off. */
+/** Defaults: a spinel with a soft sheen on every facet, seen from slightly above, spinning and floating. */
 export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   size: 480,
   tableSize: 260,
   crownHeight: 110,
   pavilionHeight: 300,
   sides: 8,
-  pitch: 0,
+  pitch: 7,
   yaw: 0,
   gap: 0,
   cornerRadius: 0,
@@ -58,10 +58,10 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   glowDuration: 4,
   glowRadius: 260,
   glowIntensity: 0.45,
-  spin: false,
-  spinDuration: 8,
+  spin: true,
+  spinDuration: 10,
   spinSteps: 24,
-  float: false,
+  float: true,
   floatDuration: 3,
   floatHeight: 18,
   floatShadow: true,

@@ -1,6 +1,6 @@
 # The gem-skills Logo
 
-An SVG diamond: the orthographic projection of a real 3D model of a cut stone, in one color like a real gem, with seven optional animations that need no JavaScript.
+An SVG diamond: the orthographic projection of a real 3D model of a cut stone, in one color like a real gem, with seven animations that need no JavaScript. The mark spins and floats by default.
 
 ## SVG
 
@@ -14,11 +14,11 @@ Playground: https://brillout.github.io/gem-skills-logo
 
 ## Color
 
-A gem is one color, so a palette is a tone ramp of that color — highlight, body, shadow — and every facet takes its tone from how it faces the light. [`color-palettes.ts`](./color-palettes.ts) has ready-made stones (Ruby, Sapphire, Emerald, Amethyst, Onyx, Gold, …); pick any of them in the playground, or pass a single color and the highlight and shadow are derived.
+A gem is one color, so a palette is a tone ramp of that color — highlight, body, shadow — and every facet takes its tone from how it faces the light. [`color-palettes.ts`](./color-palettes.ts) has ready-made stones (Spinel, Ruby, Sapphire, Emerald, Amethyst, Onyx, Gold, …); pick any of them in the playground, or pass a single color and the highlight and shadow are derived.
 
 ## Animations
 
-Every animation is an independent toggle with its own timing parameters, rendered as native SVG animation (SMIL) — so the files play inside `<img>` tags and READMEs like this one, and combine freely. At t&nbsp;=&nbsp;0 each animation rests in the static pose, so tools that don't animate (PNG export, favicons) show exactly the un-animated mark.
+Every animation is an independent toggle with its own timing parameters, rendered as native SVG animation (SMIL) — so the files play inside `<img>` tags and READMEs like this one, and combine freely (the mark above combines `spin` and `float`). At t&nbsp;=&nbsp;0 each animation rests in the static pose, so tools that don't animate (PNG export, favicons) show exactly the un-animated mark. Each file below shows one animation alone.
 
 |                             `colorFlow`                             |                           `sweep`                           |                           `glint`                           |                          `glow`                           |
 | :-----------------------------------------------------------------: | :---------------------------------------------------------: | :---------------------------------------------------------: | :-------------------------------------------------------: |
@@ -44,7 +44,7 @@ Each parameter is documented in [`diamond.ts`](./diamond.ts).
 
 ## PNG
 
-All `1024px` but with different paddings (PNGs show the static pose):
+All `1024px` but with different paddings (the stone at rest, without any animation):
 
 |                        `none`                        |                        `small`                        |                        `medium`                        |                        `large`                        |
 | :--------------------------------------------------: | :---------------------------------------------------: | :----------------------------------------------------: | :---------------------------------------------------: |

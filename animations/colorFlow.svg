@@ -1,34 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-261.7 -245 523.5 490">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-261.7 -250.8 523.5 501.6">
   <defs>
-    <linearGradient id="gem-g1" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#ffc6cf"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#ffc6cf;#ffabb8;#ff8b9c;#f86a80;#ee4a66;#e42c4d;#d61f40;#c81c3c;#bf1939;#bc1837;#bd1938;#c41b3a;#d01e3f;#e02345;#ea405d;#f55f77;#ff7f91;#ffa0ae;#ffbdc8;#ffd4db;#ffe3e8;#ffe3e8;#ffe3e8;#ffdbe1;#ffc6cf"/></stop>
-      <stop offset="1" stop-color="#f8687e"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#f8687e;#ef4f6a;#e63352;#d61f41;#c11a39;#ae1532;#9b112d;#8b0f28;#800e26;#7c0e24;#7e0e25;#860f27;#95102b;#a71330;#ba1837;#cf1d3e;#e22849;#ec4662;#f56078;#fc7489;#ff8295;#ff899a;#ff8697;#fe7a8d;#f8687e"/></stop>
+    <linearGradient id="gem-g0" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#ffa9cb"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#ffa9cb;#fe83b3;#f45b98;#e8307a;#c92569;#ab1a58;#9b1850;#9b1850;#9b1850;#9b1850;#9b1850;#9b1850;#9b1850;#a01852;#be2163;#dd2c74;#f04c8e;#fb75aa;#ff9cc3;#ffbcd7;#ffd2e4;#ffdae9;#ffd6e6;#ffc5dc;#ffa9cb"/></stop>
+      <stop offset="1" stop-color="#f25392"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#f25392;#e8327b;#cd266b;#ae1b5a;#891547;#661036;#621034;#621034;#621034;#621034;#621034;#621034;#621034;#621034;#7c1441;#a11953;#c22265;#e02d75;#ef488b;#f6659f;#fb77ab;#fd7fb1;#fc7bae;#f86ca4;#f25392"/></stop>
     </linearGradient>
-    <linearGradient id="gem-g2" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#dc2143"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#dc2143;#e53251;#ee4b66;#f7677d;#ff8395;#ffa0ae;#ffbac5;#ffced6;#ffdbe1;#ffe1e6;#ffdee4;#ffd3db;#ffc2cb;#ffaab7;#ff8d9e;#fb7085;#f1556e;#e83a58;#e12345;#d51f40;#cd1d3d;#ca1c3c;#cc1d3d;#d21e3f;#dc2143"/></stop>
-      <stop offset="1" stop-color="#a3122f"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#a3122f;#b11634;#c21a3a;#d41f40;#e32c4c;#ec4662;#f45d75;#fa6f84;#fe7b8e;#ff8092;#ff7d90;#fc7488;#f6647b;#ef4e69;#e63554;#da2142;#c81c3c;#b71736;#a81330;#9a112c;#91102a;#8d0f29;#8f1029;#97112b;#a3122f"/></stop>
+    <linearGradient id="gem-g1" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#ffcbdf"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#ffcbdf;#ffb1d0;#ff92bd;#fa73a9;#f25694;#eb3a81;#dd2c74;#d0276c;#c72467;#c32365;#c52366;#cc266a;#d82a71;#e8317a;#ef4c8d;#f769a1;#ff87b6;#ffa6c9;#ffc2da;#ffd8e8;#ffe6f0;#ffe6f0;#ffe6f0;#ffdeeb;#ffcbdf"/></stop>
+      <stop offset="1" stop-color="#fa71a7"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#fa71a7;#f35a97;#ec3f85;#de2c74;#c92569;#b51e5d;#a21953;#91164b;#871546;#821444;#841545;#8d1649;#9c1850;#ae1b5a;#c22265;#d72a70;#e9357e;#f15191;#f86aa2;#fd7daf;#ff8ab8;#ff90bc;#ff8dba;#fe82b3;#fa71a7"/></stop>
     </linearGradient>
-    <linearGradient id="gem-g3" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#f86a80"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#f86a80;#eb425e;#db2142;#c41a3a;#b01533;#a1122e;#98112c;#96102b;#9d112d;#aa1431;#bc1837;#d21e3f;#e63353;#f45b74;#ff8395;#ffabb8;#ffccd4;#ffe3e8;#ffe3e8;#ffe3e8;#ffe3e8;#ffd6dd;#ffb8c3;#ff92a2;#f86a80"/></stop>
-      <stop offset="1" stop-color="#d61f41"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#d61f41;#bc1837;#a2122e;#850f27;#6e0c21;#5d0a1c;#5c0a1c;#5c0a1c;#5c0a1c;#670b1f;#7c0e25;#97112c;#b21634;#cd1d3d;#e32c4c;#ef4f6a;#fa6d83;#ff8396;#ff91a1;#ff93a3;#ff8a9b;#fd768a;#f35b73;#e83957;#d61f41"/></stop>
+    <linearGradient id="gem-g2" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#e42f78"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#e42f78;#ec3f84;#f25695;#f970a6;#ff8bb8;#ffa7c9;#ffbfd8;#ffd2e4;#ffdfec;#ffe4ef;#ffe1ed;#ffd7e7;#ffc6dd;#ffb0cf;#ff95bf;#fc79ad;#f55f9b;#ee478a;#e8317b;#dd2c74;#d5296f;#d2286e;#d3296e;#da2b72;#e42f78"/></stop>
+      <stop offset="1" stop-color="#aa1a58"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#aa1a58;#b91f60;#ca2569;#dc2c73;#ea3980;#f15291;#f767a0;#fb78ac;#fe83b3;#ff88b7;#ff85b5;#fd7caf;#f96da5;#f35997;#ed4286;#e22e77;#d0276d;#be2163;#af1b5a;#a11953;#98174f;#94174d;#96174e;#9d1851;#aa1a58"/></stop>
     </linearGradient>
-    <linearGradient id="gem-g4" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#9e112e"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#9e112e;#a2122e;#ab1432;#ba1837;#ce1d3e;#e32a4b;#f0506a;#fd768a;#ff9eac;#ffc1ca;#ffdce2;#ffe3e8;#ffe3e8;#ffe3e8;#ffe0e5;#ffc6cf;#ffa5b2;#ff7d90;#f25770;#e53150;#d21e3f;#bd1938;#ad1532;#a3122f;#9e112e"/></stop>
-      <stop offset="1" stop-color="#5c0a1c"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#5c0a1c;#5d0a1c;#680b1f;#7a0d24;#92102a;#ac1432;#c51b3b;#df2243;#eb4460;#f6637a;#fe7b8e;#ff8c9d;#ff93a3;#ff8e9f;#ff7f91;#f8687e;#ee4a65;#e22648;#ca1c3c;#b11533;#97112b;#7e0e25;#6b0c20;#5f0a1d;#5c0a1c"/></stop>
+    <linearGradient id="gem-g3" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#fa73a8"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#fa73a8;#f04e8e;#e32e77;#cb266a;#b71e5f;#a81a57;#9f1852;#9d1851;#a41955;#b11c5c;#c32366;#da2b72;#ec4085;#f7669f;#ff8bb9;#ffb1d0;#ffd0e3;#ffe6f0;#ffe6f0;#ffe6f0;#ffe6f0;#ffdae9;#ffbdd7;#ff99c1;#fa73a8"/></stop>
+      <stop offset="1" stop-color="#de2c74"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#de2c74;#c32365;#a81a57;#8c1649;#74123d;#631034;#621034;#621034;#621034;#6d123a;#831444;#9e1852;#ba1f60;#d4296f;#eb3980;#f35a97;#fb76ab;#ff8bb9;#ff98c1;#ff9ac2;#ff91bc;#fd7eb0;#f6659f;#ee4689;#de2c74"/></stop>
     </linearGradient>
-    <linearGradient id="gem-g15" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#ffe3e8"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#ffe3e8;#ffe3e8;#ffd6dd;#ffb7c2;#ff92a2;#f8697f;#eb415e;#db2142;#c31a3a;#b01533;#a1122e;#98112c;#96102b;#9d112d;#aa1431;#bc1837;#d31e3f;#e63453;#f45c74;#ff8496;#ffabb8;#ffcdd5;#ffe3e8;#ffe3e8;#ffe3e8"/></stop>
-      <stop offset="1" stop-color="#ff93a3"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#ff93a3;#ff899b;#fc768a;#f35b73;#e83957;#d61f40;#bb1837;#a1122e;#850f27;#6e0c21;#5d0a1c;#5c0a1c;#5c0a1c;#5c0a1c;#670b1f;#7d0e25;#97112c;#b31634;#cd1d3d;#e32c4d;#f0506a;#fa6d83;#ff8496;#ff91a1;#ff93a3"/></stop>
+    <linearGradient id="gem-g4" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#a51955"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#a51955;#a91a57;#b21d5c;#c22265;#d62970;#ea377f;#f45b98;#fd7fb1;#ffa4c8;#ffc5dc;#ffdfec;#ffe6f0;#ffe6f0;#ffe6f0;#ffe3ee;#ffcbdf;#ffabcc;#ff85b5;#f5619c;#ec3e83;#da2b72;#c52366;#b51d5d;#aa1a58;#a51955"/></stop>
+      <stop offset="1" stop-color="#621034"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#621034;#631035;#6e123a;#811443;#99174f;#b31d5d;#cd266b;#e62f79;#f14f90;#f86da4;#fe83b4;#ff93be;#ff9ac2;#ff95bf;#ff87b6;#fa71a7;#f25594;#e9347d;#d1286d;#b81f5f;#9d1851;#841545;#71123b;#651035;#621034"/></stop>
     </linearGradient>
-    <linearGradient id="gem-g16" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#ed4a65"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#ed4a65;#fb7085;#ff97a7;#ffbbc6;#ffd8de;#ffe3e8;#ffe3e8;#ffe3e8;#ffe3e8;#ffcbd3;#ffabb7;#ff8496;#f45d76;#e73756;#d61f40;#c11a39;#b01533;#a5122f;#9f112e;#a1122e;#a91331;#b71736;#ca1c3c;#e12445;#ed4a65"/></stop>
-      <stop offset="1" stop-color="#c11a39"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#c11a39;#da2042;#ea3e5b;#f45e76;#fd778b;#ff8a9b;#ff93a3;#ff90a0;#ff8294;#f96c82;#ef4f6a;#e42d4d;#ce1d3e;#b51635;#9b112d;#820e26;#6e0c21;#600a1d;#5c0a1c;#5c0a1c;#660b1f;#770d23;#8e1029;#a81330;#c11a39"/></stop>
+    <linearGradient id="gem-g5" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#e32e77"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#e32e77;#c42366;#a61956;#9b1850;#9b1850;#9b1850;#9b1850;#9b1850;#9b1850;#9b1850;#a51955;#c32365;#e22e77;#f15392;#fc7bae;#ffa2c6;#ffc0d9;#ffd4e5;#ffdbe9;#ffd4e5;#ffc1da;#ffa3c7;#fd7daf;#f25593;#e32e77"/></stop>
+      <stop offset="1" stop-color="#a91a57"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#a91a57;#831544;#621034;#621034;#621034;#621034;#621034;#621034;#621034;#621034;#621034;#821444;#a71956;#c72468;#e42f78;#f04d8e;#f768a1;#fc79ad;#fd7fb1;#fc7aad;#f769a2;#f04f8f;#e52f78;#c82568;#a91a57"/></stop>
+    </linearGradient>
+    <linearGradient id="gem-g13" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#ffdae9"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#ffdae9;#ffd8e7;#ffc8de;#ffaece;#ff89b7;#f5619c;#ea377f;#cd266b;#af1c5a;#9b1850;#9b1850;#9b1850;#9b1850;#9b1850;#9b1850;#9b1850;#9b1850;#ba1f60;#d82a71;#ee4689;#f970a6;#ff97c0;#ffb8d4;#ffcfe2;#ffdae9"/></stop>
+      <stop offset="1" stop-color="#fd7eb0"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#fd7eb0;#fd7caf;#f96fa6;#f35895;#ea377f;#d1286d;#b31d5c;#8f164a;#6b1138;#621034;#621034;#621034;#621034;#621034;#621034;#621034;#621034;#77133e;#9c1850;#be2162;#dc2b73;#ed4388;#f5619c;#fb75aa;#fd7eb0"/></stop>
+    </linearGradient>
+    <linearGradient id="gem-g15" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#ffe6f0"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#ffe6f0;#ffe6f0;#ffd9e8;#ffbdd7;#ff99c1;#fa73a8;#f04d8e;#e32e77;#cb266a;#b71e5f;#a81a57;#9f1852;#9d1851;#a41955;#b21c5c;#c42366;#da2b72;#ec4186;#f7669f;#ff8bb9;#ffb1d0;#ffd1e3;#ffe6f0;#ffe6f0;#ffe6f0"/></stop>
+      <stop offset="1" stop-color="#ff9ac2"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#ff9ac2;#ff91bc;#fd7eb0;#f6659f;#ee4589;#de2c74;#c32365;#a81a57;#8c1649;#74123d;#631034;#621034;#621034;#621034;#6d123a;#831544;#9e1852;#ba1f60;#d5296f;#eb3a81;#f45b98;#fb76ab;#ff8bb9;#ff98c1;#ff9ac2"/></stop>
+    </linearGradient>
+    <linearGradient id="gem-g16" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#f25594"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#f25594;#fc79ad;#ff9ec4;#ffc0d9;#ffdbea;#ffe6f0;#ffe6f0;#ffe6f0;#ffe6f0;#ffcfe2;#ffb1cf;#ff8cb9;#f768a1;#ed4488;#de2c74;#c82468;#b71e5f;#ac1a58;#a61955;#a71a56;#b01c5b;#bf2163;#d2286e;#e8327b;#f25594"/></stop>
+      <stop offset="1" stop-color="#c82568"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" calcMode="linear" values="#c82568;#e22e77;#ef4a8c;#f768a1;#fe80b1;#ff91bd;#ff99c1;#ff97c0;#ff8ab8;#fb75aa;#f35a97;#eb3a81;#d62970;#bc2061;#a21954;#881547;#74123d;#661136;#621034;#621034;#6c1139;#7d1441;#94174d;#af1b5a;#c82568"/></stop>
     </linearGradient>
   </defs>
-  <path fill="url(#gem-g1)" d="M-50 -205.3 L50 -205.3 L92.4 -94.7 L-92.4 -94.7 Z"/>
-  <path fill="url(#gem-g2)" d="M-92.3 -95.3 L92.3 -95.3 L0 206.2 Z"/>
-  <path fill="url(#gem-g3)" d="M49.2 -205.3 L120.3 -205.3 L222.5 -94.7 L91.6 -94.7 Z"/>
-  <path fill="url(#gem-g4)" d="M91.6 -95.3 L222.4 -95.3 L-0.9 206.9 Z"/>
-  <path fill="url(#gem-g15)" d="M-120.3 -205.3 L-49.2 -205.3 L-91.6 -94.7 L-222.5 -94.7 Z"/>
-  <path fill="url(#gem-g16)" d="M-222.4 -95.3 L-91.6 -95.3 L0.9 206.9 Z"/>
+  <path fill="url(#gem-g0)" d="M49.8 -181.2 L120.5 -189.8 L120.5 -202.5 L49.8 -211.1 L-49.8 -211.1 L-120.5 -202.5 L-120.5 -189.8 L-49.8 -181.2 Z"/>
+  <path fill="url(#gem-g1)" d="M-50 -181.9 L50 -181.9 L92.3 -59.6 L-92.3 -59.6 Z"/>
+  <path fill="url(#gem-g2)" d="M-92.3 -60.3 L92.3 -60.3 L0 211.9 Z"/>
+  <path fill="url(#gem-g3)" d="M49.3 -181.8 L120.2 -190.5 L222.4 -75.5 L91.6 -59.6 Z"/>
+  <path fill="url(#gem-g4)" d="M91.6 -60.3 L222.5 -76.2 L-1 212.6 Z"/>
+  <path fill="url(#gem-g5)" d="M119.8 -190 L119.8 -203.1 L222.1 -98.3 L222.1 -74.9 Z"/>
+  <path fill="url(#gem-g13)" d="M-119.8 -203.1 L-119.8 -190 L-222.1 -74.9 L-222.1 -98.3 Z"/>
+  <path fill="url(#gem-g15)" d="M-120.2 -190.5 L-49.3 -181.8 L-91.6 -59.6 L-222.4 -75.5 Z"/>
+  <path fill="url(#gem-g16)" d="M-222.5 -76.2 L-91.6 -60.3 L1 212.6 Z"/>
 </svg>

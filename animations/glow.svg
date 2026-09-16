@@ -1,44 +1,65 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-261.7 -245 523.5 490">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-261.7 -250.8 523.5 501.6">
   <defs>
-    <linearGradient id="gem-g1" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#ffc6cf"/>
-      <stop offset="1" stop-color="#f8687e"/>
+    <linearGradient id="gem-g0" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#ffa9cb"/>
+      <stop offset="1" stop-color="#f25392"/>
     </linearGradient>
-    <path id="gem-f1" d="M-50 -205.3 L50 -205.3 L92.4 -94.7 L-92.4 -94.7 Z"/>
-    <linearGradient id="gem-g2" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#dc2143"/>
-      <stop offset="1" stop-color="#a3122f"/>
+    <path id="gem-f0" d="M49.8 -181.2 L120.5 -189.8 L120.5 -202.5 L49.8 -211.1 L-49.8 -211.1 L-120.5 -202.5 L-120.5 -189.8 L-49.8 -181.2 Z"/>
+    <linearGradient id="gem-g1" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#ffcbdf"/>
+      <stop offset="1" stop-color="#fa71a7"/>
     </linearGradient>
-    <path id="gem-f2" d="M-92.3 -95.3 L92.3 -95.3 L0 206.2 Z"/>
-    <linearGradient id="gem-g3" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#f86a80"/>
-      <stop offset="1" stop-color="#d61f41"/>
+    <path id="gem-f1" d="M-50 -181.9 L50 -181.9 L92.3 -59.6 L-92.3 -59.6 Z"/>
+    <linearGradient id="gem-g2" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#e42f78"/>
+      <stop offset="1" stop-color="#aa1a58"/>
     </linearGradient>
-    <path id="gem-f3" d="M49.2 -205.3 L120.3 -205.3 L222.5 -94.7 L91.6 -94.7 Z"/>
-    <linearGradient id="gem-g4" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#9e112e"/>
-      <stop offset="1" stop-color="#5c0a1c"/>
+    <path id="gem-f2" d="M-92.3 -60.3 L92.3 -60.3 L0 211.9 Z"/>
+    <linearGradient id="gem-g3" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#fa73a8"/>
+      <stop offset="1" stop-color="#de2c74"/>
     </linearGradient>
-    <path id="gem-f4" d="M91.6 -95.3 L222.4 -95.3 L-0.9 206.9 Z"/>
-    <linearGradient id="gem-g15" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#ffe3e8"/>
-      <stop offset="1" stop-color="#ff93a3"/>
+    <path id="gem-f3" d="M49.3 -181.8 L120.2 -190.5 L222.4 -75.5 L91.6 -59.6 Z"/>
+    <linearGradient id="gem-g4" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#a51955"/>
+      <stop offset="1" stop-color="#621034"/>
     </linearGradient>
-    <path id="gem-f15" d="M-120.3 -205.3 L-49.2 -205.3 L-91.6 -94.7 L-222.5 -94.7 Z"/>
-    <linearGradient id="gem-g16" x1="0.1629" y1="0.1307" x2="0.8371" y2="0.8693">
-      <stop offset="0" stop-color="#ed4a65"/>
-      <stop offset="1" stop-color="#c11a39"/>
+    <path id="gem-f4" d="M91.6 -60.3 L222.5 -76.2 L-1 212.6 Z"/>
+    <linearGradient id="gem-g5" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#e32e77"/>
+      <stop offset="1" stop-color="#a91a57"/>
     </linearGradient>
-    <path id="gem-f16" d="M-222.4 -95.3 L-91.6 -95.3 L0.9 206.9 Z"/>
+    <path id="gem-f5" d="M119.8 -190 L119.8 -203.1 L222.1 -98.3 L222.1 -74.9 Z"/>
+    <linearGradient id="gem-g13" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#ffdae9"/>
+      <stop offset="1" stop-color="#fd7eb0"/>
+    </linearGradient>
+    <path id="gem-f13" d="M-119.8 -203.1 L-119.8 -190 L-222.1 -74.9 L-222.1 -98.3 Z"/>
+    <linearGradient id="gem-g15" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#ffe6f0"/>
+      <stop offset="1" stop-color="#ff9ac2"/>
+    </linearGradient>
+    <path id="gem-f15" d="M-120.2 -190.5 L-49.3 -181.8 L-91.6 -59.6 L-222.4 -75.5 Z"/>
+    <linearGradient id="gem-g16" x1="0.1438" y1="0.1491" x2="0.8562" y2="0.8509">
+      <stop offset="0" stop-color="#f25594"/>
+      <stop offset="1" stop-color="#c82568"/>
+    </linearGradient>
+    <path id="gem-f16" d="M-222.5 -76.2 L-91.6 -60.3 L1 212.6 Z"/>
   </defs>
+  <use href="#gem-f0" fill="url(#gem-g0)"/>
+  <use href="#gem-f0" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.45;0"/></use>
   <use href="#gem-f1" fill="url(#gem-g1)"/>
-  <use href="#gem-f1" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.2798;0"/></use>
+  <use href="#gem-f1" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.2268;0"/></use>
   <use href="#gem-f2" fill="url(#gem-g2)"/>
-  <use href="#gem-f2" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0166;0"/></use>
+  <use href="#gem-f2" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0075;0"/></use>
   <use href="#gem-f3" fill="url(#gem-g3)"/>
-  <use href="#gem-f3" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.1077;0"/></use>
+  <use href="#gem-f3" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0969;0"/></use>
   <use href="#gem-f4" fill="url(#gem-g4)"/>
+  <use href="#gem-f5" fill="url(#gem-g5)"/>
+  <use href="#gem-f5" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0432;0"/></use>
+  <use href="#gem-f13" fill="url(#gem-g13)"/>
+  <use href="#gem-f13" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0432;0"/></use>
   <use href="#gem-f15" fill="url(#gem-g15)"/>
-  <use href="#gem-f15" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.1077;0"/></use>
+  <use href="#gem-f15" fill="#fff" fill-opacity="0"><animate attributeName="fill-opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0969;0"/></use>
   <use href="#gem-f16" fill="url(#gem-g16)"/>
 </svg>
