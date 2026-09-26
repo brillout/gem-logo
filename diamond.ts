@@ -63,11 +63,15 @@
  * A gem is one color, so `colors` is a tone ramp of that one color, lightest
  * first: highlight, body, shadow — any number of stops (color-palettes.ts
  * has ready-made ones; a single color gets its highlight and shadow
- * derived). Every patch takes its tone from the light it returns, counted in
- * photographic stops from the median patch of the resting pose, which wears
- * the body tone: every stop brighter climbs toward the highlight, every stop
- * darker sinks toward the shadow; `shading` sets how far along the ramp
- * they go (0: every patch the middle tone, 1: the full ramp).
+ * derived). Every patch takes its tone from the light it returns — averaged
+ * over the patch, and over a short turn of the stone, the way a camera sees
+ * a turning stone: a patch that catches a softbox for a sliver of a turn
+ * glimmers rather than blinks, and the resting pose, averaged alike, is
+ * exactly an animation's first frame. That light is counted in photographic
+ * stops from the median patch of the resting pose, which wears the body
+ * tone: every stop brighter climbs toward the highlight, every stop darker
+ * sinks (more gently) toward the shadow; `shading` sets how far along the
+ * ramp they go (0: every patch the middle tone, 1: the full ramp).
  *
  * `gradient` picks how a facet wears its light:
  *   "sheen"   (default) a soft gradient across each facet, lighter toward the
@@ -554,8 +558,8 @@ const FLOOR = 0.008;
 const CAMERA_SHADOW = 0.85;
 const CAMERA_SPREAD = 0.02;
 
-/** The light arriving from a direction (a unit vector pointing toward where it comes from). */
-type Environment = (dir: Vec3) => number;
+/** The light arriving from a direction (the unit vector x, y, z pointing toward where it comes from). */
+type Environment = (x: number, y: number, z: number) => number;
 
 /** The studio, its softboxes swung `orbit` degrees around the viewing axis (`colorFlow`), for a camera looking along `view`. */
 function studio(p: Resolved, orbit: number, view: Vec3): Environment {
@@ -567,15 +571,15 @@ function studio(p: Resolved, orbit: number, view: Vec3): Environment {
     power: box.power,
     spread: box.spread,
   }));
-  const toCamera = scale3(view, -1);
-  return (dir) => {
+  const [cx, cy, cz] = scale3(view, -1);
+  return (x, y, z) => {
     let light = 0;
-    for (const box of boxes) light += box.power * Math.exp((dot3(dir, box.dir) - 1) / box.spread);
-    const up = dir[1];
-    const horizon = clamp((up + 0.15) / 0.3, 0, 1);
-    const ceiling = CEILING * (0.3 + 0.7 * Math.max(0, up) ** 0.6);
+    for (const { dir, power, spread } of boxes)
+      light += power * Math.exp((x * dir[0] + y * dir[1] + z * dir[2] - 1) / spread);
+    const horizon = clamp((y + 0.15) / 0.3, 0, 1);
+    const ceiling = CEILING * (0.3 + 0.7 * Math.max(0, y) ** 0.6);
     light += FLOOR + (ceiling - FLOOR) * horizon * horizon * (3 - 2 * horizon);
-    return light * (1 - CAMERA_SHADOW * Math.exp((dot3(dir, toCamera) - 1) / CAMERA_SPREAD));
+    return light * (1 - CAMERA_SHADOW * Math.exp((x * cx + y * cy + z * cz - 1) / CAMERA_SPREAD));
   };
 }
 
@@ -609,6 +613,8 @@ const reflect = (d: Vec3, n: Vec3): Vec3 => add3(d, scale3(n, -2 * dot3(d, n)));
 interface World {
   readonly vertices: readonly Vec3[];
   readonly normals: readonly Vec3[];
+  /** The normals again, flat (x, y, z per facet), for the tracer's inner loop. */
+  readonly flatNormals: Float64Array;
   readonly offsets: readonly number[];
 }
 
@@ -616,49 +622,88 @@ interface World {
 const MAX_BOUNCES = 8;
 /** Distance, as a multiple of `size`, over which light inside the stone dims to 1/e: long paths come out darker. */
 const ABSORPTION = 2.5;
+/** Where a patch's light is traced in each triangle of its fan (barycentric weights of the two outer corners): a rule exact for quadratics. */
+const SAMPLE_SPOTS: readonly Vec[] = [
+  [1 / 6, 1 / 6],
+  [2 / 3, 1 / 6],
+  [1 / 6, 2 / 3],
+];
+/** Fan triangles smaller than this share of size² are traced at their centroid alone; twice as large and up, at every spot of SAMPLE_SPOTS. */
+const SMALL_TRIANGLE = 0.0008;
+/** The short turn of the stone (degrees) a patch's light is averaged over, and where along it (fractions of it, centered on the pose) it is traced. */
+const TURN_BLUR = 12;
+const TURN_SPOTS: readonly number[] = [-3 / 8, -1 / 8, 1 / 8, 3 / 8];
 
 /**
- * The light a ray inside the stone brings back: from `point` on facet `face`,
- * heading `dir`. At every facet it meets, the share that escapes (Fresnel)
- * brings back the studio's light from where it then points; the rest
- * reflects on.
+ * Where the light a ray inside the stone brings back comes from: from
+ * `point` on facet `face`, heading `dir`, at every facet it meets the share
+ * that escapes (Fresnel) leaves along its refracted direction and brings
+ * back the studio's light from there; the rest reflects on. Every escape
+ * is handed over as its direction (x, y, z) and share — to be lit right
+ * away, or kept, so a studio that moves (`colorFlow`) can relight the same
+ * paths without tracing them again. Scalar math throughout: this is the hot
+ * loop.
  */
-function traceInside(
+type Escape = (x: number, y: number, z: number, share: number) => void;
+
+function traceEscapes(
   w: World,
-  env: Environment,
   ior: number,
   reach: number,
   point: Vec3,
   dir: Vec3,
   face: number,
-): number {
-  let light = 0;
+  escape: Escape,
+): void {
+  const n = w.flatNormals;
+  const offsets = w.offsets;
+  let px = point[0];
+  let py = point[1];
+  let pz = point[2];
+  let dx = dir[0];
+  let dy = dir[1];
+  let dz = dir[2];
   let carried = 1;
   for (let bounce = 0; bounce < MAX_BOUNCES && carried > 0.01; bounce++) {
     let hit = -1;
     let distance = Infinity;
-    w.normals.forEach((normal, g) => {
-      const along = dot3(normal, dir);
-      if (g === face || along <= 1e-9) return;
-      const s = (w.offsets[g] - dot3(normal, point)) / along;
+    for (let g = 0; g < offsets.length; g++) {
+      if (g === face) continue;
+      const along = n[3 * g] * dx + n[3 * g + 1] * dy + n[3 * g + 2] * dz;
+      if (along <= 1e-9) continue;
+      const s = (offsets[g] - (n[3 * g] * px + n[3 * g + 1] * py + n[3 * g + 2] * pz)) / along;
       if (s < distance) {
         distance = s;
         hit = g;
       }
-    });
+    }
     if (hit < 0) break;
     distance = Math.max(0, distance);
-    point = add3(point, scale3(dir, distance));
+    px += dx * distance;
+    py += dy * distance;
+    pz += dz * distance;
     carried *= Math.exp(-distance / reach);
-    const normal = w.normals[hit];
-    const reflected = fresnel(dot3(dir, normal), ior, 1);
-    const out = reflected < 1 ? refract(dir, scale3(normal, -1), ior) : null;
-    if (out) light += carried * (1 - reflected) * env(out);
+    const ax = n[3 * hit];
+    const ay = n[3 * hit + 1];
+    const az = n[3 * hit + 2];
+    const cos = dx * ax + dy * ay + dz * az;
+    const reflected = fresnel(cos, ior, 1);
+    const k = 1 - ior * ior * (1 - cos * cos);
+    if (reflected < 1 && k >= 0) {
+      // Bent out through the facet (Snell, with the normal facing the ray).
+      const f = ior * cos - Math.sqrt(k);
+      const ex = ior * dx - f * ax;
+      const ey = ior * dy - f * ay;
+      const ez = ior * dz - f * az;
+      const length = Math.sqrt(ex * ex + ey * ey + ez * ez);
+      escape(ex / length, ey / length, ez / length, carried * (1 - reflected));
+    }
     carried *= reflected;
-    dir = reflect(dir, normal);
+    dx -= 2 * cos * ax;
+    dy -= 2 * cos * ay;
+    dz -= 2 * cos * az;
     face = hit;
   }
-  return light;
 }
 
 // --------------------------------------------------------------- 2D polygons
@@ -689,6 +734,21 @@ const signedArea2 = (poly: readonly Vec[]): number =>
   }, 0);
 
 const area = (poly: readonly Vec[]): number => Math.abs(signedArea2(poly)) / 2;
+
+/** The center of mass of a polygon's area (its vertex average when it is flat): it moves smoothly as the polygon deforms, even as corners come and go. */
+function areaCentroid(poly: readonly Vec[]): Vec {
+  const a2 = signedArea2(poly);
+  if (Math.abs(a2) < 1e-12) return centroid(poly);
+  let cx = 0;
+  let cy = 0;
+  poly.forEach(([x, y], i) => {
+    const [nx, ny] = poly[(i + 1) % poly.length];
+    const cross = x * ny - nx * y;
+    cx += (x + nx) * cross;
+    cy += (y + ny) * cross;
+  });
+  return [cx / (3 * a2), cy / (3 * a2)];
+}
 
 /**
  * Convex polygon with every edge moved inward by `d`; null when the polygon
@@ -1040,11 +1100,16 @@ const MIN_GLOSS = 0.004;
 const METAL_WRAP = 0.5;
 /**
  * The tone curve, in photographic stops: the median patch sits at ramp
- * position MEDIAN_TONE (just past the body, toward the shadow), and every
- * stop of light more or less moves a patch STOP_TONE along the ramp.
+ * position MEDIAN_TONE (the body), every stop of light more moves a patch
+ * STOP_BRIGHTER toward the highlight, and every stop less STOP_DARKER toward
+ * the shadow — gentler, so the stone stays glassy rather than sinking into
+ * black, and a patch dimming as it turns fades instead of dropping.
  */
-const MEDIAN_TONE = 0.55;
-const STOP_TONE = 0.2;
+const MEDIAN_TONE = 0.48;
+const STOP_BRIGHTER = 0.36;
+const STOP_DARKER = 0.18;
+/** A traced spot counts for at most this many times the median patch's light: a little past where the tone curve reaches the highlight. */
+const LIGHT_CAP = 5;
 /** Patches smaller than this share of size² are left out: invisible, and the neighbors' strokes cover the spot. */
 const MIN_PATCH_AREA = 2e-6;
 /** A ray this close to parallel to a facet (cosine) no longer projects reliably through it. */
@@ -1091,12 +1156,25 @@ export function diamondSvg(params: DiamondParams = {}): string {
     const b: Vec3 = [sx, -(sy + yShift) * Math.cos(ph), (sy + yShift) * Math.sin(ph)];
     return add3(b, scale3(view, (offset - dot3(n, b)) / dot3(n, view)));
   };
+  /** Memoized by turn: the same turns come back for every patch. */
+  const byTurn = <T>(compute: (yaw: number) => T): ((yaw: number) => T) => {
+    const seen = new Map<number, T>();
+    return (yaw) => {
+      let value = seen.get(yaw);
+      if (value === undefined) seen.set(yaw, (value = compute(yaw)));
+      return value;
+    };
+  };
   /** Every vertex on screen, for the stone turned by `yaw`. */
-  const pose = (yaw: number): Vec[] => model.vertices.map((v) => toScreen(yawed(v, yaw)));
-  const worldAt = (yaw: number): World => ({
-    vertices: model.vertices.map((v) => yawed(v, yaw)),
-    normals: model.faces.map((f) => yawed(f.normal, yaw)),
-    offsets: model.faces.map((f) => f.offset),
+  const pose = byTurn((yaw): Vec[] => model.vertices.map((v) => toScreen(yawed(v, yaw))));
+  const worldAt = byTurn((yaw): World => {
+    const normals = model.faces.map((f) => yawed(f.normal, yaw));
+    return {
+      vertices: model.vertices.map((v) => yawed(v, yaw)),
+      normals,
+      flatNormals: Float64Array.from(normals.flat()),
+      offsets: model.faces.map((f) => f.offset),
+    };
   });
   const yawAt = timeline ? timeline.yawAt : (): number => p.yaw;
   const orbitAt = timeline ? timeline.orbitAt : (): number => 0;
@@ -1122,14 +1200,82 @@ export function diamondSvg(params: DiamondParams = {}): string {
   /** The gloss of facet f: the studio mirrored in its surface (Fresnel). */
   const glossOf = (w: World, env: Environment, f: number): number => {
     const n = w.normals[f];
-    return fresnel(Math.max(0, -dot3(view, n)), 1, ior) * env(reflect(view, n));
+    return fresnel(Math.max(0, -dot3(view, n)), 1, ior) * env(...reflect(view, n));
+  };
+  /**
+   * The escapes traced so far, by stone pose and point — kept only while the
+   * studio moves (`colorFlow`): then every keyframe relights the same paths.
+   */
+  const escapesTraced = new Map<World, Map<string, number[]>>();
+  /** Trace the ray the camera sees at screen point `at` of facet f, handing over its escapes. */
+  const traceAt = (w: World, f: number, at: Vec, escape: Escape): void => {
+    const n = w.normals[f];
+    const into = refract(view, n, 1 / ior);
+    if (into) traceEscapes(w, ior, reach, lift(at, n, w.offsets[f]), into, f, escape);
   };
   /** The light that comes out of the gem through facet f at one screen point. */
   const lightThrough = (w: World, env: Environment, f: number, at: Vec): number => {
-    const n = w.normals[f];
-    const into = refract(view, n, 1 / ior);
-    if (!into) return 0;
-    return traceInside(w, env, ior, reach, lift(at, n, w.offsets[f]), into, f);
+    let light = 0;
+    if (!active.colorFlow) {
+      traceAt(w, f, at, (x, y, z, share) => (light += share * env(x, y, z)));
+      return light;
+    }
+    let traced = escapesTraced.get(w);
+    if (!traced) escapesTraced.set(w, (traced = new Map()));
+    const key = `${f} ${at[0]} ${at[1]}`;
+    let escapes = traced.get(key);
+    if (!escapes) {
+      const kept: number[] = [];
+      traceAt(w, f, at, (x, y, z, share) => kept.push(x, y, z, share));
+      traced.set(key, (escapes = kept));
+    }
+    for (let i = 0; i < escapes.length; i += 4)
+      light += escapes[i + 3] * env(escapes[i], escapes[i + 1], escapes[i + 2]);
+    return light;
+  };
+  /** The most a traced spot counts for: set once the exposure is known. */
+  let lightCap = Infinity;
+  /**
+   * The mean light a patch (a convex screen polygon on facet f) sends the
+   * camera: traced at fixed spots of a fan of triangles from its area
+   * centroid, weighted by their areas. A patch is only split as far as
+   * `reflections` goes, and the rays from its points go their own ways after
+   * that — so a single traced point would jump as it crosses into another
+   * path, where the mean follows the patch smoothly as it slides and deforms.
+   * Each traced spot counts for at most `lightCap` (set once the exposure is
+   * known): light past what the ramp can show adds nothing visible, and a
+   * single spot catching a softbox's core would otherwise make its whole
+   * patch flash.
+   */
+  const lightOver = (w: World, env: Environment, f: number, poly: readonly Vec[]): number => {
+    const c = areaCentroid(poly);
+    let sum = 0;
+    let total = 0;
+    const at = (a: Vec, b: Vec, [u, v]: Vec): number =>
+      Math.min(
+        lightCap,
+        lightThrough(w, env, f, [
+          c[0] + (a[0] - c[0]) * u + (b[0] - c[0]) * v,
+          c[1] + (a[1] - c[1]) * u + (b[1] - c[1]) * v,
+        ]),
+      );
+    poly.forEach((a, i) => {
+      const b = poly[(i + 1) % poly.length];
+      const weight = Math.abs((a[0] - c[0]) * (b[1] - c[1]) - (a[1] - c[1]) * (b[0] - c[0]));
+      if (weight < 1e-12) return;
+      // Small triangles are traced once, at their centroid; large ones at the
+      // spots of SAMPLE_SPOTS, blending across a band of sizes so a triangle
+      // growing past it doesn't jump.
+      const large = clamp((weight / 2 / (SMALL_TRIANGLE * p.size * p.size) - 1) * 2 + 1, 0, 1);
+      const once = large < 1 ? at(a, b, [1 / 3, 1 / 3]) : 0;
+      const spots =
+        large > 0
+          ? SAMPLE_SPOTS.reduce((s, spot) => s + at(a, b, spot), 0) / SAMPLE_SPOTS.length
+          : 0;
+      sum += weight * (once * (1 - large) + spots * large);
+      total += weight;
+    });
+    return total > 0 ? sum / total : Math.min(lightCap, lightThrough(w, env, f, c));
   };
 
   // ----------------------------------------------------------------- facets
@@ -1283,103 +1429,6 @@ export function diamondSvg(params: DiamondParams = {}): string {
     step(clipOutline(outline), [f], [{ face: f, dir: into }]);
   };
 
-  // ---------------------------------------------------------------- exposure
-  //
-  // Tones are counted in stops from the median patch of the static pose (by
-  // area), whatever the animations do, so the resting pose looks the same.
-  const staticWorld = worldAt(yawAt(0));
-  const staticEnv = envAt(0);
-  const samples: { light: number; area: number }[] = [];
-  for (const f of facets) {
-    if (!f.facingAt[0] || material === "metal") continue;
-    if (patched)
-      walkPatches(staticWorld, f.index, f.polys[0], (chain, poly) => {
-        if (chain.length === p.reflections + 1)
-          samples.push({
-            light: lightThrough(staticWorld, staticEnv, f.index, centroid(poly)),
-            area: area(poly),
-          });
-      });
-    else
-      samples.push({
-        light: lightThrough(staticWorld, staticEnv, f.index, centroid(f.polys[0])),
-        area: area(f.polys[0]),
-      });
-  }
-  const median = (() => {
-    samples.sort((a, b) => a.light - b.light);
-    const total = samples.reduce((s, x) => s + x.area, 0);
-    let seen = 0;
-    return Math.max(samples.find((x) => (seen += x.area) >= total / 2)?.light ?? 1, 1e-6);
-  })();
-  /** Ramp position (0: highlight, 1: shadow) of a patch that sends the camera `light`. */
-  const toneOf = (light: number): number => {
-    const stops = Math.log2(Math.max(light, median / 1024) / median);
-    return clamp(0.5 + p.shading * (MEDIAN_TONE - 0.5 - STOP_TONE * stops), 0, 1);
-  };
-
-  /** Fill every gap in a per-keyframe track with the value of the nearest keyframe that has one. */
-  const holdNearest = <T>(times: readonly number[], values: readonly (T | null)[]): T[] | null => {
-    const known = values.flatMap((v, i) => (v === null ? [] : [i]));
-    if (!known.length) return null;
-    return values.map((v, i) => {
-      if (v !== null) return v;
-      const j = known.reduce((best, k) =>
-        Math.abs(times[k] - times[i]) < Math.abs(times[best] - times[i]) ? k : best,
-      );
-      return values[j] as T;
-    });
-  };
-
-  /**
-   * The facet's tone (one per facet — or, patched, its base under the
-   * patches) and gloss at each of its keyframes. A metal facet's tone comes
-   * from how squarely it faces the key light, with half-wrap lighting so the
-   * facets past the light's terminator keep some shading.
-   */
-  const facetLight = (f: Facet): { tones: number[]; glosses: number[] } => {
-    const light = f.times.map((t, i) => {
-      if (!f.facingAt[i]) return null;
-      const w = worldAt(yawAt(t));
-      if (material === "metal") {
-        const key = orbitLight(lightVector(p.lightAngle, p.lightElevation), orbitAt(t));
-        const lit = clamp((dot3(w.normals[f.index], key) + METAL_WRAP) / (1 + METAL_WRAP), 0, 1);
-        return { tone: clamp(0.5 + p.shading * (0.5 - lit), 0, 1), gloss: 0 };
-      }
-      const env = envAt(t);
-      return {
-        tone: toneOf(lightThrough(w, env, f.index, centroid(f.polys[i]))),
-        gloss: glossOf(w, env, f.index),
-      };
-    });
-    const held = holdNearest(f.times, light)!;
-    return { tones: held.map((l) => l.tone), glosses: held.map((l) => l.gloss) };
-  };
-
-  // ---------------------------------------------------------------- patches
-  //
-  // A patch is a chain of facets [f, g1, …]: the part of facet f whose rays,
-  // refracted into the stone, reach g1 next, then (reflected there) g2 next…
-  // A still stone gets every patch as its exact polygon. A spinning one gets
-  // every patch that shows at some keyframe as a tweened polygon — facet g's
-  // pullback along the chain, which keeps its corner count as the stone
-  // turns — clipped to its facet (and to the patch it splits) by the SVG
-  // renderer, with keyframes of its own where a facet of the chain turns
-  // parallel to the ray, where the patch vanishes and the visibility switches.
-
-  interface Patch {
-    readonly chain: readonly number[];
-    readonly times: readonly number[];
-    /** Screen polygon at every keyframe: exact when still, the unclipped pullback when spinning. */
-    readonly polys: readonly (readonly Vec[])[];
-    /** Ramp position at every keyframe. */
-    readonly tones: readonly number[];
-    readonly shownAtStart: boolean;
-    readonly visibility: { keyTimes: number[]; values: string[] } | null;
-    /** The patches that split this one, one reflection deeper. */
-    readonly children: Patch[];
-  }
-
   /** The rays of a chain for the stone turned by `yaw`: the refracted one into its facet, then the reflected one off each next facet — null while the facet looks away. */
   const chainRays = (chain: readonly number[], normals: readonly Vec3[]): Link[] | null => {
     const n0 = normals[chain[0]];
@@ -1412,6 +1461,170 @@ export function diamondSvg(params: DiamondParams = {}): string {
     return ahead;
   };
 
+  /**
+   * The exact screen polygon a chain of facets covers with the stone turned
+   * by `yaw`: facet f's outline, cut down to where its rays follow the chain
+   * (the chain [f] alone: the whole facet); empty where it doesn't show.
+   */
+  const computeRegion = (face: Face, chain: readonly number[], yaw: number): Vec[] => {
+    if (!(chainAhead(chain, yaw)?.every((a) => a > 0) ?? false)) return [];
+    const w = worldAt(yaw);
+    const links = chainRays(chain, w.normals);
+    if (!links) return [];
+    const verts = pose(yaw);
+    const raw = face.indices.map((j) => verts[j]);
+    let region: Vec[] = clipOutline(inset(raw, p.gap / 2) ?? shrink(raw, p.gap / 2));
+    for (let k = 1; k < chain.length && region.length; k++)
+      region = clipConvex(pullback(w, links.slice(0, k), chain[k]), region);
+    return region;
+  };
+  /** computeRegion, memoized: a still stone lit by a moving studio (`colorFlow`) asks for the same regions at every keyframe. */
+  const regions = new Map<string, Vec[]>();
+  const regionAt = (face: Face, chain: readonly number[], yaw: number): Vec[] => {
+    const key = `${chain.join(".")} ${yaw}`;
+    let region = regions.get(key);
+    if (!region) regions.set(key, (region = computeRegion(face, chain, yaw)));
+    return region;
+  };
+  /**
+   * The light a patch (a chain of facets) sends the camera at the stone's
+   * turn `yaw`, as a camera sees a turning stone: averaged over a short turn
+   * (TURN_BLUR degrees, centered on `yaw`), weighted by the area the patch
+   * covers along it — so a patch that catches a softbox for a sliver of the
+   * turn glimmers instead of blinking. The resting pose gets the same short
+   * turn, so it looks exactly like an animation's first frame. Null where the
+   * patch shows nowhere along the turn.
+   */
+  const patchLight = (
+    face: Face,
+    chain: readonly number[],
+    yaw: number,
+    env: Environment,
+  ): number | null => {
+    let sum = 0;
+    let total = 0;
+    for (const s of TURN_SPOTS) {
+      const turned = yaw + s * TURN_BLUR;
+      const region = regionAt(face, chain, turned);
+      const covered = region.length ? area(region) : 0;
+      if (covered < 1e-9) continue;
+      sum += covered * lightOver(worldAt(turned), env, chain[0], region);
+      total += covered;
+    }
+    return total > 0 ? sum / total : null;
+  };
+  /** A facet's gloss at the stone's turn `yaw`, averaged over the same short turn. */
+  const glossAround = (f: number, yaw: number, env: Environment): number =>
+    TURN_SPOTS.reduce((s, spot) => s + glossOf(worldAt(yaw + spot * TURN_BLUR), env, f), 0) /
+    TURN_SPOTS.length;
+
+  // ---------------------------------------------------------------- exposure
+  //
+  // Tones are counted in stops from the median patch of the static pose (by
+  // area), whatever the animations do, so the resting pose looks the same.
+  const staticWorld = worldAt(yawAt(0));
+  const staticEnv = envAt(0);
+  const samples: { light: number; area: number }[] = [];
+  for (const f of facets) {
+    if (!f.facingAt[0] || material === "metal") continue;
+    if (patched)
+      walkPatches(staticWorld, f.index, f.polys[0], (chain, poly) => {
+        if (chain.length === p.reflections + 1)
+          samples.push({
+            light:
+              patchLight(f.face, chain, yawAt(0), staticEnv) ??
+              lightOver(staticWorld, staticEnv, f.index, poly),
+            area: area(poly),
+          });
+      });
+    else
+      samples.push({
+        light:
+          patchLight(f.face, [f.index], yawAt(0), staticEnv) ??
+          lightOver(staticWorld, staticEnv, f.index, f.polys[0]),
+        area: area(f.polys[0]),
+      });
+  }
+  const median = (() => {
+    samples.sort((a, b) => a.light - b.light);
+    const total = samples.reduce((s, x) => s + x.area, 0);
+    let seen = 0;
+    return Math.max(samples.find((x) => (seen += x.area) >= total / 2)?.light ?? 1, 1e-6);
+  })();
+  lightCap = LIGHT_CAP * median;
+  /** Ramp position (0: highlight, 1: shadow) of a patch that sends the camera `light`. */
+  const toneOf = (light: number): number => {
+    const stops = Math.log2(Math.max(light, median / 1024) / median);
+    const shift = stops * (stops > 0 ? STOP_BRIGHTER : STOP_DARKER);
+    return clamp(0.5 + p.shading * (MEDIAN_TONE - 0.5 - shift), 0, 1);
+  };
+
+  /** Fill every gap in a per-keyframe track with the value of the nearest keyframe that has one. */
+  const holdNearest = <T>(times: readonly number[], values: readonly (T | null)[]): T[] | null => {
+    const known = values.flatMap((v, i) => (v === null ? [] : [i]));
+    if (!known.length) return null;
+    return values.map((v, i) => {
+      if (v !== null) return v;
+      const j = known.reduce((best, k) =>
+        Math.abs(times[k] - times[i]) < Math.abs(times[best] - times[i]) ? k : best,
+      );
+      return values[j] as T;
+    });
+  };
+
+  /**
+   * The facet's tone (one per facet — or, patched, its base under the
+   * patches) and gloss at each of its keyframes. A metal facet's tone comes
+   * from how squarely it faces the key light, with half-wrap lighting so the
+   * facets past the light's terminator keep some shading.
+   */
+  const facetLight = (f: Facet): { tones: number[]; glosses: number[] } => {
+    const light = f.times.map((t, i) => {
+      if (!f.facingAt[i]) return null;
+      const w = worldAt(yawAt(t));
+      if (material === "metal") {
+        const key = orbitLight(lightVector(p.lightAngle, p.lightElevation), orbitAt(t));
+        const lit = clamp((dot3(w.normals[f.index], key) + METAL_WRAP) / (1 + METAL_WRAP), 0, 1);
+        return { tone: clamp(0.5 + p.shading * (0.5 - lit), 0, 1), gloss: 0 };
+      }
+      const env = envAt(t);
+      // Under spinning patches the facet's own tone only shows along its
+      // edges: one pose is enough there.
+      const light =
+        patched && spinning
+          ? lightOver(w, env, f.index, f.polys[i])
+          : (patchLight(f.face, [f.index], yawAt(t), env) ??
+            lightOver(w, env, f.index, f.polys[i]));
+      return { tone: toneOf(light), gloss: glossAround(f.index, yawAt(t), env) };
+    });
+    const held = holdNearest(f.times, light)!;
+    return { tones: held.map((l) => l.tone), glosses: held.map((l) => l.gloss) };
+  };
+
+  // ---------------------------------------------------------------- patches
+  //
+  // A patch is a chain of facets [f, g1, …]: the part of facet f whose rays,
+  // refracted into the stone, reach g1 next, then (reflected there) g2 next…
+  // A still stone gets every patch as its exact polygon. A spinning one gets
+  // every patch that shows at some keyframe as a tweened polygon — facet g's
+  // pullback along the chain, which keeps its corner count as the stone
+  // turns — clipped to its facet (and to the patch it splits) by the SVG
+  // renderer, with keyframes of its own where a facet of the chain turns
+  // parallel to the ray, where the patch vanishes and the visibility switches.
+
+  interface Patch {
+    readonly chain: readonly number[];
+    readonly times: readonly number[];
+    /** Screen polygon at every keyframe: exact when still, the unclipped pullback when spinning. */
+    readonly polys: readonly (readonly Vec[])[];
+    /** Ramp position at every keyframe. */
+    readonly tones: readonly number[];
+    readonly shownAtStart: boolean;
+    readonly visibility: { keyTimes: number[]; values: string[] } | null;
+    /** The patches that split this one, one reflection deeper. */
+    readonly children: Patch[];
+  }
+
   const patchesOf = (f: Facet): Patch[] => {
     const leafDepth = p.reflections + 1;
     if (!spinning) {
@@ -1421,12 +1634,16 @@ export function diamondSvg(params: DiamondParams = {}): string {
       const w = staticWorld;
       walkPatches(w, f.index, f.polys[0], (chain, poly) => {
         if (chain.length !== leafDepth) return;
-        const at = centroid(poly);
         root.push({
           chain,
           times: baseTimes,
           polys: [poly],
-          tones: baseTimes.map((t) => toneOf(lightThrough(w, envAt(t), f.index, at))),
+          tones: baseTimes.map((t) =>
+            toneOf(
+              patchLight(f.face, chain, yawAt(t), envAt(t)) ??
+                lightOver(w, envAt(t), f.index, poly),
+            ),
+          ),
           shownAtStart: true,
           visibility: null,
           children: [],
@@ -1522,13 +1739,8 @@ export function diamondSvg(params: DiamondParams = {}): string {
           tones.push(null);
           continue;
         }
-        // The exact patch at this keyframe, for its tone.
-        const region = reach.length ? clipConvex(own, reach) : [];
-        tones.push(
-          region.length && area(region) > 1e-9
-            ? toneOf(lightThrough(w, envAt(t), f.index, centroid(region)))
-            : null,
-        );
+        const light = patchLight(f.face, chain, yawAt(t), envAt(t));
+        tones.push(light === null ? null : toneOf(light));
       }
       const heldPolys = holdNearest(times, polys);
       if (!heldPolys) return null;
