@@ -13,14 +13,14 @@
  *
  * and `cut` arranges the facets:
  *
- *   "brilliant"  (default) the jeweler's cut: the `sides`-sided table ringed
- *                by star facets, kite facets reaching down to the girdle
- *                with upper-girdle facets between them, and below, kite-shaped
+ *   "simple"     (default) the classic icon: the table, a ring of `sides`
+ *                trapezoid crown facets down to the girdle, and `sides`
+ *                triangular pavilion facets meeting at the culet.
+ *   "brilliant"  the jeweler's cut: the `sides`-sided table ringed by star
+ *                facets, kite facets reaching down to the girdle with
+ *                upper-girdle facets between them, and below, kite-shaped
  *                pavilion mains meeting at the culet with lower-girdle facets
  *                between them — 7 · sides + 1 facets in all.
- *   "simple"     the classic icon: the table, a ring of `sides` trapezoid
- *                crown facets down to the girdle, and `sides` triangular
- *                pavilion facets meeting at the culet.
  *
  * The camera looks at the stone from the front: straight from the side by
  * default, the classic icon with the table edge-on, or elevated by `pitch`
@@ -120,7 +120,7 @@
 
 // ------------------------------------------------------------------ options
 
-export const CUTS = ["brilliant", "simple"] as const;
+export const CUTS = ["simple", "brilliant"] as const;
 export type Cut = (typeof CUTS)[number];
 export const MATERIALS = ["gem", "metal"] as const;
 export type Material = (typeof MATERIALS)[number];
@@ -138,7 +138,7 @@ export interface DiamondParams {
   pavilionHeight?: number;
   /** Number of sides of the table; the cut repeats that many times around the stone. */
   sides?: number;
-  /** How the facets are arranged: "brilliant" (the jeweler's cut, with star, kite and girdle facets) or "simple" (table, crown trapezoids, pavilion triangles). */
+  /** How the facets are arranged: "simple" (table, crown trapezoids, pavilion triangles) or "brilliant" (the jeweler's cut, with star, kite and girdle facets). */
   cut?: Cut;
   /** Camera elevation in degrees: 0 looks straight from the side (the table is edge-on), positive looks down onto the table. */
   pitch?: number;
@@ -268,7 +268,7 @@ function validate(p: Resolved): void {
   if (p.tableSize >= p.size)
     warn("tableSize should stay below size, or the crown facets fold over");
   if (!CUTS.includes(p.cut))
-    warn(`unknown cut "${p.cut}" — using "brilliant" (options: ${CUTS.join(", ")})`);
+    warn(`unknown cut "${p.cut}" — using "simple" (options: ${CUTS.join(", ")})`);
   else if (p.cut === "brilliant" && p.tableSize < p.size && !brilliantFits(p))
     warn(
       `a brilliant cut with ${p.sides} sides needs tableSize below ` +
@@ -385,7 +385,7 @@ const brilliantFits = (p: Resolved): boolean =>
 
 /** The cut actually built: an unknown cut, or a brilliant the table leaves no room for, falls back. */
 function cutOf(p: Resolved): Cut {
-  if (!CUTS.includes(p.cut)) return "brilliant";
+  if (!CUTS.includes(p.cut)) return "simple";
   return p.cut === "brilliant" && !brilliantFits(p) ? "simple" : p.cut;
 }
 
