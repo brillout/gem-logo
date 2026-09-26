@@ -5,7 +5,17 @@
 
 import { COLOR_PALETTES, PALETTE_GROUPS } from "../color-palettes.ts";
 import { PADDING_PRESETS } from "../default.ts";
-import { DEFAULTS, diamondSvg, type DiamondParams, type Gradient, GRADIENTS } from "../diamond.ts";
+import {
+  CUTS,
+  type Cut,
+  DEFAULTS,
+  diamondSvg,
+  type DiamondParams,
+  type Gradient,
+  GRADIENTS,
+  type Material,
+  MATERIALS,
+} from "../diamond.ts";
 
 // ------------------------------------------------------------------- state
 
@@ -27,8 +37,8 @@ interface SliderSpec {
   max: number;
   /** Slider granularity; whole numbers when omitted. */
   step?: number;
-  /** Sliders whose parameter only matters for one gradient mode get disabled otherwise. */
-  onlyFor?: Gradient;
+  /** Sliders whose parameter only matters for one material get dimmed otherwise. */
+  onlyFor?: Material;
 }
 const SLIDERS: Record<NumericKey, SliderSpec> = {
   size: { min: 64, max: 1024 },
@@ -41,6 +51,8 @@ const SLIDERS: Record<NumericKey, SliderSpec> = {
   gap: { min: 0, max: 40 },
   cornerRadius: { min: 0, max: 40 },
   padding: { min: 0, max: 256 },
+  refractiveIndex: { min: 1, max: 2.6, step: 0.01, onlyFor: "gem" },
+  reflections: { min: 0, max: 3, onlyFor: "gem" },
   shading: { min: 0, max: 1, step: 0.05 },
   lightAngle: { min: -180, max: 180 },
   lightElevation: { min: -90, max: 90 },
@@ -78,9 +90,19 @@ type ControlKey = keyof State;
 const SECTIONS: { title: string; keys: ControlKey[] }[] = [
   {
     title: "Shape",
-    keys: ["size", "tableSize", "crownHeight", "pavilionHeight", "sides", "gap", "cornerRadius"],
+    keys: [
+      "size",
+      "tableSize",
+      "crownHeight",
+      "pavilionHeight",
+      "sides",
+      "cut",
+      "gap",
+      "cornerRadius",
+    ],
   },
   { title: "Camera", keys: ["pitch", "yaw"] },
+  { title: "Material", keys: ["material", "refractiveIndex", "reflections"] },
   { title: "Color", keys: ["gradient", "colors", "background"] },
   { title: "Light", keys: ["shading", "lightAngle", "lightElevation"] },
   { title: "Color flow", keys: ["colorFlow", "colorFlowDuration"] },
@@ -117,6 +139,10 @@ function paramsFromUrl(): Partial<State> {
   for (const key of BOOLEAN_KEYS) if (query.has(key)) partial[key] = query.get(key) !== "false";
   const gradient = query.get("gradient");
   if (gradient && GRADIENTS.includes(gradient as Gradient)) partial.gradient = gradient as Gradient;
+  const cut = query.get("cut");
+  if (cut && CUTS.includes(cut as Cut)) partial.cut = cut as Cut;
+  const material = query.get("material");
+  if (material && MATERIALS.includes(material as Material)) partial.material = material as Material;
   // Like the numeric params, a colors list that is effectively empty
   // (?colors=,,) is ignored.
   const colors = query
@@ -138,6 +164,8 @@ function syncUrl(): void {
   for (const key of BOOLEAN_KEYS)
     if (state[key] !== stateDefaults[key]) query.set(key, String(state[key]));
   if (state.gradient !== stateDefaults.gradient) query.set("gradient", state.gradient);
+  if (state.cut !== stateDefaults.cut) query.set("cut", state.cut);
+  if (state.material !== stateDefaults.material) query.set("material", state.material);
   if (state.colors.join(",") !== stateDefaults.colors.join(","))
     query.set("colors", state.colors.join(","));
   if (state.background !== stateDefaults.background)
@@ -217,15 +245,22 @@ function toggleRow(key: BooleanKey): HTMLElement {
   return el("label", { class: "control" }, el("span", {}, key), toggle);
 }
 
-// Gradient mode.
-const gradientSelect = el("select", {});
-gradientSelect.append(
-  ...GRADIENTS.map((g) => el("option", g === state.gradient ? { selected: "" } : {}, g)),
-);
-gradientSelect.addEventListener("input", () => {
-  state.gradient = gradientSelect.value as Gradient;
-  render();
-});
+/** A select over one of the string-valued parameters (gradient, cut, material). */
+function choiceSelect<K extends "gradient" | "cut" | "material">(
+  key: K,
+  options: readonly State[K][],
+): HTMLSelectElement {
+  const select = el("select", {});
+  select.append(...options.map((o) => el("option", o === state[key] ? { selected: "" } : {}, o)));
+  select.addEventListener("input", () => {
+    state[key] = select.value as State[K];
+    render();
+  });
+  return select;
+}
+const gradientSelect = choiceSelect("gradient", GRADIENTS);
+const cutSelect = choiceSelect("cut", CUTS);
+const materialSelect = choiceSelect("material", MATERIALS);
 
 // The tone ramp: one picker per stop, lightest first; a single stop gets its highlight and shadow derived.
 const colorList = el("div", { class: "color-list" });
@@ -289,6 +324,9 @@ glintColorPicker.addEventListener("input", () => {
 function controlRow(key: ControlKey): HTMLElement {
   if (key === "gradient")
     return el("label", { class: "control" }, el("span", {}, "gradient"), gradientSelect);
+  if (key === "cut") return el("label", { class: "control" }, el("span", {}, "cut"), cutSelect);
+  if (key === "material")
+    return el("label", { class: "control" }, el("span", {}, "material"), materialSelect);
   if (key === "colors")
     return el("div", { class: "control control-colors" }, el("span", {}, "colors"), colorList);
   if (key === "background")
@@ -314,8 +352,9 @@ for (const section of SECTIONS) {
   controls.append(el("div", { class: "section" }, el("h2", {}, section.title), ...sectionRows));
 }
 
-// Preset palettes: clicking one replaces the colors, and the background when
-// the palette is designed for its own (dark) backdrop.
+// Preset palettes: clicking one replaces the colors, the material (gem, or
+// metal for the metal palettes), and the background when the palette is
+// designed for its own (dark) backdrop.
 const paletteGroups = PALETTE_GROUPS.map((group) =>
   el(
     "div",
@@ -333,6 +372,8 @@ const paletteGroups = PALETTE_GROUPS.map((group) =>
       const button = el("button", { type: "button", class: "palette" }, swatches, palette.name);
       button.addEventListener("click", () => {
         state.colors = [...palette.colors];
+        state.material = palette.material ?? "gem";
+        materialSelect.value = state.material;
         state.background = palette.background ?? null;
         syncBackgroundControls();
         rebuildColorList();
@@ -462,6 +503,8 @@ $("#reset").addEventListener("click", () => {
   for (const key of NUMERIC_KEYS) setSliderValue(key, state[key]);
   for (const key of BOOLEAN_KEYS) toggles.get(key)!.checked = state[key];
   gradientSelect.value = state.gradient;
+  cutSelect.value = state.cut;
+  materialSelect.value = state.material;
   glintColorPicker.value = state.glintColor;
   syncBackgroundControls();
   rebuildColorList();
@@ -565,7 +608,7 @@ function render(): void {
   warningsBox.replaceChildren(...warnings.map((w) => el("p", {}, w)));
 
   // Dim the controls that currently have no effect: an animation's settings
-  // while it is off, and sliders tied to another gradient mode.
+  // while it is off, and sliders tied to another material.
   for (const section of SECTIONS) {
     const [first, ...others] = section.keys;
     if (typeof stateDefaults[first] !== "boolean") continue;
@@ -574,7 +617,7 @@ function render(): void {
   }
   for (const key of NUMERIC_KEYS) {
     const { onlyFor } = SLIDERS[key];
-    if (onlyFor) rows.get(key)!.classList.toggle("inactive", state.gradient !== onlyFor);
+    if (onlyFor) rows.get(key)!.classList.toggle("inactive", state.material !== onlyFor);
   }
 
   syncPaddingControls();
