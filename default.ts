@@ -24,21 +24,25 @@ export const PADDING_PRESETS = {
 } as const;
 export type PaddingPreset = keyof typeof PADDING_PRESETS;
 
-/** Defaults: a spinel with a soft sheen on every facet, seen from slightly above, spinning and floating. */
+/** Defaults: a brilliant-cut spinel under studio lights, seen from slightly above, spinning and floating. */
 export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   size: 480,
   tableSize: 260,
   crownHeight: 110,
   pavilionHeight: 300,
   sides: 8,
+  cut: "brilliant",
   pitch: 7,
   yaw: 0,
   gap: 0,
   cornerRadius: 0,
   padding,
   colors: DEFAULT_PALETTE.colors,
+  material: "gem",
+  refractiveIndex: 1.72,
+  reflections: 1,
   gradient: "sheen",
-  shading: 0.85,
+  shading: 1,
   lightAngle: -50,
   lightElevation: 35,
   colorFlow: false,

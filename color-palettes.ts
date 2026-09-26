@@ -1,12 +1,17 @@
 /**
  * Gem palettes for the diamond mark. A gem is one color, so each palette is
  * a tone ramp of that color, lightest first — highlight, light body, body,
- * deep body, shadow — and the facets pick their tone from it by how they
- * face the light (see diamond.ts). Pass a palette's `colors` (and
- * `background`, when the palette is made for a dark backdrop), e.g.:
+ * deep body, shadow — and every patch of the stone picks its tone from it by
+ * the light it returns (see diamond.ts). The ramps follow real stones under
+ * studio light: vivid bodies, highlights paling toward white, and shadows
+ * sinking to a near-black of the same hue. Pass a palette's `colors` (and
+ * `background`, when the palette is made for a dark backdrop, or `material`,
+ * for metal), e.g.:
  *
- *   pnpm run node-ts cli.ts logo.svg --colors=#e4f0ff,#7cb4ff,#2f6de6,#1b45b4,#0f2670
+ *   pnpm run node-ts cli.ts logo.svg --colors=#dfeaff,#6fa3fb,#2458d8,#132f96,#070f45
  */
+
+import type { Material } from "./diamond.ts";
 
 export interface ColorPalette {
   name: string;
@@ -15,6 +20,8 @@ export interface ColorPalette {
   colors: string[];
   /** Backdrop the palette is designed for; omitted = transparent. */
   background?: string;
+  /** What the stone is made of; omitted = "gem". */
+  material?: Material;
 }
 
 export type PaletteGroup = (typeof PALETTE_GROUPS)[number];
@@ -28,7 +35,8 @@ export const PALETTE_GROUPS = [
   "Pale",
   // Black and smoky stones.
   "Dark",
-  // Not gems, but a diamond cut in metal looks great as a badge.
+  // Not gems, but a diamond cut in metal looks great as a badge (opaque:
+  // every facet mirrors the studio).
   "Metal",
   // Soft candy tones.
   "Pastel",
@@ -43,79 +51,94 @@ export const COLOR_PALETTES: ColorPalette[] = [
   {
     name: "Diamond",
     group: "Precious",
-    colors: ["#ffffff", "#eef5fb", "#c9dae8", "#98b2c8", "#647d96"],
+    colors: ["#ffffff", "#eef3f8", "#c3d0dc", "#7d8c9c", "#2c3440"],
   },
   {
     name: "Sapphire",
     group: "Precious",
-    colors: ["#e4f0ff", "#7cb4ff", "#2f6de6", "#1b45b4", "#0f2670"],
+    colors: ["#dfeaff", "#6fa3fb", "#2458d8", "#132f96", "#070f45"],
   },
   {
     name: "Ruby",
     group: "Precious",
-    colors: ["#ffe3e8", "#ff7d90", "#e02244", "#a4122f", "#5c0a1c"],
+    colors: ["#ffd9e0", "#ff6680", "#dc1a3c", "#8e0c26", "#35040e"],
   },
   {
     name: "Emerald",
     group: "Precious",
-    colors: ["#e2fff0", "#6fe9ac", "#16b56c", "#0b7c4a", "#05492c"],
+    colors: ["#d8fbe8", "#5ee0a0", "#10a862", "#08663b", "#022716"],
   },
 
   // ------------------------------------------------------------ semi-precious
   {
     name: "Amethyst",
     group: "Semi-precious",
-    colors: ["#f3e7ff", "#c28fff", "#8d46e6", "#6126ad", "#391466"],
+    colors: ["#f1e2ff", "#bd84ff", "#8a3fe0", "#521c9e", "#1f0848"],
   },
   {
     name: "Aquamarine",
     group: "Semi-precious",
-    colors: ["#eafcff", "#8fe7f3", "#3ec0d7", "#1f8ca4", "#125767"],
+    colors: ["#e6fbff", "#8ee5f3", "#3dbcd6", "#1a7f97", "#083745"],
   },
   {
     name: "Citrine",
     group: "Semi-precious",
-    colors: ["#fff8d9", "#ffd85e", "#f2b01f", "#c37f0b", "#794b06"],
+    colors: ["#fff7c0", "#f5d15e", "#d99a17", "#8f540b", "#3d1d07"],
   },
   {
     name: "Topaz",
     group: "Semi-precious",
-    colors: ["#fff0e1", "#ffb97c", "#f5862f", "#c15b12", "#783608"],
+    colors: ["#ffeede", "#ffba80", "#f08a3e", "#b2531c", "#4e2008"],
   },
   {
     name: "Peridot",
     group: "Semi-precious",
-    colors: ["#f6ffe1", "#caf56c", "#93cf20", "#5f9411", "#37580a"],
+    colors: ["#f3ffd8", "#c5f062", "#8cc419", "#557f0c", "#223a04"],
   },
   {
     name: "Garnet",
     group: "Semi-precious",
-    colors: ["#ffe5e5", "#e96c6c", "#b8202b", "#7c111c", "#44080f"],
+    colors: ["#ffd9d9", "#e45a5f", "#b01c28", "#6a0b15", "#270307"],
   },
   {
     name: "Tanzanite",
     group: "Semi-precious",
-    colors: ["#ebe9ff", "#a097ff", "#5b4fe7", "#3a2fb1", "#221b6f"],
+    colors: ["#e3e2fd", "#a4aef7", "#6e68dd", "#3b30a0", "#0f0a5c"],
+  },
+  {
+    name: "Zircon",
+    group: "Semi-precious",
+    colors: ["#d4fbfd", "#6ad9f2", "#1a9fcb", "#065a88", "#031c36"],
   },
   {
     name: "Tourmaline",
     group: "Semi-precious",
-    colors: ["#e6fff9", "#80e4c4", "#2bb68f", "#1b7e64", "#0f4e3e"],
+    colors: ["#d6fbef", "#67dcb0", "#189e78", "#0b5a44", "#032219"],
+  },
+  {
+    name: "Rubellite",
+    group: "Semi-precious",
+    colors: ["#f9b3d2", "#e8508c", "#b8165a", "#6c0630", "#25020f"],
+  },
+  {
+    name: "Mandarin garnet",
+    group: "Semi-precious",
+    colors: ["#ffe2a8", "#ffab45", "#ea6e18", "#983610", "#3c1106"],
   },
   {
     name: "Morganite",
     group: "Semi-precious",
-    colors: ["#fff2ef", "#ffc0b4", "#f28f81", "#c86150", "#7e3a30"],
+    colors: ["#fff4f1", "#f9cfcb", "#e2a3a2", "#b0716f", "#6e3c3d"],
   },
   {
     name: "Rose quartz",
     group: "Semi-precious",
-    colors: ["#fff4f8", "#ffc7dd", "#f294b9", "#c8638e", "#7e3b5a"],
+    colors: ["#fff2f7", "#ffc3da", "#f08db4", "#c05886", "#63294a"],
   },
   {
     name: "Spinel",
     group: "Semi-precious",
-    colors: ["#ffe6f0", "#ff85b5", "#e8307a", "#ab1a58", "#621034"],
+    colors: ["#ffd9ea", "#ff6fa8", "#e22674", "#9c1250", "#3e061f"],
   },
 
   // --------------------------------------------------------------------- pale
@@ -165,6 +188,7 @@ export const COLOR_PALETTES: ColorPalette[] = [
     name: "Hematite",
     group: "Dark",
     colors: ["#d9dde3", "#8f97a3", "#5a6270", "#353b46", "#161a21"],
+    material: "metal",
   },
   {
     name: "Black opal",
@@ -177,21 +201,25 @@ export const COLOR_PALETTES: ColorPalette[] = [
     name: "Gold",
     group: "Metal",
     colors: ["#fff7d6", "#ffd966", "#e6a91d", "#a9740c", "#5e4006"],
+    material: "metal",
   },
   {
     name: "Silver",
     group: "Metal",
     colors: ["#ffffff", "#e7eaef", "#b9bfc9", "#868d99", "#4f5662"],
+    material: "metal",
   },
   {
     name: "Copper",
     group: "Metal",
     colors: ["#fff1e7", "#f6b58d", "#d47b4b", "#9b502b", "#5b2e18"],
+    material: "metal",
   },
   {
     name: "Rose gold",
     group: "Metal",
     colors: ["#fff3f0", "#f8c4bb", "#e19587", "#b3675a", "#6f3d34"],
+    material: "metal",
   },
 
   // ------------------------------------------------------------------- pastel
