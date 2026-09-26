@@ -1,6 +1,6 @@
 # The Gem Logo
 
-An SVG diamond: the orthographic projection of a real 3D model of a brilliant-cut stone, lit the way light actually travels through a gem, with seven animations that need no JavaScript. The mark spins and floats by default.
+An SVG diamond: the orthographic projection of a real 3D model of a cut stone, lit the way light actually travels through a gem, with seven animations that need no JavaScript. The mark spins and floats by default.
 
 ## SVG
 
@@ -20,7 +20,7 @@ A gem is one color, so a palette is a tone ramp of that color — highlight, bod
 
 ## Cut
 
-`cut: "brilliant"` (default) is the jeweler's cut: the table ringed by star facets, kite facets down to the girdle with upper-girdle facets between them, and pavilion mains meeting at the culet with lower-girdle facets between them. `cut: "simple"` is the classic icon: the table, a ring of trapezoid crown facets and triangular pavilion facets. Both take the same proportions (`size`, `tableSize`, `crownHeight`, `pavilionHeight`, `sides`).
+`cut: "simple"` (default) is the classic icon: the table, a ring of trapezoid crown facets and triangular pavilion facets. `cut: "brilliant"` is the jeweler's cut: the table ringed by star facets, kite facets down to the girdle with upper-girdle facets between them, and pavilion mains meeting at the culet with lower-girdle facets between them. Both take the same proportions (`size`, `tableSize`, `crownHeight`, `pavilionHeight`, `sides`).
 
 ## Animations
 
@@ -65,7 +65,7 @@ pnpm install
 pnpm run node-ts cli.ts logo.svg --spin=true --sweep=true                    # any parameter as --name=value
 pnpm run node-ts cli.ts logo.svg --colors=#dfeaff,#6fa3fb,#2458d8,#132f96,#070f45   # a tone ramp (this one is Sapphire)
 pnpm run node-ts cli.ts logo.svg --colors=#16b56c                            # one color; highlight and shadow derived
-pnpm run node-ts cli.ts logo.svg --cut=simple --reflections=2                # the classic icon, a deeper kaleidoscope
+pnpm run node-ts cli.ts logo.svg --cut=brilliant --reflections=2             # the jeweler's cut, a deeper kaleidoscope
 pnpm run node-ts cli.ts logo.svg --refractiveIndex=2.42                      # a diamond's sparkle
 pnpm run node-ts cli.ts logo.svg --pitch=15 --yaw=22.5                       # look down onto the table, turned
 pnpm run node-ts cli.ts logo.png --pngSize=512 --padding=large

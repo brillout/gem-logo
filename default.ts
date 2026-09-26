@@ -24,14 +24,14 @@ export const PADDING_PRESETS = {
 } as const;
 export type PaddingPreset = keyof typeof PADDING_PRESETS;
 
-/** Defaults: a brilliant-cut spinel under studio lights, seen from slightly above, spinning and floating. */
+/** Defaults: a spinel in the classic simple cut under studio lights, seen from slightly above, spinning and floating. */
 export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   size: 480,
   tableSize: 260,
   crownHeight: 110,
   pavilionHeight: 300,
   sides: 8,
-  cut: "brilliant",
+  cut: "simple",
   pitch: 7,
   yaw: 0,
   gap: 0,
