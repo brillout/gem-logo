@@ -1,6 +1,6 @@
 # The Gem Logo
 
-An SVG diamond: the orthographic projection of a real 3D model of a cut stone, lit the way light actually travels through a gem, with seven animations that need no JavaScript. The mark spins and floats by default.
+An SVG diamond: the orthographic projection of a real 3D model of a cut stone, lit the way light actually travels through a gem, with seven animations that need no JavaScript. By default the mark is metal and at rest: every animation is off.
 
 ## SVG
 
@@ -16,7 +16,9 @@ Playground: https://brillout.github.io/gem-logo
 
 The stone sits in a photo studio — a dark room, a key softbox (`lightAngle`, `lightElevation`) and three dimmer ones — and every facet shows what a real gem would. Its polished surface mirrors the softboxes, and through it you see the light that comes out of the stone: bent on its way in (`refractiveIndex`), reflected inside, and split by those reflections into a mosaic of flat patches, the kaleidoscope of a real stone (`reflections` levels deep; `0` gives every facet one tone). The camera itself hides part of the studio, which gives the stone its dark patches.
 
-A gem is one color, so a palette is a tone ramp of that color — highlight, body, shadow — and every patch takes its tone from the light it returns. [`color-palettes.ts`](./color-palettes.ts) has ready-made stones (Spinel, Ruby, Sapphire, Emerald, Zircon, Rubellite, Tanzanite, Citrine, Onyx, …); pick any of them in the playground, or pass a single color and the highlight and shadow are derived. The metal palettes (Gold, Silver, …) set `material` to `metal`: an opaque stone, every facet shaded by how squarely it faces the key light.
+A gem is one color, so a palette is a tone ramp of that color — highlight, body, shadow — and every patch takes its tone from the light it returns. [`color-palettes.ts`](./color-palettes.ts) has ready-made stones (Spinel, Ruby, Sapphire, Emerald, Zircon, Rubellite, Tanzanite, Citrine, Onyx, …); pick any of them in the playground, or pass a single color and the highlight and shadow are derived.
+
+The mark is `material: "metal"` by default: an opaque stone, every facet shaded by how squarely it faces the key light. `material: "gem"` gives the transparent stone described above (the gem palettes are made for it; `refractiveIndex` and `reflections` only apply to it).
 
 ## Cut
 
@@ -24,7 +26,7 @@ A gem is one color, so a palette is a tone ramp of that color — highlight, bod
 
 ## Animations
 
-Every animation is an independent toggle with its own timing parameters, rendered as native SVG animation (SMIL) — so the files play inside `<img>` tags and READMEs like this one, and combine freely (the mark above combines `spin` and `float`). At t&nbsp;=&nbsp;0 each animation rests in the static pose, so tools that don't animate (PNG export, favicons) show exactly the un-animated mark. Each file below shows one animation alone.
+Every animation is an independent toggle with its own timing parameters, rendered as native SVG animation (SMIL) — so the files play inside `<img>` tags and READMEs like this one, and combine freely (e.g. `--spin=true --float=true`). At t&nbsp;=&nbsp;0 each animation rests in the static pose, so tools that don't animate (PNG export, favicons) show exactly the un-animated mark. Each file below shows one animation alone.
 
 |                             `colorFlow`                             |                           `sweep`                           |                           `glint`                           |                          `glow`                           |
 | :-----------------------------------------------------------------: | :---------------------------------------------------------: | :---------------------------------------------------------: | :-------------------------------------------------------: |
@@ -63,10 +65,10 @@ For custom size & padding, go to the [playground](https://brillout.github.io/gem
 ```bash
 pnpm install
 pnpm run node-ts cli.ts logo.svg --spin=true --sweep=true                    # any parameter as --name=value
-pnpm run node-ts cli.ts logo.svg --colors=#dfeaff,#6fa3fb,#2458d8,#132f96,#070f45   # a tone ramp (this one is Sapphire)
+pnpm run node-ts cli.ts logo.svg --material=gem --colors=#dfeaff,#6fa3fb,#2458d8,#132f96,#070f45   # a gem tone ramp (this one is Sapphire)
 pnpm run node-ts cli.ts logo.svg --colors=#16b56c                            # one color; highlight and shadow derived
-pnpm run node-ts cli.ts logo.svg --cut=brilliant --reflections=2             # the jeweler's cut, a deeper kaleidoscope
-pnpm run node-ts cli.ts logo.svg --refractiveIndex=2.42                      # a diamond's sparkle
+pnpm run node-ts cli.ts logo.svg --material=gem --cut=brilliant --reflections=2   # the jeweler's cut, a deeper kaleidoscope
+pnpm run node-ts cli.ts logo.svg --material=gem --refractiveIndex=2.42        # a diamond's sparkle
 pnpm run node-ts cli.ts logo.svg --pitch=15 --yaw=22.5                       # look down onto the table, turned
 pnpm run node-ts cli.ts logo.png --pngSize=512 --padding=large
 ```

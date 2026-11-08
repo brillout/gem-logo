@@ -24,7 +24,7 @@ export const PADDING_PRESETS = {
 } as const;
 export type PaddingPreset = keyof typeof PADDING_PRESETS;
 
-/** Defaults: a spinel in the classic simple cut under studio lights, seen from slightly above, spinning and floating. */
+/** Defaults: a metal stone in spinel tones, in the classic simple cut under studio lights, seen from slightly above, at rest (no animation). */
 export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   size: 480,
   tableSize: 260,
@@ -38,7 +38,7 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   cornerRadius: 0,
   padding,
   colors: DEFAULT_PALETTE.colors,
-  material: "gem",
+  material: "metal",
   refractiveIndex: 1.72,
   reflections: 1,
   gradient: "sheen",
@@ -62,10 +62,10 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   glowDuration: 4,
   glowRadius: 260,
   glowIntensity: 0.45,
-  spin: true,
+  spin: false,
   spinDuration: 10,
   spinSteps: 48,
-  float: true,
+  float: false,
   floatDuration: 3,
   floatHeight: 18,
   floatShadow: true,

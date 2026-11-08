@@ -123,9 +123,14 @@ const SECTIONS: { title: string; keys: ControlKey[] }[] = [
   if (missing.length) throw new Error(`Parameters without a control: ${missing.join(", ")}`);
 }
 
-const state: State = { ...stateDefaults, colors: [...stateDefaults.colors], ...paramsFromUrl() };
+const state: State = stateFromUrl();
 
 // ------------------------------------------------------------- url <-> state
+
+/** The defaults, overridden by the query string. */
+function stateFromUrl(): State {
+  return { ...stateDefaults, colors: [...stateDefaults.colors], ...paramsFromUrl() };
+}
 
 /** Restore state from the query string, so parameter combinations are shareable links. */
 function paramsFromUrl(): Partial<State> {
@@ -157,6 +162,15 @@ function paramsFromUrl(): Partial<State> {
   return partial;
 }
 
+// Each change gets its own history entry, so the browser's back/forward
+// buttons step through them (see the popstate listener). A continuous gesture
+// (dragging a slider or a color picker, typing a number) makes one entry: its
+// first URL change pushes one, the following ones replace it, and the gesture
+// ends with its `change` event. A button click is one change.
+let pushNextUrlChange = true;
+document.addEventListener("change", () => (pushNextUrlChange = true));
+document.addEventListener("click", () => (pushNextUrlChange = true));
+
 function syncUrl(): void {
   const query = new URLSearchParams();
   for (const key of NUMERIC_KEYS)
@@ -173,9 +187,14 @@ function syncUrl(): void {
   if (state.glintColor !== stateDefaults.glintColor) query.set("glintColor", state.glintColor);
   if (previewSize !== PREVIEW_SIZE_DEFAULT)
     query.set("previewSize", previewSize ? String(previewSize) : "fit");
-  if (previewBackground !== "#ffffff") query.set("previewBackground", previewBackground);
+  if (previewBackground !== PREVIEW_BACKGROUND_DEFAULT)
+    query.set("previewBackground", previewBackground);
   const search = query.toString();
-  history.replaceState(null, "", search ? `?${search}` : location.pathname);
+  if ((search ? `?${search}` : "") === location.search) return;
+  const url = search ? `?${search}` : location.pathname;
+  if (pushNextUrlChange) history.pushState(null, "", url);
+  else history.replaceState(null, "", url);
+  pushNextUrlChange = false;
 }
 
 // ---------------------------------------------------------------- controls
@@ -261,9 +280,6 @@ function choiceSelect<K extends "gradient" | "cut" | "material">(
 const gradientSelect = choiceSelect("gradient", GRADIENTS);
 const cutSelect = choiceSelect("cut", CUTS);
 const materialSelect = choiceSelect("material", MATERIALS);
-/** Whether the current material was set by a palette rather than picked by hand (see the palettes). */
-let materialFromPalette = false;
-materialSelect.addEventListener("input", () => (materialFromPalette = false));
 
 // The tone ramp: one picker per stop, lightest first; a single stop gets its highlight and shadow derived.
 const colorList = el("div", { class: "color-list" });
@@ -356,10 +372,8 @@ for (const section of SECTIONS) {
 }
 
 // Preset palettes: clicking one replaces the colors, and the background when
-// the palette is designed for its own (dark) backdrop. A metal palette also
-// makes the stone metal; the next gem palette turns it back into a gem, but
-// only if it was a palette that made it metal: a material picked by hand (or
-// from the URL) is kept.
+// the palette is designed for its own (dark) backdrop. The material is left
+// as picked: a palette only recolors the stone.
 const paletteGroups = PALETTE_GROUPS.map((group) =>
   el(
     "div",
@@ -377,14 +391,6 @@ const paletteGroups = PALETTE_GROUPS.map((group) =>
       const button = el("button", { type: "button", class: "palette" }, swatches, palette.name);
       button.addEventListener("click", () => {
         state.colors = [...palette.colors];
-        if (palette.material && palette.material !== state.material) {
-          state.material = palette.material;
-          materialFromPalette = true;
-        } else if (!palette.material && materialFromPalette) {
-          state.material = "gem";
-          materialFromPalette = false;
-        }
-        materialSelect.value = state.material;
         state.background = palette.background ?? null;
         syncBackgroundControls();
         rebuildColorList();
@@ -448,17 +454,21 @@ const previewBackgroundPicker = $<HTMLInputElement>("#preview-background");
 const PREVIEW_SIZE_DEFAULT = 64;
 let previewSize: number | null = PREVIEW_SIZE_DEFAULT;
 /** Backdrop of the preview area: a color, or (toggle off) the transparency checkerboard. */
-let previewBackground = "#ffffff";
-{
-  // Restore the preview settings from the query string, like the mark's parameters.
+const PREVIEW_BACKGROUND_DEFAULT = "#ffffff";
+let previewBackground = PREVIEW_BACKGROUND_DEFAULT;
+
+/** Restore the preview settings from the query string, like the mark's parameters. */
+function previewFromUrl(): void {
   const query = new URLSearchParams(location.search);
   const size = query.get("previewSize");
-  if (size === "fit") previewSize = null;
-  else if (Number(size) > 0) previewSize = Number(size);
+  previewSize = size === "fit" ? null : Number(size) > 0 ? Number(size) : PREVIEW_SIZE_DEFAULT;
   const background = query.get("previewBackground");
-  if (background && (background === CHECKERBOARD || HEX_COLOR.test(background)))
-    previewBackground = background;
+  previewBackground =
+    background && (background === CHECKERBOARD || HEX_COLOR.test(background))
+      ? background
+      : PREVIEW_BACKGROUND_DEFAULT;
 }
+previewFromUrl();
 
 previewSizeSelect.append(
   el("option", { value: "" }, "fit"),
@@ -506,21 +516,33 @@ function applyPreview(): void {
   if (!checkerboard) previewBackgroundPicker.value = previewBackground;
 }
 
-$("#reset").addEventListener("click", () => {
-  Object.assign(state, stateDefaults, { colors: [...stateDefaults.colors] });
-  // Everything goes back to its default, the preview settings included.
-  previewSize = PREVIEW_SIZE_DEFAULT;
-  previewBackground = "#ffffff";
+/** Point every sidebar control at the current state, after it changed wholesale. */
+function syncControls(): void {
   for (const key of NUMERIC_KEYS) setSliderValue(key, state[key]);
   for (const key of BOOLEAN_KEYS) toggles.get(key)!.checked = state[key];
   gradientSelect.value = state.gradient;
   cutSelect.value = state.cut;
   materialSelect.value = state.material;
-  materialFromPalette = false;
   glintColorPicker.value = state.glintColor;
   syncBackgroundControls();
   rebuildColorList();
+}
+
+$("#reset").addEventListener("click", () => {
+  Object.assign(state, stateDefaults, { colors: [...stateDefaults.colors] });
+  // Everything goes back to its default, the preview settings included.
+  previewSize = PREVIEW_SIZE_DEFAULT;
+  previewBackground = PREVIEW_BACKGROUND_DEFAULT;
+  syncControls();
   render();
+});
+
+// Back/forward: show what that history entry's URL describes.
+window.addEventListener("popstate", () => {
+  Object.assign(state, stateFromUrl());
+  previewFromUrl();
+  syncControls();
+  renderInPlace();
 });
 
 $("#copy").addEventListener("click", async (event) => {
@@ -636,4 +658,11 @@ function render(): void {
   syncUrl();
 }
 
-render();
+/** Render without adding a history entry: the URL, if anything, only gets tidied up. */
+function renderInPlace(): void {
+  pushNextUrlChange = false;
+  render();
+  pushNextUrlChange = true;
+}
+
+renderInPlace();

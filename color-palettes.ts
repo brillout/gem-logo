@@ -4,11 +4,12 @@
  * deep body, shadow — and every patch of the stone picks its tone from it by
  * the light it returns (see diamond.ts). The ramps follow real stones under
  * studio light: vivid bodies, highlights paling toward white, and shadows
- * sinking to a near-black of the same hue. Pass a palette's `colors` (and
- * `background`, when the palette is made for a dark backdrop, or `material`,
- * for metal), e.g.:
+ * sinking to a near-black of the same hue. Pass a palette's `colors`, its
+ * `background` when the palette is made for a dark backdrop, and its
+ * `material` (the mark defaults to metal, so a gem palette needs
+ * --material=gem), e.g.:
  *
- *   pnpm run node-ts cli.ts logo.svg --colors=#dfeaff,#6fa3fb,#2458d8,#132f96,#070f45
+ *   pnpm run node-ts cli.ts logo.svg --material=gem --colors=#dfeaff,#6fa3fb,#2458d8,#132f96,#070f45
  */
 
 import type { Material } from "./diamond.ts";
