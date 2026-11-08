@@ -261,6 +261,9 @@ function choiceSelect<K extends "gradient" | "cut" | "material">(
 const gradientSelect = choiceSelect("gradient", GRADIENTS);
 const cutSelect = choiceSelect("cut", CUTS);
 const materialSelect = choiceSelect("material", MATERIALS);
+/** Whether the current material was set by a palette rather than picked by hand (see the palettes). */
+let materialFromPalette = false;
+materialSelect.addEventListener("input", () => (materialFromPalette = false));
 
 // The tone ramp: one picker per stop, lightest first; a single stop gets its highlight and shadow derived.
 const colorList = el("div", { class: "color-list" });
@@ -352,9 +355,11 @@ for (const section of SECTIONS) {
   controls.append(el("div", { class: "section" }, el("h2", {}, section.title), ...sectionRows));
 }
 
-// Preset palettes: clicking one replaces the colors, the material (gem, or
-// metal for the metal palettes), and the background when the palette is
-// designed for its own (dark) backdrop.
+// Preset palettes: clicking one replaces the colors, and the background when
+// the palette is designed for its own (dark) backdrop. A metal palette also
+// makes the stone metal; the next gem palette turns it back into a gem, but
+// only if it was a palette that made it metal: a material picked by hand (or
+// from the URL) is kept.
 const paletteGroups = PALETTE_GROUPS.map((group) =>
   el(
     "div",
@@ -372,7 +377,13 @@ const paletteGroups = PALETTE_GROUPS.map((group) =>
       const button = el("button", { type: "button", class: "palette" }, swatches, palette.name);
       button.addEventListener("click", () => {
         state.colors = [...palette.colors];
-        state.material = palette.material ?? "gem";
+        if (palette.material && palette.material !== state.material) {
+          state.material = palette.material;
+          materialFromPalette = true;
+        } else if (!palette.material && materialFromPalette) {
+          state.material = "gem";
+          materialFromPalette = false;
+        }
         materialSelect.value = state.material;
         state.background = palette.background ?? null;
         syncBackgroundControls();
@@ -505,6 +516,7 @@ $("#reset").addEventListener("click", () => {
   gradientSelect.value = state.gradient;
   cutSelect.value = state.cut;
   materialSelect.value = state.material;
+  materialFromPalette = false;
   glintColorPicker.value = state.glintColor;
   syncBackgroundControls();
   rebuildColorList();
