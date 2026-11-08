@@ -1,58 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-261.7 -250.8 523.5 501.6">
   <defs>
-    <linearGradient id="gem-g0" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#ff9cc4"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#ff9cc4;#fd6aa5;#ed4288;#d3226c;#ab1658;#7d0e40;#730d3a;#730d3a;#730d3a;#730d3a;#730d3a;#730d3a;#730d3a;#8e1049;#b81a5f;#e22674;#f35092;#ff7bb0;#ffabcd;#ffcfe4;#ffd9ea;#ffd9ea;#ffd9ea;#ffc4dd;#ff9cc4"/></stop>
-      <stop offset="1" stop-color="#eb3c84"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#eb3c84;#d5226d;#ae1759;#7d0e40;#460723;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#59092d;#90114a;#bc1b60;#e22674;#ef478b;#f95f9d;#ff6ea7;#ff73ab;#fd6aa5;#f65898;#eb3c84"/></stop>
-    </linearGradient>
     <path id="gem-f0" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -181.5 L120.1 -190.1 L120.1 -202.2 L49.7 -210.8 L-49.7 -210.8 L-120.1 -202.2 L-120.1 -190.1 L-49.7 -181.5 Z"/>
-    <linearGradient id="gem-g1" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#ffd5e8"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#ffd5e8;#ffb2d2;#ff8ab9;#fb64a0;#ef488c;#e52d79;#d3226c;#c31d64;#ba1a5f;#b71a5e;#bc1b60;#c81f67;#da2470;#e8367f;#f35193;#ff6fa8;#ff98c2;#ffbfda;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd5e8"/></stop>
-      <stop offset="1" stop-color="#fa64a0"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#fa64a0;#f14b8f;#e6307b;#cf216a;#b4195c;#9a124f;#7d0e40;#670b35;#5a0a2e;#57092c;#5e0a30;#6e0c38;#860f45;#a31453;#bd1b61;#d9236f;#ea3a82;#f45495;#fd6ba5;#ff81b3;#ff90bc;#ff93bf;#ff8cba;#ff7aaf;#fa64a0"/></stop>
-    </linearGradient>
     <path id="gem-f1" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-49.7 -181.5 L49.7 -181.5 L91.8 -60 L-91.8 -60 Z"/>
-    <linearGradient id="gem-g2" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#e52e7a"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#e52e7a;#ee4389;#f75b9a;#ff78ad;#ff9dc4;#ffbed9;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd2e5;#ffb3d2;#ff90bd;#fe6ca6;#f45394;#eb3c83;#e32875;#d6236e;#cd2069;#cb2068;#d0216b;#da2470;#e52e7a"/></stop>
-      <stop offset="1" stop-color="#9b1250"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#9b1250;#b0185a;#c71e66;#df2573;#eb3d84;#f45495;#fc67a3;#ff79af;#ff86b6;#ff89b8;#ff83b4;#ff73ab;#fa619e;#f14c8f;#e8347e;#d7236e;#bf1c62;#a81656;#93114b;#800e42;#750d3c;#720d3a;#780d3d;#860f45;#9b1250"/></stop>
-    </linearGradient>
     <path id="gem-f2" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-91.8 -60 L91.8 -60 L0 210.8 Z"/>
-    <linearGradient id="gem-g3" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#f9609d"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#f9609d;#ea3b83;#d4226d;#b61a5e;#9e1351;#891046;#7f0e41;#810f42;#8f1049;#a61555;#c01c62;#df2573;#ef478c;#fe6ca6;#ff9ec5;#ffcbe1;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffbdd8;#ff8dbb;#f9609d"/></stop>
-      <stop offset="1" stop-color="#cb1f68"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#cb1f68;#a81556;#7e0e41;#56092c;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#400620;#630b32;#8d1048;#b3195c;#d7236e;#eb3d85;#f85d9b;#ff78ae;#ff91bd;#ff9dc5;#ff9bc3;#ff8ab9;#ff6ea7;#f45394;#e7327d;#cb1f68"/></stop>
-    </linearGradient>
     <path id="gem-f3" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -181.5 L120.1 -190.1 L221.7 -75.8 L91.8 -60 Z"/>
-    <linearGradient id="gem-g4" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#8c1048"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#8c1048;#95114c;#a61555;#bd1b61;#d9236f;#ec3e85;#fa629e;#ff8ebb;#ffbcd8;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd0e5;#ffa5ca;#ff75ab;#f24f91;#e52d79;#ca1f68;#b0185a;#9d1251;#8f1049;#8c1048"/></stop>
-      <stop offset="1" stop-color="#3e061f"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#3e061f;#3e061f;#400620;#5e0a30;#840f44;#ab1658;#cd2069;#e7337d;#f45394;#fe6da7;#ff89b8;#ff9ac2;#ff9dc5;#ff93be;#ff7cb0;#f9609e;#ed4388;#dd2572;#bb1b60;#99124f;#700c39;#4e0827;#3e061f;#3e061f;#3e061f"/></stop>
-    </linearGradient>
     <path id="gem-f4" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M91.8 -60 L221.7 -75.8 L0 210.8 Z"/>
-    <linearGradient id="gem-g5" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#cd2069"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#cd2069;#a51454;#760d3c;#730d3a;#730d3a;#730d3a;#730d3a;#730d3a;#730d3a;#730d3a;#95114d;#bf1c62;#e42c78;#f55696;#ff83b4;#ffb1d1;#ffd3e6;#ffd9ea;#ffd9ea;#ffd9ea;#ffbfda;#ff95bf;#fb65a1;#eb3b83;#cd2069"/></stop>
-      <stop offset="1" stop-color="#750d3c"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#750d3c;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#610a31;#99124e;#c21d64;#e42b78;#f14b8e;#fa629f;#ff70a8;#ff72aa;#fc68a3;#f45495;#e93780;#d0216b;#a81556;#750d3c"/></stop>
-    </linearGradient>
     <path id="gem-f5" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M120.1 -190.1 L120.1 -202.2 L221.7 -98.2 L221.7 -75.8 Z"/>
-    <linearGradient id="gem-g13" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#ffd9ea"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#ffd9ea;#ffd9ea;#ffc9e0;#ffa3c8;#ff71a9;#f0488c;#da2470;#b1185b;#840f44;#730d3a;#730d3a;#730d3a;#730d3a;#730d3a;#730d3a;#730d3a;#860f45;#b2185b;#db2471;#f04a8e;#ff73aa;#ffa5c9;#ffcae1;#ffd9ea;#ffd9ea"/></stop>
-      <stop offset="1" stop-color="#ff73ab"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#ff73ab;#fe6ca6;#f75b9a;#ed4187;#db2470;#b4195d;#860f44;#4e0828;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#510829;#880f45;#b6195d;#dc2471;#ed4288;#f85c9b;#fe6da6;#ff73ab"/></stop>
-    </linearGradient>
     <path id="gem-f13" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -202.2 L-120.1 -190.1 L-221.7 -75.8 L-221.7 -98.2 Z"/>
-    <linearGradient id="gem-g15" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#ffd9ea"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#ffd9ea;#ffd9ea;#ffd9ea;#ffbcd8;#ff8dbb;#f95f9d;#ea3b83;#d4226d;#b6195d;#9e1351;#891046;#7f0e41;#810f42;#90104a;#a61555;#c01c63;#e02573;#ef478c;#fe6ca6;#ff9ec5;#ffcbe2;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea"/></stop>
-      <stop offset="1" stop-color="#ff9ac3"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#ff9ac3;#ff8ab9;#ff6ea7;#f45394;#e7327c;#cb1f68;#a71556;#7e0e40;#56092b;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#400620;#630b32;#8d1048;#b4195c;#d7236e;#eb3e85;#f85d9b;#ff79ae;#ff91bd;#ff9dc5;#ff9ac3"/></stop>
-    </linearGradient>
     <path id="gem-f15" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -190.1 L-49.7 -181.5 L-91.8 -60 L-221.7 -75.8 Z"/>
-    <linearGradient id="gem-g16" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#f75c9a"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#f75c9a;#ff86b6;#ffb5d4;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd9ea;#ffd7e9;#ffadcf;#ff7db1;#f55596;#e7327d;#cf206a;#b4195c;#a01352;#91114a;#8c1048;#93114b;#a31454;#b81a5f;#d4226d;#e93881;#f75c9a"/></stop>
-      <stop offset="1" stop-color="#c71e66"><animate attributeName="stop-color" dur="6s" repeatCount="indefinite" values="#c71e66;#e52d79;#f24d90;#fd69a4;#ff85b6;#ff98c1;#ff9dc5;#ff95c0;#ff81b3;#fb65a1;#f0488c;#e22775;#c11d63;#9f1352;#770d3d;#53092a;#3e061f;#3e061f;#3e061f;#3e061f;#3e061f;#59092d;#7e0e40;#a51555;#c71e66"/></stop>
-    </linearGradient>
     <path id="gem-f16" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-221.7 -75.8 L-91.8 -60 L0 210.8 Z"/>
   </defs>
-  <use href="#gem-f0" fill="url(#gem-g0)" stroke="url(#gem-g0)"/>
-  <use href="#gem-f1" fill="url(#gem-g1)" stroke="url(#gem-g1)"/>
-  <use href="#gem-f2" fill="url(#gem-g2)" stroke="url(#gem-g2)"/>
-  <use href="#gem-f3" fill="url(#gem-g3)" stroke="url(#gem-g3)"/>
-  <use href="#gem-f4" fill="url(#gem-g4)" stroke="url(#gem-g4)"/>
-  <use href="#gem-f5" fill="url(#gem-g5)" stroke="url(#gem-g5)"/>
-  <use href="#gem-f13" fill="url(#gem-g13)" stroke="url(#gem-g13)"/>
-  <use href="#gem-f15" fill="url(#gem-g15)" stroke="url(#gem-g15)"/>
-  <use href="#gem-f16" fill="url(#gem-g16)" stroke="url(#gem-g16)"/>
+  <use href="#gem-f0" fill="currentColor" stroke="currentColor" color="#fb65a1"><animate attributeName="color" dur="6s" repeatCount="indefinite" keyTimes="0;0.0417;0.0695;0.143;0.2083;0.25;0.5;0.5417;0.5931;0.6654;0.6667;0.7494;0.75;0.7917;0.8333;0.875;0.9167;0.9583;0.985;1" values="#fb65a1;#ed4288;#e22674;#9c1250;#490725;#3e061f;#3e061f;#59092d;#9c1250;#e22674;#e32775;#ff6fa8;#ff70a8;#ff94bf;#ffa9cc;#ffaecf;#ffa3c9;#ff89b8;#ff6fa8;#fb65a1"/></use>
+  <use href="#gem-f1" fill="currentColor" stroke="currentColor" color="#ff9ac3"><animate attributeName="color" dur="6s" repeatCount="indefinite" keyTimes="0;0.0449;0.1566;0.2083;0.25;0.3021;0.3333;0.375;0.4167;0.4365;0.5;0.5752;0.6868;0.7083;0.7917;0.8333;0.875;0.9167;1" values="#ff9ac3;#ff6fa8;#e22674;#c21d63;#ac1758;#9c1250;#8f1049;#8c1048;#92114b;#9c1250;#b3195c;#e22674;#ff6fa8;#ff83b5;#ffbcd8;#ffcbe1;#ffcfe4;#ffc7df;#ff9ac3"/></use>
+  <use href="#gem-f2" fill="currentColor" stroke="currentColor" color="#c31d64"><animate attributeName="color" dur="6s" repeatCount="indefinite" keyTimes="0;0.0569;0.1844;0.2083;0.25;0.3333;0.375;0.4167;0.5;0.5474;0.6748;0.7083;0.7917;0.875;0.9167;1" values="#c31d64;#e22674;#ff6fa8;#ff83b4;#ff9fc6;#ffc2db;#ffc5dd;#ffbed9;#ff96c1;#ff6fa8;#e22674;#d0216b;#af175a;#a41454;#a81656;#c31d64"/></use>
+  <use href="#gem-f3" fill="currentColor" stroke="currentColor" color="#e93780"><animate attributeName="color" dur="6s" repeatCount="indefinite" keyTimes="0;0.0205;0.1089;0.125;0.1667;0.2083;0.25;0.2917;0.3333;0.375;0.4178;0.4583;0.509;0.5833;0.5949;0.625;0.6667;0.7083;0.75;0.7917;0.8333;0.875;0.9167;0.932;1" values="#e93780;#e22674;#9c1250;#8b1047;#6b0c36;#55092b;#4a0826;#4d0827;#5b0a2e;#740d3b;#9c1250;#b81a5e;#e22674;#fc66a2;#ff6fa8;#ff90bc;#ffb4d3;#ffcde2;#ffd8ea;#ffd6e8;#ffc6de;#ffa9cc;#ff81b3;#ff6fa8;#e93780"/></use>
+  <use href="#gem-f4" fill="currentColor" stroke="currentColor" color="#57092c"><animate attributeName="color" dur="6s" repeatCount="indefinite" keyTimes="0;0.0417;0.0833;0.125;0.1348;0.1667;0.2273;0.2917;0.3193;0.375;0.4167;0.4583;0.5;0.5417;0.5833;0.625;0.6619;0.6667;0.7504;0.7917;0.8467;0.875;0.9167;0.9583;1" values="#57092c;#600a31;#750d3c;#93114b;#9c1250;#b2185b;#e22674;#f75c9a;#ff6fa8;#ffa8cb;#ffc4dd;#ffd5e7;#ffd8ea;#ffcee3;#ffb7d5;#ff95c0;#ff6fa8;#fe6ca6;#e22674;#c11d63;#9c1250;#820f43;#690b35;#5a0a2e;#57092c"/></use>
+  <use href="#gem-f5" fill="currentColor" stroke="currentColor" color="#a61555"><animate attributeName="color" dur="6s" repeatCount="indefinite" keyTimes="0;0.0107;0.0833;0.375;0.4167;0.4621;0.5343;0.5417;0.6193;0.625;0.6667;0.7083;0.75;0.7917;0.8333;0.8536;0.875;0.9167;0.9381;1" values="#a61555;#9c1250;#420621;#3e061f;#610a31;#9c1250;#e22674;#e52d79;#ff6fa8;#ff76ac;#ff98c1;#ffabcd;#ffaecf;#ffa0c7;#ff84b5;#ff6fa8;#f9609d;#eb3c83;#e22674;#a61555"/></use>
+  <use href="#gem-f13" fill="currentColor" stroke="currentColor" color="#ffafd0"><animate attributeName="color" dur="6s" repeatCount="indefinite" keyTimes="0;0.0417;0.0833;0.1167;0.125;0.1667;0.2002;0.2737;0.3333;0.375;0.625;0.6667;0.724;0.7917;0.7973;0.875;0.8814;0.9167;0.9583;1" values="#ffafd0;#ffa6ca;#ff8ebb;#ff6fa8;#fd6aa4;#ef478c;#e22674;#9c1250;#500828;#3e061f;#3e061f;#520929;#9c1250;#dd2572;#e22674;#fd6ba5;#ff6fa8;#ff8fbc;#ffa7cb;#ffafd0"/></use>
+  <use href="#gem-f15" fill="currentColor" stroke="currentColor" color="#ffd6e8"><animate attributeName="color" dur="6s" repeatCount="indefinite" keyTimes="0;0.0417;0.0833;0.125;0.14;0.2284;0.3169;0.3333;0.375;0.4167;0.4583;0.5;0.5417;0.5833;0.6257;0.6667;0.7169;0.7917;0.8041;0.875;0.9167;0.9583;1" values="#ffd6e8;#ffc6de;#ffa9cc;#ff81b3;#ff6fa8;#e22674;#9c1250;#8a1047;#6a0c36;#55092b;#4a0825;#4d0827;#5b0a2e;#750d3b;#9c1250;#b81a5f;#e22674;#fc67a2;#ff6fa8;#ffb4d3;#ffcde2;#ffd8ea;#ffd6e8"/></use>
+  <use href="#gem-f16" fill="currentColor" stroke="currentColor" color="#e7337d"><animate attributeName="color" dur="6s" repeatCount="indefinite" keyTimes="0;0.0743;0.0833;0.1667;0.2083;0.25;0.2917;0.3333;0.375;0.4167;0.4191;0.5085;0.5833;0.6012;0.625;0.6667;0.7083;0.75;0.7917;0.8333;0.875;0.8916;0.9167;0.9845;1" values="#e7337d;#ff6fa8;#ff7aaf;#ffc0db;#ffd3e6;#ffd9ea;#ffd1e5;#ffbcd8;#ff9cc4;#ff72aa;#ff6fa8;#e22674;#a71556;#9c1250;#880f45;#6d0c37;#5c0a2f;#57092c;#5e0a30;#710c39;#8d1048;#9c1250;#ad1759;#e22674;#e7337d"/></use>
 </svg>

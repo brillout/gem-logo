@@ -24,7 +24,7 @@ export const PADDING_PRESETS = {
 } as const;
 export type PaddingPreset = keyof typeof PADDING_PRESETS;
 
-/** Defaults: a metal stone in spinel tones, in the classic simple cut under studio lights, seen from slightly above, at rest (no animation). */
+/** Defaults: a flat-shaded metal stone in spinel tones, in the classic simple cut under studio lights, seen from slightly above, at rest (no animation). */
 export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   size: 480,
   tableSize: 260,
@@ -41,7 +41,7 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   material: "metal",
   refractiveIndex: 1.72,
   reflections: 1,
-  gradient: "sheen",
+  gradient: "flat",
   shading: 1,
   lightAngle: -50,
   lightElevation: 35,

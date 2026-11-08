@@ -1,58 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-261.7 -250.8 523.5 501.6">
   <defs>
-    <linearGradient id="gem-g0" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#ff9cc4"/>
-      <stop offset="1" stop-color="#eb3c84"/>
-    </linearGradient>
     <path id="gem-f0" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -181.5 L120.1 -190.1 L120.1 -202.2 L49.7 -210.8 L-49.7 -210.8 L-120.1 -202.2 L-120.1 -190.1 L-49.7 -181.5 Z"/>
-    <linearGradient id="gem-g1" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#ffd5e8"/>
-      <stop offset="1" stop-color="#fa64a0"/>
-    </linearGradient>
     <path id="gem-f1" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-49.7 -181.5 L49.7 -181.5 L91.8 -60 L-91.8 -60 Z"/>
-    <linearGradient id="gem-g2" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#e52e7a"/>
-      <stop offset="1" stop-color="#9b1250"/>
-    </linearGradient>
     <path id="gem-f2" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-91.8 -60 L91.8 -60 L0 210.8 Z"/>
-    <linearGradient id="gem-g3" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#f9609d"/>
-      <stop offset="1" stop-color="#cb1f68"/>
-    </linearGradient>
     <path id="gem-f3" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -181.5 L120.1 -190.1 L221.7 -75.8 L91.8 -60 Z"/>
-    <linearGradient id="gem-g4" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#8c1048"/>
-      <stop offset="1" stop-color="#3e061f"/>
-    </linearGradient>
     <path id="gem-f4" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M91.8 -60 L221.7 -75.8 L0 210.8 Z"/>
-    <linearGradient id="gem-g5" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#cd2069"/>
-      <stop offset="1" stop-color="#750d3c"/>
-    </linearGradient>
     <path id="gem-f5" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M120.1 -190.1 L120.1 -202.2 L221.7 -98.2 L221.7 -75.8 Z"/>
-    <linearGradient id="gem-g13" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#ffd9ea"/>
-      <stop offset="1" stop-color="#ff73ab"/>
-    </linearGradient>
     <path id="gem-f13" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -202.2 L-120.1 -190.1 L-221.7 -75.8 L-221.7 -98.2 Z"/>
-    <linearGradient id="gem-g15" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#ffd9ea"/>
-      <stop offset="1" stop-color="#ff9ac3"/>
-    </linearGradient>
     <path id="gem-f15" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -190.1 L-49.7 -181.5 L-91.8 -60 L-221.7 -75.8 Z"/>
-    <linearGradient id="gem-g16" x1="0.1105" y1="0.1865" x2="0.8895" y2="0.8135">
-      <stop offset="0" stop-color="#f75c9a"/>
-      <stop offset="1" stop-color="#c71e66"/>
-    </linearGradient>
     <path id="gem-f16" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-221.7 -75.8 L-91.8 -60 L0 210.8 Z"/>
   </defs>
-  <use href="#gem-f0" fill="url(#gem-g0)" stroke="url(#gem-g0)"/>
-  <use href="#gem-f1" fill="url(#gem-g1)" stroke="url(#gem-g1)"/>
-  <use href="#gem-f2" fill="url(#gem-g2)" stroke="url(#gem-g2)"/>
-  <use href="#gem-f3" fill="url(#gem-g3)" stroke="url(#gem-g3)"/>
-  <use href="#gem-f4" fill="url(#gem-g4)" stroke="url(#gem-g4)"/>
-  <use href="#gem-f5" fill="url(#gem-g5)" stroke="url(#gem-g5)"/>
-  <use href="#gem-f13" fill="url(#gem-g13)" stroke="url(#gem-g13)"/>
-  <use href="#gem-f15" fill="url(#gem-g15)" stroke="url(#gem-g15)"/>
-  <use href="#gem-f16" fill="url(#gem-g16)" stroke="url(#gem-g16)"/>
+  <use href="#gem-f0" fill="#fb65a1" stroke="#fb65a1"/>
+  <use href="#gem-f1" fill="#ff9ac3" stroke="#ff9ac3"/>
+  <use href="#gem-f2" fill="#c31d64" stroke="#c31d64"/>
+  <use href="#gem-f3" fill="#e93780" stroke="#e93780"/>
+  <use href="#gem-f4" fill="#57092c" stroke="#57092c"/>
+  <use href="#gem-f5" fill="#a61555" stroke="#a61555"/>
+  <use href="#gem-f13" fill="#ffafd0" stroke="#ffafd0"/>
+  <use href="#gem-f15" fill="#ffd6e8" stroke="#ffd6e8"/>
+  <use href="#gem-f16" fill="#e7337d" stroke="#e7337d"/>
 </svg>

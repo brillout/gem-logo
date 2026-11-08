@@ -74,9 +74,9 @@
  * ramp they go (0: every patch the middle tone, 1: the full ramp).
  *
  * `gradient` picks how a facet wears its light:
- *   "sheen"   (default) a soft gradient across each facet, lighter toward the
- *             light — the glassy look.
- *   "flat"    every patch one solid tone.
+ *   "flat"    (default) every patch one solid tone.
+ *   "sheen"   a soft gradient across each facet, lighter toward the light —
+ *             the glassy look.
  *
  * Animation
  * ---------
@@ -158,7 +158,7 @@ export interface DiamondParams {
   refractiveIndex?: number;
   /** How many internal reflections split the facets into patches (the kaleidoscope), 0 to 3; 0 shows every facet in one tone. Each level multiplies the patches — and a spinning mark's file size. */
   reflections?: number;
-  /** How a facet wears its light: "sheen" (a soft gradient toward the light) or "flat" (solid tones). */
+  /** How a facet wears its light: "flat" (solid tones, the default) or "sheen" (a soft gradient toward the light). */
   gradient?: Gradient;
   /** How far along the ramp patches go with the light they return: 0 (every patch the middle tone) to 1 (the full ramp). */
   shading?: number;
