@@ -45,7 +45,7 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   shading: 1,
   fillLight: 0.75,
   lightAngle: -40,
-  lightElevation: 35,
+  lightElevation: 20,
   colorFlow: false,
   colorFlowDuration: 6,
   sweep: false,

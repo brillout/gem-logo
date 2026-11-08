@@ -10,13 +10,13 @@
     <path id="gem-f15" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -175 L-49.7 -159.2 L-91.8 -29.2 L-221.7 -58.4 Z"/>
     <path id="gem-f16" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-221.7 -58.4 L-91.8 -29.2 L0 213.3 Z"/>
   </defs>
-  <use href="#gem-f0" fill="#fb65a1" stroke="#fb65a1"/>
-  <use href="#gem-f1" fill="#ffafd0" stroke="#ffafd0"/>
-  <use href="#gem-f2" fill="#de2572" stroke="#de2572"/>
-  <use href="#gem-f3" fill="#f14b8f" stroke="#f14b8f"/>
-  <use href="#gem-f4" fill="#c91f67" stroke="#c91f67"/>
-  <use href="#gem-f5" fill="#d6236e" stroke="#d6236e"/>
-  <use href="#gem-f13" fill="#ff9ac3" stroke="#ff9ac3"/>
-  <use href="#gem-f15" fill="#ffd6e8" stroke="#ffd6e8"/>
-  <use href="#gem-f16" fill="#e7337d" stroke="#e7337d"/>
+  <use href="#gem-f0" fill="#e93881" stroke="#e93881"/>
+  <use href="#gem-f1" fill="#ff95c0" stroke="#ff95c0"/>
+  <use href="#gem-f2" fill="#ec3e85" stroke="#ec3e85"/>
+  <use href="#gem-f3" fill="#e52e7a" stroke="#e52e7a"/>
+  <use href="#gem-f4" fill="#d0216b" stroke="#d0216b"/>
+  <use href="#gem-f5" fill="#cc2069" stroke="#cc2069"/>
+  <use href="#gem-f13" fill="#ff7db1" stroke="#ff7db1"/>
+  <use href="#gem-f15" fill="#ffc2dc" stroke="#ffc2dc"/>
+  <use href="#gem-f16" fill="#f9609e" stroke="#f9609e"/>
 </svg>
