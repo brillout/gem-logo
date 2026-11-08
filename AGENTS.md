@@ -1,0 +1,1 @@
+- Always push directly to `main`, don't create PRs
