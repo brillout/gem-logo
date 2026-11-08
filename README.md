@@ -20,6 +20,8 @@ A gem is one color, so a palette is a tone ramp of that color — highlight, bod
 
 The mark is `material: "metal"` by default: an opaque stone, every facet shaded by how squarely it faces the key light. `material: "gem"` gives the transparent stone described above (the gem palettes are made for it; `refractiveIndex` and `reflections` only apply to it).
 
+With either material, `fillLight` (`0` to `1`) lifts the shadow side toward the middle tone without dimming the lit side, like a photographer's fill light.
+
 ## Cut
 
 `cut: "simple"` (default) is the classic icon: the table, a ring of trapezoid crown facets and triangular pavilion facets. `cut: "brilliant"` is the jeweler's cut: the table ringed by star facets, kite facets down to the girdle with upper-girdle facets between them, and pavilion mains meeting at the culet with lower-girdle facets between them. Both take the same proportions (`size`, `tableSize`, `crownHeight`, `pavilionHeight`, `sides`).

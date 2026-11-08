@@ -54,6 +54,7 @@ const SLIDERS: Record<NumericKey, SliderSpec> = {
   refractiveIndex: { min: 1, max: 2.6, step: 0.01, onlyFor: "gem" },
   reflections: { min: 0, max: 3, onlyFor: "gem" },
   shading: { min: 0, max: 1, step: 0.05 },
+  fillLight: { min: 0, max: 1, step: 0.05 },
   lightAngle: { min: -180, max: 180 },
   lightElevation: { min: -90, max: 90 },
   colorFlowDuration: { min: 1, max: 60, step: 0.5 },
@@ -104,7 +105,7 @@ const SECTIONS: { title: string; keys: ControlKey[] }[] = [
   { title: "Camera", keys: ["pitch", "yaw"] },
   { title: "Material", keys: ["material", "refractiveIndex", "reflections"] },
   { title: "Color", keys: ["gradient", "colors", "background"] },
-  { title: "Light", keys: ["shading", "lightAngle", "lightElevation"] },
+  { title: "Light", keys: ["shading", "fillLight", "lightAngle", "lightElevation"] },
   { title: "Color flow", keys: ["colorFlow", "colorFlowDuration"] },
   {
     title: "Sweep",

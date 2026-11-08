@@ -71,7 +71,9 @@
  * stops from the median patch of the resting pose, which wears the body
  * tone: every stop brighter climbs toward the highlight, every stop darker
  * sinks (more gently) toward the shadow; `shading` sets how far along the
- * ramp they go (0: every patch the middle tone, 1: the full ramp).
+ * ramp they go (0: every patch the middle tone, 1: the full ramp), and
+ * `fillLight` lifts the dark half alone back toward the middle tone, the way
+ * a fill light opens up a photo's shadows without touching its highlights.
  *
  * `gradient` picks how a facet wears its light:
  *   "flat"    (default) every patch one solid tone.
@@ -162,6 +164,8 @@ export interface DiamondParams {
   gradient?: Gradient;
   /** How far along the ramp patches go with the light they return: 0 (every patch the middle tone) to 1 (the full ramp). */
   shading?: number;
+  /** Lifts the shadow side, leaving the lit side as is: 0 (none: the darkest patches wear the shadow tone) to 1 (nothing darker than the middle tone). */
+  fillLight?: number;
   /** Azimuth of the key light in degrees: 0 = from the viewer, 90 = from the right, -90 = from the left. */
   lightAngle?: number;
   /** Elevation of the key light above the horizon, in degrees. */
@@ -285,6 +289,8 @@ function validate(p: Resolved): void {
   const bad = p.colors.filter((c) => parseHex(c) === null);
   if (bad.length) warn(`colors must be hex (#rgb / #rrggbb) — using gray for ${bad.join(", ")}`);
   if (p.shading < 0 || p.shading > 1) warn("shading should be between 0 and 1");
+  if (!(p.fillLight >= 0 && p.fillLight <= 1))
+    warn("fillLight must be between 0 and 1 — clamping it");
   if (p.colorFlow && p.colorFlowDuration <= 0)
     warn("colorFlowDuration must be > 0 — colorFlow ignored");
   if (p.sweep && (p.sweepDuration <= 0 || p.sweepHold < 0 || p.sweepWidth <= 0))
@@ -1552,11 +1558,21 @@ export function diamondSvg(params: DiamondParams = {}): string {
     return Math.max(samples.find((x) => (seen += x.area) >= total / 2)?.light ?? 1, 1e-6);
   })();
   lightCap = LIGHT_CAP * median;
-  /** Ramp position (0: highlight, 1: shadow) of a patch that sends the camera `light`. */
+  /**
+   * Ramp position (0: highlight, 1: shadow) of a patch `offset` from the
+   * middle of the ramp at `shading` 1 (positive: toward the shadow), its
+   * dark half lifted by `fillLight`.
+   */
+  const fill = clamp(Number.isNaN(p.fillLight) ? 0 : p.fillLight, 0, 1);
+  const rampTone = (offset: number): number => {
+    const tone = clamp(0.5 + p.shading * offset, 0, 1);
+    return tone > 0.5 ? 0.5 + (tone - 0.5) * (1 - fill) : tone;
+  };
+  /** Ramp position of a patch that sends the camera `light`. */
   const toneOf = (light: number): number => {
     const stops = Math.log2(Math.max(light, median / 1024) / median);
     const shift = stops * (stops > 0 ? STOP_BRIGHTER : STOP_DARKER);
-    return clamp(0.5 + p.shading * (MEDIAN_TONE - 0.5 - shift), 0, 1);
+    return rampTone(MEDIAN_TONE - 0.5 - shift);
   };
 
   /** Fill every gap in a per-keyframe track with the value of the nearest keyframe that has one. */
@@ -1585,7 +1601,7 @@ export function diamondSvg(params: DiamondParams = {}): string {
       if (material === "metal") {
         const key = orbitLight(lightVector(p.lightAngle, p.lightElevation), orbitAt(t));
         const lit = clamp((dot3(w.normals[f.index], key) + METAL_WRAP) / (1 + METAL_WRAP), 0, 1);
-        return { tone: clamp(0.5 + p.shading * (0.5 - lit), 0, 1), gloss: 0 };
+        return { tone: rampTone(0.5 - lit), gloss: 0 };
       }
       const env = envAt(t);
       // Under spinning patches the facet's own tone only shows along its
