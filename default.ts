@@ -43,7 +43,7 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   reflections: 1,
   gradient: "flat",
   shading: 1,
-  fillLight: 0.75,
+  fillLight: 0.85,
   lightAngle: -40,
   lightElevation: 20,
   colorFlow: false,

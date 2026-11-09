@@ -17,8 +17,8 @@
   <use href="#gem-f2" fill="#d43074" stroke="#d43074"/>
   <use href="#gem-f3" fill="#cb2269" stroke="#cb2269"/>
   <use href="#gem-f3" fill="#fbc0da" stroke="#fbc0da" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0813;0"/></use>
-  <use href="#gem-f4" fill="#b31758" stroke="#b31758"/>
-  <use href="#gem-f5" fill="#af1656" stroke="#af1656"/>
+  <use href="#gem-f4" fill="#bb185d" stroke="#bb185d"/>
+  <use href="#gem-f5" fill="#b8185b" stroke="#b8185b"/>
   <use href="#gem-f5" fill="#fbc0da" stroke="#fbc0da" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0439;0"/></use>
   <use href="#gem-f13" fill="#f1699e" stroke="#f1699e"/>
   <use href="#gem-f13" fill="#fbc0da" stroke="#fbc0da" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0439;0"/></use>

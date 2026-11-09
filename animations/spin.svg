@@ -14,10 +14,10 @@
   </defs>
   <use href="#gem-f0" fill="#d02b6f" stroke="#d02b6f"/>
   <use href="#gem-f1" fill="currentColor" stroke="currentColor" color="#f480ae"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.3234;0.5;1" values="#f480ae;#f05b95;#e84e8b;#cb2269"/></use>
-  <use href="#gem-f2" fill="currentColor" stroke="currentColor" color="#d43074"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.3207;0.3333;1" values="#d43074;#c61b63;#c51b62;#b31758"/></use>
-  <use href="#gem-f3" fill="currentColor" stroke="currentColor" color="#cb2269"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.1298;0.1667;1" values="#cb2269;#c61b63;#c41a62;#af1656"/></use>
-  <use href="#gem-f4" fill="currentColor" stroke="currentColor" color="#b31758"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.6667;1" values="#b31758;#a1134f;#a1134f"/></use>
-  <use href="#gem-f5" fill="currentColor" stroke="currentColor" color="#af1656"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.3333;1" values="#af1656;#a91453;#a91453"/></use>
+  <use href="#gem-f2" fill="currentColor" stroke="currentColor" color="#d43074"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.3256;0.3333;1" values="#d43074;#c61b63;#c51b63;#bb185d"/></use>
+  <use href="#gem-f3" fill="currentColor" stroke="currentColor" color="#cb2269"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.1424;0.1667;1" values="#cb2269;#c61b63;#c51b62;#b8185b"/></use>
+  <use href="#gem-f4" fill="currentColor" stroke="currentColor" color="#bb185d"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.6667;1" values="#bb185d;#b01657;#b01657"/></use>
+  <use href="#gem-f5" fill="currentColor" stroke="currentColor" color="#b8185b"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;1" values="#b8185b;#b51759"/></use>
   <use href="#gem-f11" fill="currentColor" stroke="currentColor" color="#e54a88"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.6667;0.8887;1" values="#e54a88;#e54a88;#f05b95;#f1699e"/></use>
   <use href="#gem-f13" fill="currentColor" stroke="currentColor" color="#f1699e"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.5;1" values="#f1699e;#f696bd;#f9aacb"/></use>
   <use href="#gem-f14" fill="currentColor" stroke="currentColor" color="#d93779"><animate attributeName="color" dur="1.25s" repeatCount="indefinite" keyTimes="0;0.3333;0.6667;1" values="#d93779;#d93779;#e34785;#e84e8b"/></use>

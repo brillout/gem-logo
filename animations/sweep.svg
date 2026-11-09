@@ -18,9 +18,9 @@
   <use href="#gem-f2" fill="#fbc0da" stroke="#fbc0da" opacity="0"><animate attributeName="opacity" dur="4.4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.114;0.1795;0.245;1" keySplines="0 0 1 1;0.45 0 0.55 1;0.45 0 0.55 1;0 0 1 1" values="0;0;0.55;0;0"/></use>
   <use href="#gem-f3" fill="#cb2269" stroke="#cb2269"/>
   <use href="#gem-f3" fill="#fbc0da" stroke="#fbc0da" opacity="0"><animate attributeName="opacity" dur="4.4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.1399;0.2054;0.2709;1" keySplines="0 0 1 1;0.45 0 0.55 1;0.45 0 0.55 1;0 0 1 1" values="0;0;0.55;0;0"/></use>
-  <use href="#gem-f4" fill="#b31758" stroke="#b31758"/>
+  <use href="#gem-f4" fill="#bb185d" stroke="#bb185d"/>
   <use href="#gem-f4" fill="#fbc0da" stroke="#fbc0da" opacity="0"><animate attributeName="opacity" dur="4.4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.1544;0.2199;0.2854;1" keySplines="0 0 1 1;0.45 0 0.55 1;0.45 0 0.55 1;0 0 1 1" values="0;0;0.55;0;0"/></use>
-  <use href="#gem-f5" fill="#af1656" stroke="#af1656"/>
+  <use href="#gem-f5" fill="#b8185b" stroke="#b8185b"/>
   <use href="#gem-f5" fill="#fbc0da" stroke="#fbc0da" opacity="0"><animate attributeName="opacity" dur="4.4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.1549;0.2204;0.286;1" keySplines="0 0 1 1;0.45 0 0.55 1;0.45 0 0.55 1;0 0 1 1" values="0;0;0.55;0;0"/></use>
   <use href="#gem-f13" fill="#f1699e" stroke="#f1699e"/>
   <use href="#gem-f13" fill="#fbc0da" stroke="#fbc0da" opacity="0"><animate attributeName="opacity" dur="4.4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.0168;0.0823;0.1478;1" keySplines="0 0 1 1;0.45 0 0.55 1;0.45 0 0.55 1;0 0 1 1" values="0;0;0.55;0;0"/></use>
