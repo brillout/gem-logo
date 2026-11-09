@@ -10,19 +10,19 @@
     <path id="gem-f15" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -175 L-49.7 -159.2 L-91.8 -29.2 L-221.7 -58.4 Z"/>
     <path id="gem-f16" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-221.7 -58.4 L-91.8 -29.2 L0 213.3 Z"/>
   </defs>
-  <use href="#gem-f0" fill="#e93881" stroke="#e93881"/>
-  <use href="#gem-f0" fill="#ffd9ea" stroke="#ffd9ea" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.45;0"/></use>
-  <use href="#gem-f1" fill="#ff95c0" stroke="#ff95c0"/>
-  <use href="#gem-f1" fill="#ffd9ea" stroke="#ffd9ea" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.1878;0"/></use>
-  <use href="#gem-f2" fill="#ec3e85" stroke="#ec3e85"/>
-  <use href="#gem-f3" fill="#e52e7a" stroke="#e52e7a"/>
-  <use href="#gem-f3" fill="#ffd9ea" stroke="#ffd9ea" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0875;0"/></use>
-  <use href="#gem-f4" fill="#d0216b" stroke="#d0216b"/>
-  <use href="#gem-f5" fill="#cc2069" stroke="#cc2069"/>
-  <use href="#gem-f5" fill="#ffd9ea" stroke="#ffd9ea" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0435;0"/></use>
-  <use href="#gem-f13" fill="#ff7db1" stroke="#ff7db1"/>
-  <use href="#gem-f13" fill="#ffd9ea" stroke="#ffd9ea" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0435;0"/></use>
-  <use href="#gem-f15" fill="#ffc2dc" stroke="#ffc2dc"/>
-  <use href="#gem-f15" fill="#ffd9ea" stroke="#ffd9ea" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0875;0"/></use>
-  <use href="#gem-f16" fill="#f9609e" stroke="#f9609e"/>
+  <use href="#gem-f0" fill="#d72e74" stroke="#d72e74"/>
+  <use href="#gem-f0" fill="#fcc6de" stroke="#fcc6de" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.45;0"/></use>
+  <use href="#gem-f1" fill="#f785b3" stroke="#f785b3"/>
+  <use href="#gem-f1" fill="#fcc6de" stroke="#fcc6de" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.1878;0"/></use>
+  <use href="#gem-f2" fill="#da3478" stroke="#da3478"/>
+  <use href="#gem-f3" fill="#d1256d" stroke="#d1256d"/>
+  <use href="#gem-f3" fill="#fcc6de" stroke="#fcc6de" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0875;0"/></use>
+  <use href="#gem-f4" fill="#ba195d" stroke="#ba195d"/>
+  <use href="#gem-f5" fill="#b7185b" stroke="#b7185b"/>
+  <use href="#gem-f5" fill="#fcc6de" stroke="#fcc6de" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0435;0"/></use>
+  <use href="#gem-f13" fill="#f56ea3" stroke="#f56ea3"/>
+  <use href="#gem-f13" fill="#fcc6de" stroke="#fcc6de" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0435;0"/></use>
+  <use href="#gem-f15" fill="#fab0cf" stroke="#fab0cf"/>
+  <use href="#gem-f15" fill="#fcc6de" stroke="#fcc6de" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" values="0;0.0875;0"/></use>
+  <use href="#gem-f16" fill="#ec5390" stroke="#ec5390"/>
 </svg>

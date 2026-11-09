@@ -7,8 +7,8 @@
 import { COLOR_PALETTES } from "./color-palettes.ts";
 import type { DiamondParams } from "./diamond.ts";
 
-const DEFAULT_PALETTE = COLOR_PALETTES.find((p) => p.name === "Spinel");
-if (!DEFAULT_PALETTE) throw new Error('default palette "Spinel" is missing from color-palettes.ts');
+const DEFAULT_PALETTE = COLOR_PALETTES.find((p) => p.name === "Pink tourmaline");
+if (!DEFAULT_PALETTE) throw new Error('default palette "Pink tourmaline" is missing from color-palettes.ts');
 
 const padding = 40;
 
@@ -24,7 +24,7 @@ export const PADDING_PRESETS = {
 } as const;
 export type PaddingPreset = keyof typeof PADDING_PRESETS;
 
-/** Defaults: a flat-shaded metal stone in spinel tones, in the classic simple cut under studio lights, seen from slightly above, at rest (no animation). */
+/** Defaults: a flat-shaded metal stone in pink tourmaline tones, in the classic simple cut under studio lights, seen from slightly above, at rest (no animation). */
 export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   size: 480,
   tableSize: 260,
