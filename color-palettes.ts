@@ -32,6 +32,8 @@ export const PALETTE_GROUPS = [
   "Precious",
   // The rest of the jeweler's tray.
   "Semi-precious",
+  // Steps from Spinel to Rubellite.
+  "Pink",
   // Pale, milky and icy stones.
   "Pale",
   // Black and smoky stones.
@@ -141,11 +143,35 @@ export const COLOR_PALETTES: ColorPalette[] = [
     group: "Semi-precious",
     colors: ["#ffd9ea", "#ff6fa8", "#e22674", "#9c1250", "#3e061f"],
   },
+
+  // --------------------------------------------------------------------- pink
+  // Evenly spaced steps from Spinel (lightest, brightest) to Rubellite
+  // (deepest): each tone is Spinel's blended with Rubellite's in OKLab, at
+  // 1/6, 2/6, 3/6, 4/6 and 5/6 of the way.
   {
-    // Halfway between Spinel and Rubellite (each tone blended 50/50 in OKLab).
+    name: "Flamingo",
+    group: "Pink",
+    colors: ["#fed3e6", "#fb6aa3", "#db2370", "#94104b", "#3a051c"],
+  },
+  {
+    name: "Fuchsia",
+    group: "Pink",
+    colors: ["#fdcce2", "#f7659f", "#d4216b", "#8c0e45", "#35041a"],
+  },
+  {
     name: "Pink tourmaline",
-    group: "Semi-precious",
+    group: "Pink",
     colors: ["#fcc6de", "#f4609a", "#cd1e67", "#840c40", "#310417"],
+  },
+  {
+    name: "Cerise",
+    group: "Pink",
+    colors: ["#fbc0da", "#f05b95", "#c61b63", "#7c0a3a", "#2d0314"],
+  },
+  {
+    name: "Raspberry",
+    group: "Pink",
+    colors: ["#fab9d6", "#ec5591", "#bf195e", "#740835", "#290212"],
   },
 
   // --------------------------------------------------------------------- pale
