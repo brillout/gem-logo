@@ -32,7 +32,7 @@ export const DEFAULTS: Required<Omit<DiamondParams, "onWarn">> = {
   pavilionHeight: 300,
   sides: 8,
   cut: "simple",
-  pitch: 13,
+  pitch: 17,
   yaw: 0,
   gap: 0,
   cornerRadius: 0,

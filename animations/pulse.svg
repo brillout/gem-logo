@@ -1,14 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-288.3 -278.8 576.7 557.7">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-288.3 -279.2 576.7 558.5">
   <defs>
-    <path id="gem-f0" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -159.2 L120.1 -175 L120.1 -197.4 L49.7 -213.3 L-49.7 -213.3 L-120.1 -197.4 L-120.1 -175 L-49.7 -159.2 Z"/>
-    <path id="gem-f1" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-49.7 -159.2 L49.7 -159.2 L91.8 -29.2 L-91.8 -29.2 Z"/>
-    <path id="gem-f2" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-91.8 -29.2 L91.8 -29.2 L0 213.3 Z"/>
-    <path id="gem-f3" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -159.2 L120.1 -175 L221.7 -58.4 L91.8 -29.2 Z"/>
-    <path id="gem-f4" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M91.8 -29.2 L221.7 -58.4 L0 213.3 Z"/>
-    <path id="gem-f5" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M120.1 -175 L120.1 -197.4 L221.7 -99.7 L221.7 -58.4 Z"/>
-    <path id="gem-f13" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -197.4 L-120.1 -175 L-221.7 -58.4 L-221.7 -99.7 Z"/>
-    <path id="gem-f15" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -175 L-49.7 -159.2 L-91.8 -29.2 L-221.7 -58.4 Z"/>
-    <path id="gem-f16" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-221.7 -58.4 L-91.8 -29.2 L0 213.3 Z"/>
+    <path id="gem-f0" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -143.4 L120.1 -163.9 L120.1 -193 L49.7 -213.6 L-49.7 -213.6 L-120.1 -193 L-120.1 -163.9 L-49.7 -143.4 Z"/>
+    <path id="gem-f1" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-49.7 -143.4 L49.7 -143.4 L91.8 -8.5 L-91.8 -8.5 Z"/>
+    <path id="gem-f2" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-91.8 -8.5 L91.8 -8.5 L0 213.6 Z"/>
+    <path id="gem-f3" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M49.7 -143.4 L120.1 -163.9 L221.7 -46.4 L91.8 -8.5 Z"/>
+    <path id="gem-f4" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M91.8 -8.5 L221.7 -46.4 L0 213.6 Z"/>
+    <path id="gem-f5" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M120.1 -163.9 L120.1 -193 L221.7 -100.1 L221.7 -46.4 Z"/>
+    <path id="gem-f13" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -193 L-120.1 -163.9 L-221.7 -46.4 L-221.7 -100.1 Z"/>
+    <path id="gem-f15" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -163.9 L-49.7 -143.4 L-91.8 -8.5 L-221.7 -46.4 Z"/>
+    <path id="gem-f16" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-221.7 -46.4 L-91.8 -8.5 L0 213.6 Z"/>
   </defs>
   <g>
     <animateTransform attributeName="transform" type="scale" dur="3.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.8333;0.8917;0.95;1" keySplines="0 0 1 1;0.2 0 0.4 1;0.45 0 0.55 1;0.45 0 0.55 1" values="1;1;1.12;0.964;1"/>
