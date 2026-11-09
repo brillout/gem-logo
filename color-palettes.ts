@@ -141,6 +141,12 @@ export const COLOR_PALETTES: ColorPalette[] = [
     group: "Semi-precious",
     colors: ["#ffd9ea", "#ff6fa8", "#e22674", "#9c1250", "#3e061f"],
   },
+  {
+    // Halfway between Spinel and Rubellite (each tone blended 50/50 in OKLab).
+    name: "Pink tourmaline",
+    group: "Semi-precious",
+    colors: ["#fcc6de", "#f4609a", "#cd1e67", "#840c40", "#310417"],
+  },
 
   // --------------------------------------------------------------------- pale
   {
