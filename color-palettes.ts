@@ -119,11 +119,6 @@ export const COLOR_PALETTES: ColorPalette[] = [
     colors: ["#d6fbef", "#67dcb0", "#189e78", "#0b5a44", "#032219"],
   },
   {
-    name: "Rubellite",
-    group: "Semi-precious",
-    colors: ["#f9b3d2", "#e8508c", "#b8165a", "#6c0630", "#25020f"],
-  },
-  {
     name: "Mandarin garnet",
     group: "Semi-precious",
     colors: ["#ffe2a8", "#ffab45", "#ea6e18", "#983610", "#3c1106"],
@@ -138,16 +133,16 @@ export const COLOR_PALETTES: ColorPalette[] = [
     group: "Semi-precious",
     colors: ["#fff2f7", "#ffc3da", "#f08db4", "#c05886", "#63294a"],
   },
-  {
-    name: "Spinel",
-    group: "Semi-precious",
-    colors: ["#ffd9ea", "#ff6fa8", "#e22674", "#9c1250", "#3e061f"],
-  },
 
   // --------------------------------------------------------------------- pink
-  // Evenly spaced steps from Spinel (lightest, brightest) to Rubellite
-  // (deepest): each tone is Spinel's blended with Rubellite's in OKLab, at
-  // 1/6, 2/6, 3/6, 4/6 and 5/6 of the way.
+  // Spinel (lightest, brightest) to Rubellite (deepest), with five evenly
+  // spaced steps between them: each tone is Spinel's blended with
+  // Rubellite's in OKLab, at 1/6, 2/6, 3/6, 4/6 and 5/6 of the way.
+  {
+    name: "Spinel",
+    group: "Pink",
+    colors: ["#ffd9ea", "#ff6fa8", "#e22674", "#9c1250", "#3e061f"],
+  },
   {
     name: "Flamingo",
     group: "Pink",
@@ -172,6 +167,11 @@ export const COLOR_PALETTES: ColorPalette[] = [
     name: "Raspberry",
     group: "Pink",
     colors: ["#fab9d6", "#ec5591", "#bf195e", "#740835", "#290212"],
+  },
+  {
+    name: "Rubellite",
+    group: "Pink",
+    colors: ["#f9b3d2", "#e8508c", "#b8165a", "#6c0630", "#25020f"],
   },
 
   // --------------------------------------------------------------------- pale
