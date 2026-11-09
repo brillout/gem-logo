@@ -10,15 +10,15 @@
     <path id="gem-f15" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-120.1 -163.9 L-49.7 -143.4 L-91.8 -8.5 L-221.7 -46.4 Z"/>
     <path id="gem-f16" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M-221.7 -46.4 L-91.8 -8.5 L0 213.6 Z"/>
   </defs>
-  <use href="#gem-f0" fill="#d72e74" stroke="#d72e74"/>
-  <use href="#gem-f1" fill="#f785b3" stroke="#f785b3"/>
-  <use href="#gem-f2" fill="#da3478" stroke="#da3478"/>
-  <use href="#gem-f3" fill="#d1256d" stroke="#d1256d"/>
-  <use href="#gem-f4" fill="#ba195d" stroke="#ba195d"/>
-  <use href="#gem-f5" fill="#b7185b" stroke="#b7185b"/>
-  <use href="#gem-f13" fill="#f56ea3" stroke="#f56ea3"/>
-  <use href="#gem-f15" fill="#fab0cf" stroke="#fab0cf"/>
-  <use href="#gem-f16" fill="#ec5390" stroke="#ec5390"/>
+  <use href="#gem-f0" fill="#d02b6f" stroke="#d02b6f"/>
+  <use href="#gem-f1" fill="#f480ae" stroke="#f480ae"/>
+  <use href="#gem-f2" fill="#d43074" stroke="#d43074"/>
+  <use href="#gem-f3" fill="#cb2269" stroke="#cb2269"/>
+  <use href="#gem-f4" fill="#b31758" stroke="#b31758"/>
+  <use href="#gem-f5" fill="#af1656" stroke="#af1656"/>
+  <use href="#gem-f13" fill="#f1699e" stroke="#f1699e"/>
+  <use href="#gem-f15" fill="#f9aacb" stroke="#f9aacb"/>
+  <use href="#gem-f16" fill="#e84e8b" stroke="#e84e8b"/>
   <g transform="translate(-120.1 -163.9)"><path d="M0 -28Q0 0 28 0Q0 0 0 28Q0 0 -28 0Q0 0 0 -28Z" fill="#ffffff" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.1064;0.1864;0.2664;1" keySplines="0 0 1 1;0.2 0 0.4 1;0.45 0 0.55 1;0 0 1 1" values="0;0;1;0;0"/><animateTransform attributeName="transform" type="scale" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.1064;0.1864;0.2664;1" keySplines="0 0 1 1;0.2 0 0.4 1;0.45 0 0.55 1;0 0 1 1" values="0;0;1;0;0"/><animateTransform attributeName="transform" type="rotate" dur="4s" repeatCount="indefinite" additive="sum" keyTimes="0;0.1064;0.1864;0.2664;1" values="0;0;45;90;90"/></path></g>
   <g transform="translate(221.7 -46.4)"><path d="M0 -28Q0 0 28 0Q0 0 0 28Q0 0 -28 0Q0 0 0 -28Z" fill="#ffffff" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.61;0.69;0.77;1" keySplines="0 0 1 1;0.2 0 0.4 1;0.45 0 0.55 1;0 0 1 1" values="0;0;1;0;0"/><animateTransform attributeName="transform" type="scale" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.61;0.69;0.77;1" keySplines="0 0 1 1;0.2 0 0.4 1;0.45 0 0.55 1;0 0 1 1" values="0;0;1;0;0"/><animateTransform attributeName="transform" type="rotate" dur="4s" repeatCount="indefinite" additive="sum" keyTimes="0;0.61;0.69;0.77;1" values="0;0;45;90;90"/></path></g>
   <g transform="translate(0 213.6)"><path d="M0 -28Q0 0 28 0Q0 0 0 28Q0 0 -28 0Q0 0 0 -28Z" fill="#ffffff" opacity="0"><animate attributeName="opacity" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.2987;0.3787;0.4587;1" keySplines="0 0 1 1;0.2 0 0.4 1;0.45 0 0.55 1;0 0 1 1" values="0;0;1;0;0"/><animateTransform attributeName="transform" type="scale" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.2987;0.3787;0.4587;1" keySplines="0 0 1 1;0.2 0 0.4 1;0.45 0 0.55 1;0 0 1 1" values="0;0;1;0;0"/><animateTransform attributeName="transform" type="rotate" dur="4s" repeatCount="indefinite" additive="sum" keyTimes="0;0.2987;0.3787;0.4587;1" values="0;0;45;90;90"/></path></g>
