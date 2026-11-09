@@ -167,6 +167,24 @@ h1 {
   color: #a1a1aa;
 }
 
+/* A title links to its section (#fragment), so a reload scrolls back to it. */
+.palette-group h2 a,
+.section h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.palette-group h2 a:hover,
+.section h2 a:hover {
+  color: #52525b;
+  text-decoration: underline;
+}
+
+.section,
+.palette-group {
+  scroll-margin-top: 12px;
+}
+
 button.palette {
   display: inline-flex;
   align-items: center;

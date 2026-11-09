@@ -192,7 +192,8 @@ function syncUrl(): void {
     query.set("previewBackground", previewBackground);
   const search = query.toString();
   if ((search ? `?${search}` : "") === location.search) return;
-  const url = search ? `?${search}` : location.pathname;
+  // Keep the #section the sidebar is scrolled to (see sectionHeading).
+  const url = (search ? `?${search}` : location.pathname) + location.hash;
   if (pushNextUrlChange) history.pushState(null, "", url);
   else history.replaceState(null, "", url);
   pushNextUrlChange = false;
@@ -217,6 +218,19 @@ function el<K extends keyof HTMLElementTagNameMap>(
   for (const [name, value] of Object.entries(attrs)) node.setAttribute(name, value);
   node.append(...children);
   return node;
+}
+
+/**
+ * A sidebar section's title, linking to the section itself: clicking it puts
+ * the section's id in the URL's #fragment, so a reload (or a shared link)
+ * scrolls the sidebar back to it.
+ */
+const sectionIds = new Set<string>();
+function sectionHeading(title: string): { id: string; heading: HTMLElement } {
+  const id = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  if (sectionIds.has(id)) throw new Error(`Duplicate section id: ${id}`);
+  sectionIds.add(id);
+  return { id, heading: el("h2", {}, el("a", { href: `#${id}` }, title)) };
 }
 
 const sliderRows = new Map<NumericKey, HTMLElement>();
@@ -369,17 +383,17 @@ for (const section of SECTIONS) {
     rows.set(key, row);
     return row;
   });
-  controls.append(el("div", { class: "section" }, el("h2", {}, section.title), ...sectionRows));
+  const { id, heading } = sectionHeading(section.title);
+  controls.append(el("div", { class: "section", id }, heading, ...sectionRows));
 }
 
 // Preset palettes: clicking one replaces the colors, and the background when
 // the palette is designed for its own (dark) backdrop. The material is left
 // as picked: a palette only recolors the stone.
-const paletteGroups = PALETTE_GROUPS.map((group) =>
-  el(
-    "div",
-    { class: "palette-group" },
-    el("h2", {}, group),
+const paletteGroups = PALETTE_GROUPS.map((group) => {
+  const { id, heading } = sectionHeading(group);
+  const node = el("div", { class: "palette-group", id }, heading);
+  node.append(
     ...COLOR_PALETTES.filter((palette) => palette.group === group).map((palette) => {
       const swatches = el(
         "span",
@@ -399,8 +413,9 @@ const paletteGroups = PALETTE_GROUPS.map((group) =>
       });
       return button;
     }),
-  ),
-);
+  );
+  return node;
+});
 controls.append(el("div", { class: "palettes" }, ...paletteGroups));
 
 // ----------------------------------------------------------------- actions
@@ -667,3 +682,7 @@ function renderInPlace(): void {
 }
 
 renderInPlace();
+
+// The sidebar is built by this script, after the browser's own jump to the
+// URL's #fragment, so jump to that section here.
+document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
